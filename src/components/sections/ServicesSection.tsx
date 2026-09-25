@@ -4,18 +4,13 @@ import { Container } from '../layout/Container';
 import { Eyebrow } from '../ui/Eyebrow';
 import { ArrowButton } from '../ui/ArrowButton';
 import { StaggerHeading } from '../ui/LetterStagger';
-import { ServiceItem } from '../../data/landingData';
-import { PORTAL_DEFAULTS } from '../../data/portalDefaults';
-import { usePortalContent } from '../../context/PortalContentContext';
+import { SERVICES_LIST, ServiceItem } from '../../data/landingData';
 
 interface ServicesSectionProps {
   onOpenServiceDetail: (service: ServiceItem) => void;
 }
 
 export const ServicesSection: React.FC<ServicesSectionProps> = ({ onOpenServiceDetail }) => {
-  const {content}=usePortalContent();
-  const cms:any=content('services',PORTAL_DEFAULTS.services);
-  const items:ServiceItem[]=Array.isArray(cms.items)?cms.items:[];
   const getIcon = (iconName: string) => {
     const iconClass = "transition-colors duration-200 text-[#111111] group-hover:text-white";
     switch (iconName) {
@@ -42,18 +37,18 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({ onOpenServiceD
           {/* Left Column: Title & Description */}
           <div className="lg:col-span-4 flex flex-col justify-between h-full">
             <div>
-              <Eyebrow>{cms.eyebrow}</Eyebrow>
+              <Eyebrow>LAYANAN UTAMA</Eyebrow>
               <div className="mb-5 sm:mb-6">
                 <StaggerHeading
                   as="h2"
-                  text={cms.title}
+                  text="Ekosistem Perjalanan Muslim Nuzultrip"
                   className="font-h2 font-bold text-[#111111] leading-[1.12] tracking-tight"
-                  highlightWord={cms.highlightWord}
+                  highlightWord="Nuzultrip"
                   highlightClass="text-emerald-600"
                 />
               </div>
               <p className="text-[16px] sm:text-[17px] text-[#555555] leading-[1.65] max-w-[360px]">
-                {cms.description}
+                Menghubungkan mitra, vendor layanan, dan jaringan distribusi dalam satu kesatuan sistem yang transparan dan terstandar.
               </p>
             </div>
 
@@ -61,10 +56,10 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({ onOpenServiceD
             <div className="pt-8 sm:pt-10 mt-auto">
               <ArrowButton
                 variant="link"
-                onClick={() => items[0] && onOpenServiceDetail(items[0])}
+                onClick={() => onOpenServiceDetail(SERVICES_LIST[0])}
                 id="services-cta-other"
               >
-                {cms.moreCta}
+                Layanan Lainnya
               </ArrowButton>
             </div>
           </div>
@@ -72,7 +67,7 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({ onOpenServiceD
           {/* Right Column: 2x2 Services Grid */}
           <div className="lg:col-span-8 flex flex-col justify-between">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
-              {items.map((service) => (
+              {SERVICES_LIST.map((service) => (
                 <div
                   key={service.id}
                   onClick={() => onOpenServiceDetail(service)}
