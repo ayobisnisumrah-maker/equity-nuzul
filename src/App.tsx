@@ -40,8 +40,7 @@ type DetailContent = { title: string; category?: string; content: string; detail
 
 export default function App() {
   const { content } = usePortalContent();
-  const path = window.location.pathname;
-  if (path === '/atur-sandi') return <SetPasswordPage />;
+  const [path,setPath]=useState(()=>window.location.pathname);
   const [isInterestModalOpen, setIsInterestModalOpen] = useState(false);
   const [isPitchdeckModalOpen, setIsPitchdeckModalOpen] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
@@ -95,6 +94,10 @@ export default function App() {
     const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => { void applyUser(session?.user ?? null); });
     return () => { alive = false; listener.subscription.unsubscribe(); };
   }, []);
+
+  useEffect(()=>{const sync=()=>setPath(window.location.pathname);window.addEventListener('popstate',sync);return()=>window.removeEventListener('popstate',sync)},[]);
+
+  useEffect(()=>{if(!authReady)return;if(path==='/atur-sandi')return;const requested:PortalRole|null=path==='/admin'?'admin':path==='/investor'?'investor':null;if(requested&&(!portalIdentity||portalIdentity.role!==requested)){window.history.replaceState({},'', '/masuk');setPath('/masuk');setIsLoginModalOpen(true);return}if(path==='/masuk'&&!portalIdentity){setIsLoginModalOpen(true);return}if(path==='/auth/callback'){const destination=portalIdentity?.role==='admin'?'/admin':portalIdentity?.role==='investor'?'/investor':'/masuk';window.history.replaceState({},'',destination);setPath(destination);if(destination==='/masuk')setIsLoginModalOpen(true)}} ,[authReady,path,portalIdentity]);
 
   // Handle global Escape key to close modals
   useEffect(() => {
@@ -305,15 +308,7 @@ export default function App() {
   const protectedPath=path==='/admin'||path==='/investor';
   const requestedRole:PortalRole|null=path==='/admin'?'admin':path==='/investor'?'investor':null;
   if(protectedPath&&!authReady)return <div className="min-h-screen bg-[#F5F5F3] flex items-center justify-center text-sm text-black/50">Memverifikasi akses...</div>;
-  if(protectedPath&&(!portalIdentity||portalIdentity.role!==requestedRole)){
-    if(path!=='/masuk') window.history.replaceState({},'', '/masuk');
-    if(!isLoginModalOpen) queueMicrotask(()=>setIsLoginModalOpen(true));
-  }
-  if(path==='/masuk'&&!portalIdentity&&!isLoginModalOpen)queueMicrotask(()=>setIsLoginModalOpen(true));
-  if(path==='/auth/callback'&&authReady){
-    const destination=portalIdentity?.role==='admin'?'/admin':portalIdentity?.role==='investor'?'/investor':'/masuk';
-    if(window.location.pathname!==destination)window.history.replaceState({},'',destination);
-  }
+  if(path==='/atur-sandi')return <SetPasswordPage/>;
 
   const closeDashboard=()=>{setDashboardRole(null);setPortalIdentity(null);window.scrollTo({top:0,left:0,behavior:'instant' as ScrollBehavior})};
   const logout=async()=>{await supabase?.auth.signOut();closeDashboard()};
@@ -408,7 +403,7 @@ export default function App() {
             isOpen={isLoginModalOpen}
             onClose={() => setIsLoginModalOpen(false)}
             onOpenInterest={() => setIsInterestModalOpen(true)}
-            onAuthenticated={(identity) => { setIsLoginModalOpen(false); setPortalIdentity(identity); setDashboardRole(identity.role); window.history.replaceState({},'',identity.role==='admin'?'/admin':'/investor'); }}
+            onAuthenticated={(identity) => { setIsLoginModalOpen(false); setPortalIdentity(identity); setDashboardRole(identity.role); const destination=identity.role==='admin'?'/admin':'/investor'; window.history.replaceState({},'',destination); setPath(destination); }}
           />
         )}
 
