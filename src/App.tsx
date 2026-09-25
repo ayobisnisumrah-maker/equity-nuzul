@@ -17,8 +17,9 @@ import { FloatingAnnouncement } from './components/ui/FloatingAnnouncement';
 import { ServiceItem, InvestorInfoItem, ArticleItem } from './data/landingData';
 import { AdminDashboard } from './components/admin/AdminDashboard';
 import { InvestorDashboard } from './components/investor/InvestorDashboard';
+import { SetPasswordPage } from './components/SetPasswordPage';
 import { supabase } from './lib/supabase';
-import type { PortalIdentity, PortalRole } from './services/auth';
+import { resolvePortalIdentity, type PortalIdentity, type PortalRole } from './services/auth';
 import { usePortalContent } from './context/PortalContentContext';
 
 // Code-split modals so initial landing page bundle is super lightweight
@@ -39,12 +40,14 @@ type DetailContent = { title: string; category?: string; content: string; detail
 
 export default function App() {
   const { content } = usePortalContent();
+  const [path,setPath]=useState(()=>window.location.pathname);
   const [isInterestModalOpen, setIsInterestModalOpen] = useState(false);
   const [isPitchdeckModalOpen, setIsPitchdeckModalOpen] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isPastHero, setIsPastHero] = useState(false);
   const [dashboardRole,setDashboardRole]=useState<PortalRole|null>(null);
   const [portalIdentity,setPortalIdentity]=useState<PortalIdentity|null>(null);
+  const [authReady,setAuthReady]=useState(false);
   const [detailModal, setDetailModal] = useState<{
     isOpen: boolean;
     title: string;
@@ -66,6 +69,35 @@ export default function App() {
     }
     window.scrollTo({ top: 0, left: 0, behavior: 'instant' as ScrollBehavior });
   }, []);
+
+  // Restore authenticated Admin/Investor dashboard after refresh and keep role state synced with Supabase Auth.
+  useEffect(() => {
+    if (!supabase) { setAuthReady(true); return; }
+    let alive = true;
+    const applyUser = async (user: import('@supabase/supabase-js').User | null) => {
+      if (!alive) return;
+      if (!user) { setPortalIdentity(null); setDashboardRole(null); setAuthReady(true); return; }
+      try {
+        const identity = await resolvePortalIdentity(user);
+        if (!alive) return;
+        setPortalIdentity(identity);
+        setDashboardRole(identity.role);
+        setAuthReady(true);
+      } catch {
+        if (!alive) return;
+        setPortalIdentity(null);
+        setDashboardRole(null);
+        setAuthReady(true);
+      }
+    };
+    void supabase.auth.getSession().then(({ data }) => applyUser(data.session?.user ?? null));
+    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => { void applyUser(session?.user ?? null); });
+    return () => { alive = false; listener.subscription.unsubscribe(); };
+  }, []);
+
+  useEffect(()=>{const sync=()=>setPath(window.location.pathname);window.addEventListener('popstate',sync);return()=>window.removeEventListener('popstate',sync)},[]);
+
+  useEffect(()=>{if(!authReady)return;if(path==='/atur-sandi')return;const requested:PortalRole|null=path==='/admin'?'admin':path==='/investor'?'investor':null;if(requested&&(!portalIdentity||portalIdentity.role!==requested)){window.history.replaceState({},'', '/masuk');setPath('/masuk');setIsLoginModalOpen(true);return}if(path==='/masuk'&&!portalIdentity){setIsLoginModalOpen(true);return}if(path==='/auth/callback'){const destination=portalIdentity?.role==='admin'?'/admin':portalIdentity?.role==='investor'?'/investor':'/masuk';window.history.replaceState({},'',destination);setPath(destination);if(destination==='/masuk')setIsLoginModalOpen(true)}} ,[authReady,path,portalIdentity]);
 
   // Handle global Escape key to close modals
   useEffect(() => {
@@ -273,10 +305,15 @@ export default function App() {
     });
   };
 
-  const closeDashboard=()=>{setDashboardRole(null);window.scrollTo({top:0,left:0,behavior:'instant' as ScrollBehavior})};
+  const protectedPath=path==='/admin'||path==='/investor';
+  const requestedRole:PortalRole|null=path==='/admin'?'admin':path==='/investor'?'investor':null;
+  if(protectedPath&&!authReady)return <div className="min-h-screen bg-[#F5F5F3] flex items-center justify-center text-sm text-black/50">Memverifikasi akses...</div>;
+  if(path==='/atur-sandi')return <SetPasswordPage/>;
+
+  const closeDashboard=()=>{window.history.replaceState({},'', '/');setPath('/');window.scrollTo({top:0,left:0,behavior:'instant' as ScrollBehavior})};
   const logout=async()=>{await supabase?.auth.signOut();closeDashboard()};
   if(dashboardRole==='admin' && portalIdentity) return <AdminDashboard identity={portalIdentity} onBack={closeDashboard} onLogout={logout}/>;
-  if(dashboardRole==='investor') return <InvestorDashboard onBack={closeDashboard} onLogout={logout}/>;
+  if(dashboardRole==='investor' && portalIdentity) return <InvestorDashboard onBack={closeDashboard} onLogout={logout}/>;
 
   return (
     <div className="min-h-screen bg-[#F5F5F3] text-[#111111] flex flex-col selection:bg-[#090909] selection:text-white">
@@ -366,7 +403,7 @@ export default function App() {
             isOpen={isLoginModalOpen}
             onClose={() => setIsLoginModalOpen(false)}
             onOpenInterest={() => setIsInterestModalOpen(true)}
-            onAuthenticated={(identity) => { setIsLoginModalOpen(false); setPortalIdentity(identity); setDashboardRole(identity.role); }}
+            onAuthenticated={(identity) => { setIsLoginModalOpen(false); setPortalIdentity(identity); setDashboardRole(identity.role); const destination=identity.role==='admin'?'/admin':'/investor'; window.history.replaceState({},'',destination); setPath(destination); }}
           />
         )}
 

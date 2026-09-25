@@ -5,6 +5,7 @@ import { Eyebrow } from '../ui/Eyebrow';
 import { StaggerHeading } from '../ui/LetterStagger';
 import { ArrowButton } from '../ui/ArrowButton';
 import { IMAGES } from '../../data/landingData';
+import { usePortalContent } from '../../context/PortalContentContext';
 
 interface QuickActionSectionProps {
   onOpenInterest: () => void;
@@ -15,6 +16,17 @@ export const QuickActionSection: React.FC<QuickActionSectionProps> = ({
   onOpenInterest,
   onOpenPitchdeck,
 }) => {
+  const { content } = usePortalContent();
+  const cms = content('quick_action', {} as Record<string, unknown>);
+  const eyebrow = typeof cms.eyebrow === 'string' ? cms.eyebrow : 'QUICK ACTION';
+  const headline = typeof cms.headline === 'string' ? cms.headline : 'Kenali. Pelajari. Tentukan Langkah Anda.';
+  const description = typeof cms.description === 'string' ? cms.description : 'Tim Investor Relations kami siap memberikan pendampingan personal bagi calon mitra dan investor strategis.';
+  const discussCta = typeof cms.discussCta === 'string' ? cms.discussCta : 'Diskusikan Peluang';
+  const phone = typeof cms.phone === 'string' ? cms.phone : '+62 812-3456-7890';
+  const whatsappUrl = typeof cms.whatsappUrl === 'string' && /^https:\/\/(wa\.me|api\.whatsapp\.com)\//i.test(cms.whatsappUrl) ? cms.whatsappUrl : 'https://wa.me/6281234567890?text=Halo%20Tim%20Nuzultrip%20Equity,%20saya%20tertarik%20mengenal%20penawaran%20equity%20lebih%20lanjut';
+  const imageUrl = typeof cms.imageUrl === 'string' && cms.imageUrl ? cms.imageUrl : IMAGES.quickActionBg;
+  const invitationTitle = typeof cms.invitationTitle === 'string' ? cms.invitationTitle : 'Siap Mengenal Nuzultrip Lebih Jauh?';
+  const invitationDescription = typeof cms.invitationDescription === 'string' ? cms.invitationDescription : 'Dapatkan konsultasi eksklusif mengenai struktur kepemilikan dan skema bagi hasil.';
   return (
     <section
       id="kontak"
@@ -25,18 +37,18 @@ export const QuickActionSection: React.FC<QuickActionSectionProps> = ({
           {/* Column 1: Left Headline & Bottom-Aligned CTA */}
           <div className="lg:col-span-4 flex flex-col justify-between">
             <div>
-              <Eyebrow variant="dark">QUICK ACTION</Eyebrow>
+              <Eyebrow variant="dark">{eyebrow}</Eyebrow>
               <div className="mb-4">
                 <StaggerHeading
                   as="h2"
-                  text="Kenali. Pelajari. Tentukan Langkah Anda."
+                  text={headline}
                   className="font-h2 font-bold text-white leading-[1.08] tracking-tight"
                   highlightWord="Langkah"
                   highlightClass="text-emerald-400"
                 />
               </div>
               <p className="text-[15px] sm:text-[16px] text-white/65 leading-relaxed max-w-[320px]">
-                Tim Investor Relations kami siap memberikan pendampingan personal bagi calon mitra dan investor strategis.
+                {description}
               </p>
             </div>
 
@@ -48,7 +60,7 @@ export const QuickActionSection: React.FC<QuickActionSectionProps> = ({
                 id="quick-action-cta-discuss"
                 className="text-white hover:text-emerald-400 transition-colors"
               >
-                Diskusikan Peluang
+                {discussCta}
               </ArrowButton>
             </div>
           </div>
@@ -57,7 +69,7 @@ export const QuickActionSection: React.FC<QuickActionSectionProps> = ({
           <div className="lg:col-span-4 flex flex-col justify-between gap-4">
             {/* Action Card 1: Hubungi Tim WhatsApp / Call */}
             <a
-              href="https://wa.me/6281234567890?text=Halo%20Tim%20Nuzultrip%20Equity,%20saya%20tertarik%20mengenal%20penawaran%20equity%20lebih%20lanjut"
+              href={whatsappUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="bg-[#1e1f20]/60 hover:bg-[#1e1f20] rounded-2xl p-6 border border-white/10 transition-all duration-300 flex flex-col justify-between flex-1 group cursor-pointer outline-none"
@@ -76,7 +88,7 @@ export const QuickActionSection: React.FC<QuickActionSectionProps> = ({
                   Hubungi Tim
                 </h3>
                 <p className="text-[14px] text-white/70 mt-1 font-mono">
-                  +62 812-3456-7890
+                  {phone}
                 </p>
               </div>
             </a>
@@ -110,7 +122,7 @@ export const QuickActionSection: React.FC<QuickActionSectionProps> = ({
           <div className="lg:col-span-4 flex flex-col">
             <div className="relative w-full h-full min-h-[320px] rounded-2xl overflow-hidden border border-white/15 flex flex-col justify-between p-7 text-white group">
               <img
-                src={IMAGES.quickActionBg}
+                src={imageUrl}
                 alt="Ekosistem Nuzultrip"
                 className="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
                 loading="lazy"
@@ -122,10 +134,10 @@ export const QuickActionSection: React.FC<QuickActionSectionProps> = ({
                   Langkah Awal Kemitraan
                 </span>
                 <h3 className="text-[22px] sm:text-[24px] font-bold text-white mt-2 leading-[1.2]">
-                  Siap Mengenal Nuzultrip Lebih Jauh?
+                  {invitationTitle}
                 </h3>
                 <p className="text-[14px] text-white/75 mt-2 leading-relaxed">
-                  Dapatkan konsultasi eksklusif mengenai struktur kepemilikan dan skema bagi hasil.
+                  {invitationDescription}
                 </p>
               </div>
 

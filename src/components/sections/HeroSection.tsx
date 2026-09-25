@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { ArrowRight, Download, ChevronDown } from 'lucide-react';
 import { HeroParticles } from '../hero/HeroParticles';
 import { StaggerText } from '../ui/LetterStagger';
+import { usePortalContent } from '../../context/PortalContentContext';
 
 interface HeroSectionProps {
   onOpenInterest: () => void;
@@ -23,6 +24,16 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   onOpenInterest,
   onOpenPitchdeck,
 }) => {
+  const { content } = usePortalContent();
+  const cms = content('hero', {} as Record<string, unknown>);
+  const eyebrow = typeof cms.eyebrow === 'string' ? cms.eyebrow : 'NUZULTRIP EQUITY';
+  const headline = typeof cms.headline === 'string' ? cms.headline : 'Berkembang Dalam Ekosistem Muslim';
+  const headlineHighlight = typeof cms.headlineHighlight === 'string' ? cms.headlineHighlight : 'Yang Terintegrasi';
+  const description = typeof cms.description === 'string' ? cms.description : 'Nuzultrip membangun ekosistem perjalanan Muslim melalui layanan, jaringan, dan teknologi yang terintegrasi untuk mendukung pertumbuhan jangka panjang.';
+  const primaryCta = typeof cms.primaryCta === 'string' ? cms.primaryCta : 'Ajukan Minat Equity';
+  const secondaryCta = typeof cms.secondaryCta === 'string' ? cms.secondaryCta : 'Unduh Pitchdeck 2025';
+  const highlightsLabel = typeof cms.highlightsLabel === 'string' ? cms.highlightsLabel : 'SOROTAN EKOSISTEM NUZULTRIP';
+  const highlights = Array.isArray(cms.highlights) && cms.highlights.every((v) => typeof v === 'string') ? cms.highlights as string[] : HIGHLIGHT_BADGES;
   const [isEntranceVisible, setIsEntranceVisible] = useState(false);
   const [scrollY, setScrollY] = useState(0);
 
@@ -87,7 +98,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
         >
           <div className="inline-flex items-center px-4 py-1.5 rounded-full bg-white/[0.04] border border-white/[0.12] backdrop-blur-md shadow-[0_0_20px_rgba(16,185,129,0.14)]">
             <span className="text-[11px] sm:text-xs font-semibold tracking-[0.22em] uppercase text-emerald-300/90">
-              NUZULTRIP EQUITY
+              {eyebrow}
             </span>
           </div>
         </div>
@@ -98,7 +109,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           style={parallaxContent}
         >
           <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-[4.25rem] font-bold tracking-[-0.035em] leading-[1.12] text-[#f4f4f8]">
-            Berkembang Dalam Ekosistem Muslim{' '}
+            {headline}{' '}
             <span
               className="inline-block"
               style={{
@@ -107,7 +118,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                   '0 0 35px rgba(16, 185, 129, 0.45), 0 0 70px rgba(16, 185, 129, 0.2)',
               }}
             >
-              Yang Terintegrasi
+              {headlineHighlight}
             </span>
           </h1>
         </div>
@@ -118,7 +129,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           style={parallaxContent}
         >
           <p className="hero-subtitle text-[#9499ab] text-sm sm:text-base md:text-lg max-w-3xl lg:max-w-[860px] mx-auto leading-[1.7] font-normal">
-            Nuzultrip membangun ekosistem perjalanan Muslim melalui layanan, jaringan, dan teknologi yang terintegrasi untuk mendukung pertumbuhan jangka panjang.
+            {description}
           </p>
         </div>
 
@@ -139,7 +150,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             }}
           >
             <span className="relative z-10 font-semibold tracking-wide">
-              <StaggerText text="Ajukan Minat Equity" />
+              <StaggerText text={primaryCta} />
             </span>
             <ArrowRight className="w-4 h-4 relative z-10 transition-transform duration-300 group-hover:translate-x-1" />
             <div
@@ -159,7 +170,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           >
             <Download className="w-4 h-4 text-emerald-400 group-hover:scale-110 transition-transform duration-200" />
             <span className="tracking-wide">
-              <StaggerText text="Unduh Pitchdeck 2025" />
+              <StaggerText text={secondaryCta} />
             </span>
           </button>
         </div>
@@ -175,7 +186,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               aria-hidden="true"
             />
             <span className="text-[10.5px] sm:text-[11px] font-bold tracking-[0.18em] uppercase text-emerald-400/90 whitespace-nowrap">
-              SOROTAN EKOSISTEM NUZULTRIP
+              {highlightsLabel}
             </span>
             <span
               className="h-[1px] flex-1 bg-gradient-to-r from-transparent via-white/20 to-transparent"
@@ -186,7 +197,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           {/* Frame Berjalan Dibawahnya dengan Spasi Height yang Lega */}
           <div className="hero-partners-track w-full overflow-hidden py-2 px-1">
             <div className="animate-marquee-slow flex items-center gap-2.5">
-              {[...HIGHLIGHT_BADGES, ...HIGHLIGHT_BADGES].map((badge, idx) => (
+              {[...highlights, ...highlights].map((badge, idx) => (
                 <div
                   key={idx}
                   className="hero-chip group/chip px-4 py-2 rounded-full bg-white/[0.03] hover:bg-white/[0.07] border border-white/[0.09] hover:border-emerald-500/30 transition-all duration-200 flex items-center gap-2 shrink-0 backdrop-blur-sm"

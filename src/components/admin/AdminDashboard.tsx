@@ -22,8 +22,8 @@ const modules:{id:Module;label:string;icon:any;description:string}[]=[
  {id:'pengaturan',label:'Pengaturan',icon:Settings,description:'Konfigurasi dashboard dan portal'}
 ];
 export const AdminDashboard:React.FC<{identity:PortalIdentity;onBack:()=>void;onLogout:()=>void}>=({identity,onBack,onLogout})=>{
- const [active,setActive]=useState<Module>('ringkasan');const [mobile,setMobile]=useState(false);const [permissions,setPermissions]=useState<AdminModule[]>(['ringkasan']);const [roleLabel,setRoleLabel]=useState(identity.roleLabel);
- useEffect(()=>{void supabase?.auth.getUser().then(async({data})=>{if(!data.user)return;try{const access=await getAdminAccess(data.user.id);setPermissions(access.permissions);setRoleLabel(access.role);if(!access.permissions.includes(active))setActive('ringkasan')}catch{}})},[]);
+ const [active,setActive]=useState<Module>('ringkasan');const [mobile,setMobile]=useState(false);const [permissions,setPermissions]=useState<AdminModule[]>(['ringkasan']);const [permissionKeys,setPermissionKeys]=useState<string[]>([]);const [roleLabel,setRoleLabel]=useState(identity.roleLabel);
+ useEffect(()=>{void supabase?.auth.getUser().then(async({data})=>{if(!data.user)return;try{const access=await getAdminAccess(data.user.id);setPermissions(access.permissions);setPermissionKeys(access.permissionKeys);setRoleLabel(access.role);if(!access.permissions.includes(active))setActive('ringkasan')}catch{}})},[]);
  const visibleModules=useMemo(()=>modules.filter(m=>permissions.includes(m.id)),[permissions]);
  const current=modules.find(x=>x.id===active)!;
  return <div className="min-h-screen bg-[#f5f5f3] text-[#111] flex">
@@ -38,12 +38,12 @@ export const AdminDashboard:React.FC<{identity:PortalIdentity;onBack:()=>void;on
    <div className="p-5 lg:p-8">
     {active==='ringkasan'?<AdminSummary/>:
     active==='portal'?<PortalEditor/>:
-    active==='investor'?<InvestorManagement/>:
-    active==='kasir'?<CashierModule/>:
-    active==='keuangan'?<FinanceModule/>:
+    active==='investor'?<InvestorManagement permissionKeys={permissionKeys}/>:
+    active==='kasir'?<CashierModule permissionKeys={permissionKeys}/>:
+    active==='keuangan'?<FinanceModule permissionKeys={permissionKeys}/>:
     active==='laporan'?<ReportsModule/>:
-    active==='dokumen'?<DocumentsModule/>:
-    active==='admin'?<AdminManagement/>:
+    active==='dokumen'?<DocumentsModule permissionKeys={permissionKeys}/>:
+    active==='admin'?<AdminManagement permissionKeys={permissionKeys}/>:
     active==='pengaturan'?<SettingsModule/>:
     null}
    </div>

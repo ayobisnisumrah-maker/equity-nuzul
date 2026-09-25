@@ -5,12 +5,21 @@ import { Eyebrow } from '../ui/Eyebrow';
 import { ArrowButton } from '../ui/ArrowButton';
 import { StaggerHeading } from '../ui/LetterStagger';
 import { ARTICLES_LIST, ArticleItem } from '../../data/landingData';
+import { usePortalContent } from '../../context/PortalContentContext';
 
 interface ArticlesSectionProps {
   onSelectArticle: (article: ArticleItem) => void;
 }
 
 export const ArticlesSection: React.FC<ArticlesSectionProps> = ({ onSelectArticle }) => {
+  const { content } = usePortalContent();
+  const cms = content('articles', {} as Record<string, unknown>);
+  const eyebrow = typeof cms.eyebrow === 'string' ? cms.eyebrow : 'ARTIKEL & BERITA';
+  const headline = typeof cms.headline === 'string' ? cms.headline : 'Pahami Peluang. Ambil Keputusan.';
+  const description = typeof cms.description === 'string' ? cms.description : 'Analisis pasar, panduan investasi syariah, dan pembaruan strategis industri perjalanan ibadah Indonesia.';
+  const moreCta = typeof cms.moreCta === 'string' ? cms.moreCta : 'Lebih Artikel Lainnya';
+  const readMore = typeof cms.readMore === 'string' ? cms.readMore : 'Baca Selengkapnya';
+  const articles = Array.isArray(cms.itemsJson) && cms.itemsJson.length ? cms.itemsJson as ArticleItem[] : ARTICLES_LIST;
   return (
     <section
       id="artikel"
@@ -21,18 +30,18 @@ export const ArticlesSection: React.FC<ArticlesSectionProps> = ({ onSelectArticl
           {/* Left Column: Title & CTA */}
           <div className="lg:col-span-4 flex flex-col justify-between h-full">
             <div>
-              <Eyebrow>ARTIKEL & BERITA</Eyebrow>
+              <Eyebrow>{eyebrow}</Eyebrow>
               <div className="mb-5 sm:mb-6">
                 <StaggerHeading
                   as="h2"
-                  text="Pahami Peluang. Ambil Keputusan."
+                  text={headline}
                   className="font-h2 font-bold text-[#111111] leading-[1.08] tracking-tight"
                   highlightWord="Keputusan."
                   highlightClass="text-emerald-600"
                 />
               </div>
               <p className="text-[16px] sm:text-[17px] text-[#555555] leading-[1.65] max-w-[360px]">
-                Analisis pasar, panduan investasi syariah, dan pembaruan strategis industri perjalanan ibadah Indonesia.
+                {description}
               </p>
             </div>
 
@@ -40,17 +49,17 @@ export const ArticlesSection: React.FC<ArticlesSectionProps> = ({ onSelectArticl
             <div className="pt-8 sm:pt-10 mt-auto">
               <ArrowButton
                 variant="link"
-                onClick={() => onSelectArticle(ARTICLES_LIST[0])}
+                onClick={() => onSelectArticle(articles[0])}
                 id="articles-cta-more"
               >
-                Lebih Artikel Lainnya
+                {moreCta}
               </ArrowButton>
             </div>
           </div>
 
           {/* Right Column: 2 Editorial Cards */}
           <div className="lg:col-span-8 grid grid-cols-1 sm:grid-cols-2 gap-6">
-            {ARTICLES_LIST.map((article) => (
+            {articles.map((article) => (
               <article
                 key={article.id}
                 onClick={() => onSelectArticle(article)}
@@ -88,7 +97,7 @@ export const ArticlesSection: React.FC<ArticlesSectionProps> = ({ onSelectArticl
                   </div>
 
                   <div className="mt-6 pt-4 border-t border-black/[0.06] flex items-center justify-between text-[13px] font-bold text-[#111111]">
-                    <span>Baca Selengkapnya</span>
+                    <span>{readMore}</span>
                     <ArrowRight
                       size={15}
                       className="group-hover:translate-x-1.5 transition-transform duration-200"

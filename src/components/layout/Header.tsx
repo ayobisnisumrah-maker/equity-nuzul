@@ -3,6 +3,7 @@ import { ArrowRight, Menu, X, Megaphone } from 'lucide-react';
 import { Container } from './Container';
 import { NuzultripLogo } from '../ui/NuzultripLogo';
 import { LOGO_CONFIG } from '../../data/logoDatabase';
+import { usePortalContent } from '../../context/PortalContentContext';
 
 interface HeaderProps {
   onOpenLogin: () => void;
@@ -19,18 +20,27 @@ export const Header: React.FC<HeaderProps> = ({
   isPastHero = false,
   onOpenAnnouncement,
 }) => {
+  const { content } = usePortalContent();
+  const cms = content('header', {} as Record<string, unknown>);
+  const labels = Array.isArray(cms.navLabels) && cms.navLabels.length === 7 && cms.navLabels.every((v) => typeof v === 'string') ? cms.navLabels as string[] : ['Tentang','Peluang','Proses','Roadmap','Jaringan','Investor','Kontak'];
+  const announcementBadge = typeof cms.announcementBadge === 'string' ? cms.announcementBadge : 'Pengumuman';
+  const announcementTitle = typeof cms.announcementTitle === 'string' ? cms.announcementTitle : 'RUPS Luar Biasa Kuartal 3';
+  const announcementText = typeof cms.announcementText === 'string' ? cms.announcementText : 'dijadwalkan pada 20 Oktober 2026. Laporan Triwulan II telah terbit.';
+  const loginLabel = typeof cms.loginLabel === 'string' ? cms.loginLabel : 'Masuk';
+  const interestLabel = typeof cms.interestLabel === 'string' ? cms.interestLabel : 'Ajukan Minat Equity';
+  const investorLoginLabel = typeof cms.investorLoginLabel === 'string' ? cms.investorLoginLabel : 'Masuk Portal Investor';
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState<string>('');
 
   const navLinks = [
-    { key: 'tentang', label: 'Tentang', href: '#tentang' },
-    { key: 'peluang', label: 'Peluang', href: '#peluang' },
-    { key: 'proses', label: 'Proses', href: '#proses' },
-    { key: 'roadmap', label: 'Roadmap', href: '#roadmap' },
-    { key: 'jaringan', label: 'Jaringan', href: '#jaringan' },
-    { key: 'investor', label: 'Investor', href: '#informasi' },
-    { key: 'kontak', label: 'Kontak', href: '#kontak' },
+    { key: 'tentang', label: labels[0], href: '#tentang' },
+    { key: 'peluang', label: labels[1], href: '#peluang' },
+    { key: 'proses', label: labels[2], href: '#proses' },
+    { key: 'roadmap', label: labels[3], href: '#roadmap' },
+    { key: 'jaringan', label: labels[4], href: '#jaringan' },
+    { key: 'investor', label: labels[5], href: '#informasi' },
+    { key: 'kontak', label: labels[6], href: '#kontak' },
   ];
 
   useEffect(() => {
@@ -148,10 +158,10 @@ export const Header: React.FC<HeaderProps> = ({
           <div className="flex items-center justify-center gap-2 sm:gap-2.5 text-center flex-wrap">
             <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 text-[10px] font-bold uppercase tracking-wider shrink-0">
               <Megaphone size={11} className="shrink-0" />
-              <span>Pengumuman</span>
+              <span>{announcementBadge}</span>
             </span>
             <p className="text-[11.5px] sm:text-[12.5px] leading-tight text-neutral-200">
-              <strong className="text-white font-medium">RUPS Luar Biasa Kuartal 3</strong> dijadwalkan pada 20 Oktober 2026. Laporan Triwulan II telah terbit.
+              <strong className="text-white font-medium">{announcementTitle}</strong> {announcementText}
             </p>
           </div>
         </Container>
@@ -206,7 +216,7 @@ export const Header: React.FC<HeaderProps> = ({
                 onClick={onOpenLogin}
                 className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-white/10 hover:bg-[#10b981] border border-white/15 hover:border-[#10b981] text-white hover:text-white text-[14px] font-semibold transition-all duration-200 active:scale-98 shadow-sm hover:shadow-[0_4px_16px_rgba(16,185,129,0.35)] group backdrop-blur-sm cursor-pointer"
               >
-                <span>Masuk</span>
+                <span>{loginLabel}</span>
                 <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
               </button>
             </div>
@@ -265,7 +275,7 @@ export const Header: React.FC<HeaderProps> = ({
               }}
               className="w-full py-3.5 px-6 rounded-xl bg-white text-black font-semibold text-center flex items-center justify-center gap-2"
             >
-              <span>Ajukan Minat Equity</span>
+              <span>{interestLabel}</span>
               <ArrowRight size={16} />
             </button>
 
@@ -277,7 +287,7 @@ export const Header: React.FC<HeaderProps> = ({
               }}
               className="w-full py-3.5 px-6 rounded-xl border border-white/20 text-white font-medium text-center"
             >
-              Masuk Portal Investor
+              {investorLoginLabel}
             </button>
           </div>
         </div>
