@@ -18,12 +18,10 @@ export async function resolvePortalIdentity(user:User):Promise<PortalIdentity>{
  if(account.error)throw account.error;
  if(!account.data||account.data.status!=='active'||!account.data.full_name)throw new Error('Akun tidak terdaftar.');
 
- const admin=await supabase.from('admins').select('id,is_active,title,roles!admins_role_id_fkey(key)').eq('id',user.id).maybeSingle();
+ const admin=await supabase.from('admins').select('id,is_active,title,role_id').eq('id',user.id).maybeSingle();
  if(admin.error)throw admin.error;
  if(admin.data?.is_active){
-  const roleRow=Array.isArray(admin.data.roles)?admin.data.roles[0]:admin.data.roles;
-  const roleKey=(roleRow as {key?:string}|null)?.key||'admin';
-  const roleLabel=roleKey==='super_admin'?'Super Admin':admin.data.title||'Admin';
+  const roleLabel=admin.data.title||'Admin';
   return {role:'admin',name:account.data.full_name,roleLabel};
  }
 
