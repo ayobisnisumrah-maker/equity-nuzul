@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { ArrowRight } from 'lucide-react';
+import { usePortalContent } from '../../context/PortalContentContext';
 
 interface EquityCalculatorProps {
   onOpenInterest: () => void;
@@ -39,11 +40,20 @@ const formatPercentage = (num: number): string => {
 };
 
 export const EquityCalculator: React.FC<EquityCalculatorProps> = ({ onOpenInterest }) => {
+  const { content } = usePortalContent();
+  const cms = content('equity', {} as Record<string, unknown>);
+  const calculatorTitle = typeof cms.calculatorTitle === 'string' ? cms.calculatorTitle : 'Simulasi Bagi Hasil';
+  const calculatorNote = typeof cms.calculatorNote === 'string' ? cms.calculatorNote : '*Pencairan dividen ditransfer bulanan sesuai pembukuan riil.';
+  const calculatorCta = typeof cms.calculatorCta === 'string' ? cms.calculatorCta : 'Ajukan Minat Equity';
+  const configuredOptions = Array.isArray(cms.calculatorOptionsJson) ? cms.calculatorOptionsJson.filter((v): v is UnitOption => Boolean(v) && typeof v === 'object' && Number.isFinite((v as UnitOption).units) && Number.isFinite((v as UnitOption).price) && Number.isFinite((v as UnitOption).monthlyShare)) : [];
+  const unitOptions = configuredOptions.length >= 2 ? configuredOptions : UNIT_OPTIONS;
+  const sharePercentPerUnit = typeof cms.sharePercentPerUnit === 'number' && cms.sharePercentPerUnit > 0 ? cms.sharePercentPerUnit : SHARE_PERCENT_PER_UNIT;
   const [stepIndex, setStepIndex] = useState<number>(0);
 
-  const currentOption = UNIT_OPTIONS[stepIndex];
+  const safeStepIndex = Math.min(stepIndex, unitOptions.length - 1);
+  const currentOption = unitOptions[safeStepIndex];
   const totalInvestment = currentOption.price;
-  const ownershipPercentage = currentOption.units * SHARE_PERCENT_PER_UNIT;
+  const ownershipPercentage = currentOption.units * sharePercentPerUnit;
   const monthlyShare = currentOption.monthlyShare;
   const annualShare = monthlyShare * 12;
   const yieldRoi = ((annualShare / totalInvestment) * 100).toFixed(1);
@@ -53,7 +63,7 @@ export const EquityCalculator: React.FC<EquityCalculatorProps> = ({ onOpenIntere
       {/* Header Bersih */}
       <div className="pb-3 sm:pb-4">
         <h3 className="text-[20px] sm:text-[22px] font-bold text-[#111111] tracking-tight">
-          Simulasi Bagi Hasil
+          {calculatorTitle}
         </h3>
       </div>
 
@@ -76,7 +86,7 @@ export const EquityCalculator: React.FC<EquityCalculatorProps> = ({ onOpenIntere
             {/* Active filled track */}
             <div
               className="absolute top-0 left-0 h-full bg-emerald-500 rounded-full transition-all duration-150"
-              style={{ width: `${(stepIndex / (UNIT_OPTIONS.length - 1)) * 100}%` }}
+              style={{ width: `${(stepIndex / (unitOptions.length - 1)) * 100}%` }}
             />
 
             {/* Native range input overlaid for drag, touch, and accessibility */}
@@ -84,7 +94,7 @@ export const EquityCalculator: React.FC<EquityCalculatorProps> = ({ onOpenIntere
               id="unit-equity-slider"
               type="range"
               min="0"
-              max="4"
+              max={unitOptions.length - 1}
               step="1"
               value={stepIndex}
               onChange={(e) => setStepIndex(Number(e.target.value))}
@@ -95,14 +105,14 @@ export const EquityCalculator: React.FC<EquityCalculatorProps> = ({ onOpenIntere
             {/* Thumb Bulat Hijau: Rata Tengah Sempurna */}
             <div
               className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-5 h-5 rounded-full bg-emerald-600 border-2 border-white shadow-md pointer-events-none transition-all duration-150 z-10"
-              style={{ left: `${(stepIndex / (UNIT_OPTIONS.length - 1)) * 100}%` }}
+              style={{ left: `${(stepIndex / (unitOptions.length - 1)) * 100}%` }}
             />
           </div>
 
           {/* Angka Ticks 1, 2, 5, 10, 25: Rata Tengah dengan Thumb */}
           <div className="relative w-full mt-2.5 h-5">
-            {UNIT_OPTIONS.map((opt, idx) => {
-              const pct = (idx / (UNIT_OPTIONS.length - 1)) * 100;
+            {unitOptions.map((opt, idx) => {
+              const pct = (idx / (unitOptions.length - 1)) * 100;
               const isSelected = stepIndex === idx;
               return (
                 <button
@@ -181,14 +191,14 @@ export const EquityCalculator: React.FC<EquityCalculatorProps> = ({ onOpenIntere
       {/* Tombol CTA & Catatan di Atas Tombol */}
       <div className="pt-3">
         <span className="text-[11px] text-[#777777] text-center block mb-2 leading-relaxed">
-          *Pencairan dividen ditransfer bulanan sesuai pembukuan riil.
+          {calculatorNote}
         </span>
         <button
           type="button"
           onClick={onOpenInterest}
           className="w-full py-3.5 px-4 rounded-xl bg-[#111111] hover:bg-emerald-600 active:scale-98 text-white font-bold text-[13.5px] flex items-center justify-center gap-2 transition-all duration-200 shadow-sm group cursor-pointer"
         >
-          <span>Ajukan Minat Equity</span>
+          <span>{calculatorCta}</span>
           <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
         </button>
       </div>
