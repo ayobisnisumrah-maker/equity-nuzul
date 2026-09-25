@@ -15,6 +15,10 @@ import { ArticlesSection } from './components/sections/ArticlesSection';
 
 import { FloatingAnnouncement } from './components/ui/FloatingAnnouncement';
 import { ServiceItem, InvestorInfoItem, ArticleItem } from './data/landingData';
+import { AdminDashboard } from './components/admin/AdminDashboard';
+import { InvestorDashboard } from './components/investor/InvestorDashboard';
+import { supabase } from './lib/supabase';
+import type { PortalRole } from './services/auth';
 
 // Code-split modals so initial landing page bundle is super lightweight
 const EquityInterestModal = React.lazy(() =>
@@ -35,6 +39,7 @@ export default function App() {
   const [isPitchdeckModalOpen, setIsPitchdeckModalOpen] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isPastHero, setIsPastHero] = useState(false);
+  const [dashboardRole,setDashboardRole]=useState<PortalRole|null>(null);
   const [detailModal, setDetailModal] = useState<{
     isOpen: boolean;
     title: string;
@@ -234,6 +239,11 @@ export default function App() {
     });
   };
 
+  const closeDashboard=()=>{setDashboardRole(null);window.scrollTo({top:0,left:0,behavior:'instant' as ScrollBehavior})};
+  const logout=async()=>{await supabase?.auth.signOut();closeDashboard()};
+  if(dashboardRole==='admin') return <AdminDashboard onBack={closeDashboard}/>;
+  if(dashboardRole==='investor') return <InvestorDashboard onBack={closeDashboard} onLogout={logout}/>;
+
   return (
     <div className="min-h-screen bg-[#F5F5F3] text-[#111111] flex flex-col selection:bg-[#090909] selection:text-white">
       {/* Sticky Header */}
@@ -322,6 +332,7 @@ export default function App() {
             isOpen={isLoginModalOpen}
             onClose={() => setIsLoginModalOpen(false)}
             onOpenInterest={() => setIsInterestModalOpen(true)}
+            onAuthenticated={(role) => { setIsLoginModalOpen(false); setDashboardRole(role); }}
           />
         )}
 
