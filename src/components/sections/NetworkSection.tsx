@@ -4,12 +4,20 @@ import { Container } from '../layout/Container';
 import { Eyebrow } from '../ui/Eyebrow';
 import { ArrowButton } from '../ui/ArrowButton';
 import { NETWORK_PARTNERS, IMAGES } from '../../data/landingData';
+import { usePortalContent } from '../../context/PortalContentContext';
 
 interface NetworkSectionProps {
   onOpenDetail: () => void;
 }
 
 export const NetworkSection: React.FC<NetworkSectionProps> = ({ onOpenDetail }) => {
+  const { content } = usePortalContent();
+  const cms = content('network', {} as Record<string, unknown>);
+  const eyebrow = typeof cms.eyebrow === 'string' ? cms.eyebrow : 'JARINGAN & MITRA';
+  const description = typeof cms.description === 'string' ? cms.description : 'Menjadi bagian dari perjalanan bersama Nuzultrip melalui kepemilikan equity dan sinergi ekosistem.';
+  const detailCta = typeof cms.detailCta === 'string' ? cms.detailCta : 'Pelajari Selengkapnya';
+  const partners = Array.isArray(cms.partnersJson) && cms.partnersJson.length ? cms.partnersJson as typeof NETWORK_PARTNERS : NETWORK_PARTNERS;
+  const imageUrl = typeof cms.imageUrl === 'string' && cms.imageUrl ? cms.imageUrl : IMAGES.partnerPortrait;
   const getIcon = (iconName: string) => {
     switch (iconName) {
       case 'user':
@@ -33,7 +41,7 @@ export const NetworkSection: React.FC<NetworkSectionProps> = ({ onOpenDetail }) 
           {/* Column 1: Left Editorial Content */}
           <div className="lg:col-span-4 flex flex-col justify-between h-full">
             <div>
-              <Eyebrow>JARINGAN & MITRA</Eyebrow>
+              <Eyebrow>{eyebrow}</Eyebrow>
               <h2 className="font-h2 font-bold text-[#111111] leading-[1.05] tracking-tight mb-5 sm:mb-6">
                 Terhubung<br />
                 untuk<br />
@@ -41,8 +49,7 @@ export const NetworkSection: React.FC<NetworkSectionProps> = ({ onOpenDetail }) 
                 <span className="text-emerald-600">Bersama</span>
               </h2>
               <p className="text-[16px] sm:text-[17px] text-[#555555] leading-[1.65] max-w-[360px]">
-                Menjadi bagian dari perjalanan bersama Nuzultrip melalui kepemilikan
-                equity dan sinergi ekosistem.
+                {description}
               </p>
             </div>
 
@@ -53,14 +60,14 @@ export const NetworkSection: React.FC<NetworkSectionProps> = ({ onOpenDetail }) 
                 onClick={onOpenDetail}
                 id="network-cta-detail"
               >
-                Pelajari Selengkapnya
+                {detailCta}
               </ArrowButton>
             </div>
           </div>
 
           {/* Column 2: 3 Stacked Cards */}
           <div className="lg:col-span-4 flex flex-col justify-between gap-4">
-            {NETWORK_PARTNERS.map((partner) => (
+            {partners.map((partner) => (
               <div
                 key={partner.id}
                 className="bg-white rounded-2xl p-6 border border-black/[0.08] shadow-[0_2px_8px_rgba(0,0,0,0.02)] flex items-start gap-4 hover:shadow-md transition-all duration-300 group flex-1 cursor-pointer"
@@ -84,7 +91,7 @@ export const NetworkSection: React.FC<NetworkSectionProps> = ({ onOpenDetail }) 
           <div className="lg:col-span-4 flex flex-col h-full">
             <div className="relative w-full h-full min-h-[380px] sm:min-h-[460px] rounded-2xl overflow-hidden shadow-lg border border-black/10 flex flex-col justify-end p-7 text-white group">
               <img
-                src={IMAGES.partnerPortrait}
+                src={imageUrl}
                 alt="Mitra dan Ekosistem Profesional Nuzultrip"
                 className="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
                 loading="lazy"
