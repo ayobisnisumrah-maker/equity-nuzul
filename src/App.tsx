@@ -17,6 +17,7 @@ import { FloatingAnnouncement } from './components/ui/FloatingAnnouncement';
 import { ServiceItem, InvestorInfoItem, ArticleItem } from './data/landingData';
 import { AdminDashboard } from './components/admin/AdminDashboard';
 import { InvestorDashboard } from './components/investor/InvestorDashboard';
+import { SetPasswordPage } from './components/SetPasswordPage';
 import { supabase } from './lib/supabase';
 import { resolvePortalIdentity, type PortalIdentity, type PortalRole } from './services/auth';
 import { usePortalContent } from './context/PortalContentContext';
@@ -39,6 +40,8 @@ type DetailContent = { title: string; category?: string; content: string; detail
 
 export default function App() {
   const { content } = usePortalContent();
+  const path = window.location.pathname;
+  if (path === '/atur-sandi') return <SetPasswordPage />;
   const [isInterestModalOpen, setIsInterestModalOpen] = useState(false);
   const [isPitchdeckModalOpen, setIsPitchdeckModalOpen] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
