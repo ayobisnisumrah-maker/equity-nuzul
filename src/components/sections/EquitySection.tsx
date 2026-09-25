@@ -4,8 +4,7 @@ import { Eyebrow } from '../ui/Eyebrow';
 import { ArrowButton } from '../ui/ArrowButton';
 import { AnimatedNumber } from '../ui/AnimatedNumber';
 import { StaggerHeading } from '../ui/LetterStagger';
-import { PORTAL_DEFAULTS } from '../../data/portalDefaults';
-import { usePortalContent } from '../../context/PortalContentContext';
+import { EQUITY_METRICS } from '../../data/landingData';
 import { EquityCalculator } from './EquityCalculator';
 
 interface EquitySectionProps {
@@ -17,9 +16,6 @@ export const EquitySection: React.FC<EquitySectionProps> = ({
   onOpenInterest,
   onOpenDetail,
 }) => {
-  const {content}=usePortalContent();
-  const cms:any=content('equity',PORTAL_DEFAULTS.equity);
-  const metrics:any[]=Array.isArray(cms.metrics)?cms.metrics:[];
   return (
     <section
       id="peluang"
@@ -30,18 +26,19 @@ export const EquitySection: React.FC<EquitySectionProps> = ({
           {/* Column 1: Left Editorial Content */}
           <div className="lg:col-span-4 flex flex-col justify-between h-full">
             <div>
-              <Eyebrow>{cms.eyebrow}</Eyebrow>
+              <Eyebrow>PELUANG EQUITY</Eyebrow>
               <div className="mb-5 sm:mb-6">
                 <StaggerHeading
                   as="h2"
-                  text={cms.title}
+                  text="Kesempatan Bertumbuh Bersama"
                   className="font-h2 font-bold text-[#111111] leading-[1.08] tracking-tight"
-                  highlightWord={cms.highlightWord}
+                  highlightWord="Bersama"
                   highlightClass="text-emerald-600"
                 />
               </div>
               <p className="text-[16px] sm:text-[17px] text-[#555555] leading-[1.65] max-w-[360px]">
-                {cms.description}
+                Jadilah bagian dari perjalanan besar Nuzultrip dengan kepemilikan
+                yang jelas, transparan, dan terstruktur.
               </p>
             </div>
 
@@ -52,14 +49,14 @@ export const EquitySection: React.FC<EquitySectionProps> = ({
                 onClick={onOpenDetail}
                 id="equity-cta-detail"
               >
-                {cms.detailCta}
+                Lebih Detail Penawaran
               </ArrowButton>
             </div>
           </div>
 
           {/* Column 2: 6 Metrics Point - Dibatasi Garis Atas & Garis Bawah Rata Frame Simulasi */}
           <div className="lg:col-span-4 flex flex-col h-full min-h-[420px] sm:min-h-[480px] border-t border-b border-black/[0.08] divide-y divide-black/[0.08]">
-            {metrics.map((item) => (
+            {EQUITY_METRICS.map((item) => (
               <div
                 key={item.id}
                 className="flex items-center justify-between gap-4 flex-1 py-2 sm:py-2.5 group"
