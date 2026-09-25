@@ -1,0 +1,14 @@
+import {ABOUT_METRICS,EQUITY_METRICS,COMPANY_METRICS,SERVICES_LIST,NETWORK_PARTNERS,INVESTOR_INFO_LIST,ARTICLES_LIST,IMAGES} from './landingData';
+
+export const PORTAL_DEFAULTS={
+ header:{announcementBadge:'Pengumuman',announcementTitle:'RUPS Luar Biasa Kuartal 3',announcementText:'dijadwalkan pada 20 Oktober 2026. Laporan Triwulan II telah terbit.',announcementTooltip:'Klik untuk melihat rincian pengumuman resmi',logoAria:'Nuzultrip Beranda',navAria:'Navigasi Utama',loginLabel:'Masuk',mobileOpenLabel:'Buka menu',mobileCloseLabel:'Tutup menu',mobileInterestLabel:'Ajukan Minat Equity',mobileLoginLabel:'Masuk Portal Investor',navLinks:[{key:'tentang',label:'Tentang',href:'#tentang'},{key:'peluang',label:'Peluang',href:'#peluang'},{key:'proses',label:'Proses',href:'#proses'},{key:'roadmap',label:'Roadmap',href:'#roadmap'},{key:'jaringan',label:'Jaringan',href:'#jaringan'},{key:'investor',label:'Investor',href:'#informasi'},{key:'kontak',label:'Kontak',href:'#kontak'}]},
+ hero:{eyebrow:'NUZULTRIP EQUITY',headline:'Berkembang Dalam Ekosistem Muslim',headlineHighlight:'Yang Terintegrasi',description:'Nuzultrip membangun ekosistem perjalanan Muslim melalui layanan, jaringan, dan teknologi yang terintegrasi untuk mendukung pertumbuhan jangka panjang.',primaryCta:'Ajukan Minat Equity',secondaryCta:'Unduh Pitchdeck 2025',highlightsLabel:'SOROTAN EKOSISTEM NUZULTRIP',scrollLabel:'Scroll Eksplorasi',highlights:['40% Alokasi Equity','50 Unit Terbatas','Rp 100 Juta / Unit','Dividen Berkala','Jaringan 4 Negara','1000+ Jamaah Tahunan','Izin PPIU Kemenag Resmi','Kontrak Hotel Langsung Makkah-Madinah']},
+ about:{eyebrow:'TENTANG KAMI',title:'Menghadirkan Inovasi Teknologi dengan Integrasi Berkelanjutan',highlightWord:'Berkelanjutan',metricPrefix:'Metrik',metrics:ABOUT_METRICS},
+ equity:{eyebrow:'PELUANG EQUITY',title:'Kesempatan Bertumbuh Bersama',highlightWord:'Bersama',description:'Jadilah bagian dari perjalanan besar Nuzultrip dengan kepemilikan yang jelas, transparan, dan terstruktur.',detailCta:'Lebih Detail Penawaran',metrics:EQUITY_METRICS},
+ company:{eyebrow:'PERUSAHAAN',title:'Perjalanan Muslim yang Bertumbuh',highlightWord:'Bertumbuh',description:'Menghadirkan layanan perjalanan ibadah yang bermakna melalui layanan, jaringan, dan teknologi.',detailCta:'Lebih Detail Penawaran',images:IMAGES.companySlices,metrics:COMPANY_METRICS,credentialValue:'Amanah',credentialLabel:'Terverifikasi PPIU Kemenag'},
+ services:{eyebrow:'LAYANAN UTAMA',title:'Ekosistem Perjalanan Muslim Nuzultrip',highlightWord:'Nuzultrip',description:'Menghubungkan mitra, vendor layanan, dan jaringan distribusi dalam satu kesatuan sistem yang transparan dan terstandar.',moreCta:'Layanan Lainnya',items:SERVICES_LIST},
+ network:{partners:NETWORK_PARTNERS,portrait:IMAGES.partnerPortrait},
+ investor:{items:INVESTOR_INFO_LIST},
+ articles:{items:ARTICLES_LIST},
+ images:IMAGES
+} as const;
