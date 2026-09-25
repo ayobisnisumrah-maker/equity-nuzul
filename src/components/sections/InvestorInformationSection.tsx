@@ -1,3 +1,4 @@
+import { usePortalSection } from '../../context/PortalContentContext';
 import React, { useState } from 'react';
 import { ArrowRight } from 'lucide-react';
 import { Container } from '../layout/Container';
@@ -12,8 +13,10 @@ interface InvestorInformationSectionProps {
 export const InvestorInformationSection: React.FC<InvestorInformationSectionProps> = ({
   onSelectItem,
 }) => {
+  const field = usePortalSection('investor');
+  const cmsItems = field('itemsJson', INVESTOR_INFO_LIST);
   const [hoveredCard, setHoveredCard] = useState<string | null>(null);
-  const activeId = hoveredCard || INVESTOR_INFO_LIST[0].id;
+  const activeId = hoveredCard || cmsItems[0]?.id;
 
   return (
     <section
@@ -23,10 +26,10 @@ export const InvestorInformationSection: React.FC<InvestorInformationSectionProp
       <Container size="default">
         {/* Section Header */}
         <div className="max-w-[720px] mb-12 sm:mb-16">
-          <Eyebrow>INFORMASI INVESTOR</Eyebrow>
+          <Eyebrow>{field('eyebrow', 'INFORMASI INVESTOR')}</Eyebrow>
           <StaggerHeading
             as="h2"
-            text="Informasi penting dalam satu tempat"
+            text={field('headline', 'Informasi penting dalam satu tempat')}
             className="font-h2 font-bold text-[#111111] leading-[1.08] tracking-tight"
             highlightWord="tempat"
             highlightClass="text-emerald-600"
@@ -37,7 +40,7 @@ export const InvestorInformationSection: React.FC<InvestorInformationSectionProp
           {/* Left Column: Image that dynamically updates on card hover (gambar saja tanpa text atau keterangan) */}
           <div className="lg:col-span-5 flex flex-col">
             <div className="relative w-full h-full min-h-[380px] sm:min-h-[500px] rounded-2xl overflow-hidden border border-black/[0.08] shadow-sm bg-[#E8E8E4]">
-              {INVESTOR_INFO_LIST.map((item) => (
+              {cmsItems.map((item) => (
                 <img
                   key={item.id}
                   src={item.imageUrl}
@@ -55,7 +58,7 @@ export const InvestorInformationSection: React.FC<InvestorInformationSectionProp
 
           {/* Right Column: 6 Investor Information Cards in 2 columns x 3 rows */}
           <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {INVESTOR_INFO_LIST.map((item) => {
+            {cmsItems.map((item) => {
               const isItemActive = item.id === activeId;
               return (
                 <div

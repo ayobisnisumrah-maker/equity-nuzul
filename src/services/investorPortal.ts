@@ -2,7 +2,8 @@ import {supabase} from '../lib/supabase';
 export interface InvestorPortfolio{investor_code:string|null;full_name:string;units:number;ownership_percent:number;invested_amount:number}
 export interface InvestorTransaction{id:string;transaction_date:string;reference_no:string;description:string;amount:number;payment_method:string;status:string}
 export interface InvestorDistribution{id:string;period:string;amount:number;status:string;paid_at:string|null;notes:string|null}
-export interface SalesSummary{invoice_count:number;total_sales:number;payments_received:number;refunds:number;outstanding:number;net_cash:number;paid_count:number;dp_count:number;refunded_count:number;cancelled_count:number;pax:number}\nexport interface InvestorDocument{id:string;title:string;category:string;file_url:string;created_at:string}
+export interface SalesSummary{invoice_count:number;total_sales:number;payments_received:number;refunds:number;outstanding:number;net_cash:number;paid_count:number;dp_count:number;refunded_count:number;cancelled_count:number;pax:number}
+export interface InvestorDocument{id:string;title:string;category:string;file_url:string;created_at:string}
 const db=()=>{if(!supabase)throw new Error('Supabase belum dikonfigurasi.');return supabase};
 export async function getInvestorDashboardData(){
  const {data:{user}}=await db().auth.getUser();if(!user)throw new Error('Sesi investor tidak tersedia.');

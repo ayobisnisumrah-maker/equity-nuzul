@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { X, Lock, Eye, EyeOff, ShieldCheck, ArrowRight } from 'lucide-react';
 import { signInPortal, type PortalIdentity } from '../../services/auth';
 
@@ -23,11 +23,14 @@ export const LoginModal: React.FC<LoginModalProps> = ({
   const [identity,setIdentity]=useState<PortalIdentity|null>(null);
   const [loginError,setLoginError]=useState('');
 
+  const redirectTimer = useRef<number | undefined>(undefined);
+  const mounted = useRef(true);
+  useEffect(() => { mounted.current = isOpen; return () => { mounted.current = false; window.clearTimeout(redirectTimer.current); }; }, [isOpen]);
   if (!isOpen) return null;
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault(); setIsLoggingIn(true); setLoginError('');
-    try { const result=await signInPortal(investorId,password); const next={role:result.role,name:result.name,roleLabel:result.roleLabel}; setIdentity(next); setIsSuccess(true); window.setTimeout(()=>onAuthenticated(next),900); }
+    try { const result=await signInPortal(investorId,password); if(!mounted.current)return; const next={role:result.role,name:result.name,roleLabel:result.roleLabel}; setIdentity(next); setIsSuccess(true); redirectTimer.current=window.setTimeout(()=>onAuthenticated(next),900); }
     catch(error){ setLoginError(error instanceof Error?error.message:'Gagal masuk.'); }
     finally { setIsLoggingIn(false); }
   };

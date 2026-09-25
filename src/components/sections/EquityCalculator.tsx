@@ -1,8 +1,9 @@
+import { usePortalSection } from '../../context/PortalContentContext';
 import React, { useState } from 'react';
 import { ArrowRight } from 'lucide-react';
 
 interface EquityCalculatorProps {
-  onOpenInterest: () => void;
+  onOpenInterest: (units?: number) => void;
 }
 
 interface UnitOption {
@@ -39,6 +40,7 @@ const formatPercentage = (num: number): string => {
 };
 
 export const EquityCalculator: React.FC<EquityCalculatorProps> = ({ onOpenInterest }) => {
+  const field = usePortalSection('equity');
   const [stepIndex, setStepIndex] = useState<number>(0);
 
   const currentOption = UNIT_OPTIONS[stepIndex];
@@ -53,7 +55,7 @@ export const EquityCalculator: React.FC<EquityCalculatorProps> = ({ onOpenIntere
       {/* Header Bersih */}
       <div className="pb-3 sm:pb-4">
         <h3 className="text-[20px] sm:text-[22px] font-bold text-[#111111] tracking-tight">
-          Simulasi Bagi Hasil
+          {field('calculatorTitle', 'Simulasi Bagi Hasil')}
         </h3>
       </div>
 
@@ -181,11 +183,11 @@ export const EquityCalculator: React.FC<EquityCalculatorProps> = ({ onOpenIntere
       {/* Tombol CTA & Catatan di Atas Tombol */}
       <div className="pt-3">
         <span className="text-[11px] text-[#777777] text-center block mb-2 leading-relaxed">
-          *Pencairan dividen ditransfer bulanan sesuai pembukuan riil.
+          {field('calculatorNote', '*Pencairan dividen ditransfer bulanan sesuai pembukuan riil.')}
         </span>
         <button
           type="button"
-          onClick={onOpenInterest}
+          onClick={() => onOpenInterest(currentOption.units)}
           className="w-full py-3.5 px-4 rounded-xl bg-[#111111] hover:bg-emerald-600 active:scale-98 text-white font-bold text-[13.5px] flex items-center justify-center gap-2 transition-all duration-200 shadow-sm group cursor-pointer"
         >
           <span>Ajukan Minat Equity</span>

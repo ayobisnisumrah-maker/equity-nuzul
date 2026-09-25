@@ -1,3 +1,4 @@
+import { usePortalSection } from '../../context/PortalContentContext';
 import React from 'react';
 import { Container } from '../layout/Container';
 import { Eyebrow } from '../ui/Eyebrow';
@@ -8,7 +9,7 @@ import { EQUITY_METRICS } from '../../data/landingData';
 import { EquityCalculator } from './EquityCalculator';
 
 interface EquitySectionProps {
-  onOpenInterest: () => void;
+  onOpenInterest: (units?: number) => void;
   onOpenDetail: () => void;
 }
 
@@ -16,6 +17,8 @@ export const EquitySection: React.FC<EquitySectionProps> = ({
   onOpenInterest,
   onOpenDetail,
 }) => {
+  const field = usePortalSection('equity');
+  const cmsItems = field('metricsJson', EQUITY_METRICS);
   return (
     <section
       id="peluang"
@@ -26,11 +29,11 @@ export const EquitySection: React.FC<EquitySectionProps> = ({
           {/* Column 1: Left Editorial Content */}
           <div className="lg:col-span-4 flex flex-col justify-between h-full">
             <div>
-              <Eyebrow>PELUANG EQUITY</Eyebrow>
+              <Eyebrow>{field('eyebrow', 'PELUANG EQUITY')}</Eyebrow>
               <div className="mb-5 sm:mb-6">
                 <StaggerHeading
                   as="h2"
-                  text="Kesempatan Bertumbuh Bersama"
+                  text={field('headline', 'Kesempatan Bertumbuh Bersama')}
                   className="font-h2 font-bold text-[#111111] leading-[1.08] tracking-tight"
                   highlightWord="Bersama"
                   highlightClass="text-emerald-600"
@@ -49,14 +52,14 @@ export const EquitySection: React.FC<EquitySectionProps> = ({
                 onClick={onOpenDetail}
                 id="equity-cta-detail"
               >
-                Lebih Detail Penawaran
+                {field('detailCta', 'Lebih Detail Penawaran')}
               </ArrowButton>
             </div>
           </div>
 
           {/* Column 2: 6 Metrics Point - Dibatasi Garis Atas & Garis Bawah Rata Frame Simulasi */}
           <div className="lg:col-span-4 flex flex-col h-full min-h-[420px] sm:min-h-[480px] border-t border-b border-black/[0.08] divide-y divide-black/[0.08]">
-            {EQUITY_METRICS.map((item) => (
+            {cmsItems.map((item) => (
               <div
                 key={item.id}
                 className="flex items-center justify-between gap-4 flex-1 py-2 sm:py-2.5 group"

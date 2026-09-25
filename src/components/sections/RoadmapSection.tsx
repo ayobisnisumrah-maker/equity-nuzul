@@ -1,3 +1,4 @@
+import { usePortalSection } from '../../context/PortalContentContext';
 import React, { useRef, useState, useEffect } from 'react';
 import {
   CheckCircle2,
@@ -106,6 +107,8 @@ const ROADMAP_PHASES: RoadmapPhase[] = [
 ];
 
 export const RoadmapSection: React.FC = () => {
+  const field = usePortalSection('roadmap');
+  const cmsItems = field('phasesJson', ROADMAP_PHASES);
   const [activeIndex, setActiveIndex] = useState(0); // Default to first phase (Fase 01)
   const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -196,7 +199,7 @@ export const RoadmapSection: React.FC = () => {
     if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 35) {
       if (deltaX > 0) {
         // Swiped left -> advance to next phase
-        if (activeIndex < ROADMAP_PHASES.length - 1) {
+        if (activeIndex < cmsItems.length - 1) {
           scrollToIndex(activeIndex + 1);
         }
       } else {
@@ -232,7 +235,7 @@ export const RoadmapSection: React.FC = () => {
     isMouseDown.current = false;
     if (hasMouseMoved.current) {
       const deltaX = e.clientX - mouseStartX.current;
-      if (deltaX < -35 && activeIndex < ROADMAP_PHASES.length - 1) {
+      if (deltaX < -35 && activeIndex < cmsItems.length - 1) {
         scrollToIndex(activeIndex + 1);
       } else if (deltaX > 35 && activeIndex > 0) {
         scrollToIndex(activeIndex - 1);
@@ -258,23 +261,23 @@ export const RoadmapSection: React.FC = () => {
         {/* Header Compact */}
         <div className="mb-8 sm:mb-10">
           <div>
-            <Eyebrow>ROADMAP PERUSAHAAN</Eyebrow>
+            <Eyebrow>{field('eyebrow', 'ROADMAP PERUSAHAAN')}</Eyebrow>
             <StaggerHeading
               as="h2"
-              text="Peta Jalan Pertumbuhan Nuzultrip"
+              text={field('headline', 'Peta Jalan Pertumbuhan Nuzultrip')}
               className="font-h2 font-bold text-[#111111] leading-[1.12] tracking-tight"
               highlightWord="Nuzultrip"
               highlightClass="text-emerald-600"
             />
             <p className="text-[14.5px] sm:text-[15.5px] text-[#666666] mt-2 max-w-xl">
-              Tahapan strategis pengembangan bisnis, platform teknologi, dan tata kelola investasi jangka panjang.
+              {field('description', 'Tahapan strategis pengembangan bisnis, platform teknologi, dan tata kelola investasi jangka panjang.')}
             </p>
           </div>
         </div>
 
         {/* Minimalist Horizontal Step Selector Bar */}
         <div className="hidden sm:grid grid-cols-5 gap-2 mb-6 p-1.5 bg-white rounded-xl border border-black/[0.08] shadow-xs">
-          {ROADMAP_PHASES.map((phase, idx) => {
+          {cmsItems.map((phase, idx) => {
             const isCurrent = idx === activeIndex;
             return (
               <button
@@ -335,7 +338,7 @@ export const RoadmapSection: React.FC = () => {
         <div className="flex sm:hidden items-center justify-between mb-3 text-[12px] text-[#666666]">
           <span className="font-semibold text-[#111111] flex items-center gap-1.5">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-            Fase {ROADMAP_PHASES[activeIndex].step} dari 05
+            Fase {cmsItems[activeIndex]?.step ?? '—'} dari {cmsItems.length}
           </span>
           <span className="text-[11.5px] text-[#777777] flex items-center gap-1">
             <span>Geser card ke samping</span>
@@ -356,7 +359,7 @@ export const RoadmapSection: React.FC = () => {
           className="flex gap-4 overflow-x-auto pb-4 pt-1 snap-x snap-mandatory scrollbar-none -mx-4 px-4 sm:mx-0 sm:px-0 touch-pan-x overscroll-x-contain select-none cursor-grab active:cursor-grabbing"
           style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
         >
-          {ROADMAP_PHASES.map((item, index) => {
+          {cmsItems.map((item, index) => {
             const isSelected = index === activeIndex;
             return (
               <div
@@ -458,7 +461,7 @@ export const RoadmapSection: React.FC = () => {
         <div className="flex items-center justify-between mt-4 pt-2 border-t border-black/[0.06] lg:hidden">
           {/* Step Dots Indicator */}
           <div className="flex items-center gap-1.5 sm:gap-2">
-            {ROADMAP_PHASES.map((phase, idx) => {
+            {cmsItems.map((phase, idx) => {
               const isCurrent = idx === activeIndex;
               return (
                 <button
@@ -495,16 +498,16 @@ export const RoadmapSection: React.FC = () => {
 
             <button
               type="button"
-              onClick={() => scrollToIndex(Math.min(ROADMAP_PHASES.length - 1, activeIndex + 1))}
-              disabled={activeIndex === ROADMAP_PHASES.length - 1}
+              onClick={() => scrollToIndex(Math.min(cmsItems.length - 1, activeIndex + 1))}
+              disabled={activeIndex === cmsItems.length - 1}
               className={`inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-[12px] font-semibold transition-all border ${
-                activeIndex === ROADMAP_PHASES.length - 1
+                activeIndex === cmsItems.length - 1
                   ? 'text-black/25 border-black/5 bg-black/[0.02] cursor-not-allowed'
                   : 'text-white border-emerald-600 bg-emerald-600 hover:bg-emerald-700 active:scale-95 shadow-xs cursor-pointer'
               }`}
               aria-label="Fase selanjutnya"
             >
-              <span>Fase {ROADMAP_PHASES[Math.min(ROADMAP_PHASES.length - 1, activeIndex + 1)].step}</span>
+              <span>Fase {cmsItems[Math.min(cmsItems.length - 1, activeIndex + 1)]?.step ?? '—'}</span>
               <ChevronRight size={14} />
             </button>
           </div>

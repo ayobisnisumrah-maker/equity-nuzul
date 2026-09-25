@@ -1,3 +1,4 @@
+import { usePortalSection } from '../../context/PortalContentContext';
 import React from 'react';
 import { ArrowRight, Instagram, Facebook, Disc as TikTokIcon } from 'lucide-react';
 import { Container } from './Container';
@@ -13,6 +14,7 @@ export const Footer: React.FC<FooterProps> = ({
   onOpenDetail,
   logoSrc,
 }) => {
+  const field = usePortalSection('footer');
   const tentangLinks = [
     'Model Bisnis',
     'Ekosistem Bisnis',
@@ -41,17 +43,17 @@ export const Footer: React.FC<FooterProps> = ({
           <div className="lg:col-span-4 flex flex-col justify-between">
             <div>
               <div className="flex items-center mb-5 shrink-0">
-                <NuzultripLogo size="lg" src={logoSrc || LOGO_CONFIG.footerLogoSrc} />
+                <NuzultripLogo size="lg" src={field('logoUrl', '') || logoSrc || LOGO_CONFIG.footerLogoSrc} />
               </div>
               <p className="text-[14px] sm:text-[15px] text-white/70 leading-relaxed max-w-[320px]">
-                Melayani perjalanan Muslim Indonesia dengan hati, profesionalisme, dan teknologi.
+                {field('tagline', 'Melayani perjalanan Muslim Indonesia dengan hati, profesionalisme, dan teknologi.')}
               </p>
             </div>
 
             {/* Social Media Links */}
             <div className="mt-8 flex items-center gap-3">
               <a
-                href="https://instagram.com"
+                href={field('instagramUrl', 'https://instagram.com')}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Instagram Nuzultrip"
@@ -60,7 +62,7 @@ export const Footer: React.FC<FooterProps> = ({
                 <Instagram size={17} />
               </a>
               <a
-                href="https://facebook.com"
+                href={field('facebookUrl', 'https://facebook.com')}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Facebook Nuzultrip"
@@ -69,7 +71,7 @@ export const Footer: React.FC<FooterProps> = ({
                 <Facebook size={17} />
               </a>
               <a
-                href="https://tiktok.com"
+                href={field('tiktokUrl', 'https://tiktok.com')}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="TikTok Nuzultrip"
@@ -86,7 +88,7 @@ export const Footer: React.FC<FooterProps> = ({
               TENTANG NUZULTRIP
             </h4>
             <ul className="space-y-2.5">
-              {tentangLinks.map((item) => (
+              {field('aboutLinks', tentangLinks).map((item) => (
                 <li key={item}>
                   <button
                     type="button"
@@ -106,7 +108,7 @@ export const Footer: React.FC<FooterProps> = ({
               INFORMASI
             </h4>
             <ul className="space-y-2.5">
-              {infoLinks.map((item) => (
+              {field('infoLinks', infoLinks).map((item) => (
                 <li key={item}>
                   <button
                     type="button"
@@ -125,20 +127,20 @@ export const Footer: React.FC<FooterProps> = ({
             <div className="bg-white/[0.04] rounded-2xl p-6 sm:p-7 border border-white/15 h-full flex flex-col justify-between">
               <div>
                 <h4 className="text-[12px] font-bold uppercase tracking-[0.16em] text-white/60 mb-2.5">
-                  BUTUH INFORMASI TERBARU?
+                  {field('contactTitle', 'BUTUH INFORMASI TERBARU?')}
                 </h4>
                 <p className="text-[13.5px] text-white/70 leading-relaxed">
-                  Hubungi tim Investor Relations untuk informasi, dokumen, atau pembaruan resmi Nuzultrip Equity.
+                  {field('contactDescription', 'Hubungi tim Investor Relations untuk informasi, dokumen, atau pembaruan resmi Nuzultrip Equity.')}
                 </p>
               </div>
               <div className="pt-6 mt-auto">
                 <a
-                  href="https://wa.me/6281234567890?text=Halo%20Tim%20Nuzultrip%20Equity,%20saya%20membutuhkan%20informasi%20terbaru%20mengenai%20penawaran%20equity."
+                  href={field('whatsappUrl', 'https://wa.me/6281234567890?text=Halo%20Tim%20Nuzultrip%20Equity,%20saya%20membutuhkan%20informasi%20terbaru%20mengenai%20penawaran%20equity.')}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-full py-2.5 px-4 rounded-xl bg-white hover:bg-[#10b981] hover:border-[#10b981] text-[#090909] hover:text-white font-bold text-[13.5px] flex items-center justify-center gap-2 hover:shadow-[0_4px_16px_rgba(16,185,129,0.35)] transition-all duration-200 group cursor-pointer"
                 >
-                  <span>Hubungi Kami</span>
+                  <span>{field('contactCta', 'Hubungi Kami')}</span>
                   <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
                 </a>
               </div>
@@ -148,7 +150,7 @@ export const Footer: React.FC<FooterProps> = ({
 
         {/* Bottom Bar: Copyright & Legal Policies */}
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-[13px] text-white/50">
-          <p>© 2026 Nuzultrip. All Rights Reserved.</p>
+          <p>{field('copyright', '© 2026 Nuzultrip. All Rights Reserved.')}</p>
           <div className="flex items-center gap-4 sm:gap-5 text-center sm:text-right">
             <button
               type="button"

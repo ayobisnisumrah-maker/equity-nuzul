@@ -1,3 +1,4 @@
+import { usePortalSection } from '../../context/PortalContentContext';
 import React from 'react';
 import { Compass, Globe, Building2, Luggage } from 'lucide-react';
 import { Container } from '../layout/Container';
@@ -11,6 +12,8 @@ interface ServicesSectionProps {
 }
 
 export const ServicesSection: React.FC<ServicesSectionProps> = ({ onOpenServiceDetail }) => {
+  const field = usePortalSection('services');
+  const cmsItems = field('itemsJson', SERVICES_LIST);
   const getIcon = (iconName: string) => {
     const iconClass = "transition-colors duration-200 text-[#111111] group-hover:text-white";
     switch (iconName) {
@@ -37,18 +40,18 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({ onOpenServiceD
           {/* Left Column: Title & Description */}
           <div className="lg:col-span-4 flex flex-col justify-between h-full">
             <div>
-              <Eyebrow>LAYANAN UTAMA</Eyebrow>
+              <Eyebrow>{field('eyebrow', 'LAYANAN UTAMA')}</Eyebrow>
               <div className="mb-5 sm:mb-6">
                 <StaggerHeading
                   as="h2"
-                  text="Ekosistem Perjalanan Muslim Nuzultrip"
+                  text={field('headline', 'Ekosistem Perjalanan Muslim Nuzultrip')}
                   className="font-h2 font-bold text-[#111111] leading-[1.12] tracking-tight"
                   highlightWord="Nuzultrip"
                   highlightClass="text-emerald-600"
                 />
               </div>
               <p className="text-[16px] sm:text-[17px] text-[#555555] leading-[1.65] max-w-[360px]">
-                Menghubungkan mitra, vendor layanan, dan jaringan distribusi dalam satu kesatuan sistem yang transparan dan terstandar.
+                {field('description', 'Menghubungkan mitra, vendor layanan, dan jaringan distribusi dalam satu kesatuan sistem yang transparan dan terstandar.')}
               </p>
             </div>
 
@@ -56,10 +59,10 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({ onOpenServiceD
             <div className="pt-8 sm:pt-10 mt-auto">
               <ArrowButton
                 variant="link"
-                onClick={() => onOpenServiceDetail(SERVICES_LIST[0])}
+                onClick={() => cmsItems[0] && onOpenServiceDetail(cmsItems[0])}
                 id="services-cta-other"
               >
-                Layanan Lainnya
+                {field('moreCta', 'Layanan Lainnya')}
               </ArrowButton>
             </div>
           </div>
@@ -67,7 +70,7 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({ onOpenServiceD
           {/* Right Column: 2x2 Services Grid */}
           <div className="lg:col-span-8 flex flex-col justify-between">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
-              {SERVICES_LIST.map((service) => (
+              {cmsItems.map((service) => (
                 <div
                   key={service.id}
                   onClick={() => onOpenServiceDetail(service)}

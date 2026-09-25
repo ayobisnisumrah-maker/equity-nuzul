@@ -1,3 +1,4 @@
+import { usePortalSection } from '../../context/PortalContentContext';
 import React, { useState, useEffect, useRef } from 'react';
 import { Container } from '../layout/Container';
 import { Eyebrow } from '../ui/Eyebrow';
@@ -11,16 +12,19 @@ interface CompanySectionProps {
 }
 
 export const CompanySection: React.FC<CompanySectionProps> = ({ onOpenDetail }) => {
+  const field = usePortalSection('company');
+  const companyImages = field('imagesJson', IMAGES.companySlices.map(imageUrl => ({ imageUrl }))).map(item => item.imageUrl);
+  const cmsItems = field('metricsJson', COMPANY_METRICS);
   const [activeImageIndex, setActiveImageIndex] = useState(0);
   const imageContainerRef = useRef<HTMLDivElement>(null);
 
   // Preload all 5 images on mount
   useEffect(() => {
-    IMAGES.companySlices.forEach((url) => {
+    companyImages.forEach((url) => {
       const img = new Image();
       img.src = url;
     });
-  }, []);
+  }, [companyImages.join("|")]);
 
   // Automatic slideshow for mobile or when not hovered
   useEffect(() => {
@@ -28,11 +32,11 @@ export const CompanySection: React.FC<CompanySectionProps> = ({ onOpenDetail }) 
     if (!isTouch) return;
 
     const interval = setInterval(() => {
-      setActiveImageIndex((prev) => (prev + 1) % IMAGES.companySlices.length);
+      setActiveImageIndex((prev) => (prev + 1) % Math.max(1, companyImages.length));
     }, 3200);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [companyImages.join("|")]);
 
   // Mouse move handler for 5 horizontal segment divisions
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -43,7 +47,7 @@ export const CompanySection: React.FC<CompanySectionProps> = ({ onOpenDetail }) 
     const ratio = Math.max(0, Math.min(1, x / width));
 
     // Divide 0..1 into 5 parts
-    const index = Math.min(Math.floor(ratio * 5), 4);
+    const index = Math.min(Math.floor(ratio * companyImages.length), Math.max(0, companyImages.length - 1));
     if (index !== activeImageIndex) {
       setActiveImageIndex(index);
     }
@@ -63,19 +67,18 @@ export const CompanySection: React.FC<CompanySectionProps> = ({ onOpenDetail }) 
           {/* Column 1: Left Description & CTA */}
           <div className="lg:col-span-4 flex flex-col justify-between h-full">
             <div>
-              <Eyebrow>PERUSAHAAN</Eyebrow>
+              <Eyebrow>{field('eyebrow', 'PERUSAHAAN')}</Eyebrow>
               <div className="mb-5 sm:mb-6">
                 <StaggerHeading
                   as="h2"
-                  text="Perjalanan Muslim yang Bertumbuh"
+                  text={field('headline', 'Perjalanan Muslim yang Bertumbuh')}
                   className="font-h2 font-bold text-[#111111] leading-[1.08] tracking-tight"
                   highlightWord="Bertumbuh"
                   highlightClass="text-emerald-600"
                 />
               </div>
               <p className="text-[16px] sm:text-[17px] text-[#555555] leading-[1.65] max-w-[360px]">
-                Menghadirkan layanan perjalanan ibadah yang bermakna melalui layanan,
-                jaringan, dan teknologi.
+                {field('description', 'Menghadirkan layanan perjalanan ibadah yang bermakna melalui layanan, jaringan, dan teknologi.')}
               </p>
             </div>
 
@@ -99,7 +102,7 @@ export const CompanySection: React.FC<CompanySectionProps> = ({ onOpenDetail }) 
               onMouseLeave={handleMouseLeave}
               className="relative w-full h-[320px] sm:h-[400px] lg:h-[440px] rounded-2xl overflow-hidden border border-black/[0.1] bg-[#E8E8E4] shadow-sm cursor-crosshair group select-none"
             >
-              {IMAGES.companySlices.map((url, idx) => (
+              {companyImages.map((url, idx) => (
                 <div
                   key={url}
                   className={`absolute inset-0 transition-opacity duration-300 ease-out ${
@@ -119,7 +122,7 @@ export const CompanySection: React.FC<CompanySectionProps> = ({ onOpenDetail }) 
               {/* Clean pure visual image card without text overlay */}
               {/* Indicator bar showing active 1 of 5 */}
               <div className="absolute bottom-4 inset-x-6 z-10 flex items-center justify-center gap-1.5 pointer-events-none">
-                {[0, 1, 2, 3, 4].map((i) => (
+                {companyImages.map((_, i) => (
                   <div
                     key={i}
                     className={`h-1 rounded-full transition-all duration-300 ${
@@ -134,7 +137,7 @@ export const CompanySection: React.FC<CompanySectionProps> = ({ onOpenDetail }) 
           {/* Column 3: 5 Poin Metrik & Kredensial Disusun Vertikal */}
           <div className="lg:col-span-4 flex flex-col justify-between py-1 h-full">
             <div className="flex flex-col justify-between h-full gap-y-3 sm:gap-y-3.5">
-              {COMPANY_METRICS.map((item, idx) => {
+              {cmsItems.map((item, idx) => {
                 const isActive = activeImageIndex === idx;
                 return (
                   <div
@@ -177,8 +180,8 @@ export const CompanySection: React.FC<CompanySectionProps> = ({ onOpenDetail }) 
 
               {/* Point 5: Headline Amanah dengan deskripsi Terverifikasi PPIU Kemenag */}
               <div
-                onMouseEnter={() => setActiveImageIndex(4)}
-                onClick={() => setActiveImageIndex(4)}
+                onMouseEnter={() => setActiveImageIndex(Math.max(0, companyImages.length - 1))}
+                onClick={() => setActiveImageIndex(Math.max(0, companyImages.length - 1))}
                 className={`pb-2.5 sm:pb-3 border-b transition-all duration-200 cursor-pointer flex flex-col group ${
                   activeImageIndex === 4
                     ? 'border-black/50 pl-2'
@@ -193,7 +196,7 @@ export const CompanySection: React.FC<CompanySectionProps> = ({ onOpenDetail }) 
                         : 'text-[#111111] group-hover:text-black'
                     }`}
                   >
-                    Amanah
+                    {field('credential', 'Amanah')}
                   </div>
                   {activeImageIndex === 4 && (
                     <span className="w-1.5 h-1.5 rounded-full bg-[#111111] animate-pulse" />
@@ -206,7 +209,7 @@ export const CompanySection: React.FC<CompanySectionProps> = ({ onOpenDetail }) 
                       : 'text-[#666666] group-hover:text-[#333333]'
                   }`}
                 >
-                  Terverifikasi PPIU Kemenag
+                  {field('credentialDescription', 'Terverifikasi PPIU Kemenag')}
                 </p>
               </div>
             </div>

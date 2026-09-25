@@ -1,3 +1,4 @@
+import { usePortalSection } from '../../context/PortalContentContext';
 import React, { useState } from 'react';
 import { Megaphone, X, ArrowRight, ExternalLink } from 'lucide-react';
 
@@ -10,6 +11,7 @@ export const FloatingAnnouncement: React.FC<FloatingAnnouncementProps> = ({
   isVisible,
   onOpenDetail,
 }) => {
+  const field = usePortalSection('header');
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -46,12 +48,12 @@ export const FloatingAnnouncement: React.FC<FloatingAnnouncementProps> = ({
           </div>
 
           <p className="text-[13px] text-neutral-200 leading-relaxed mb-4">
-            <strong className="text-white font-semibold">RUPS Luar Biasa Kuartal 3</strong> dijadwalkan pada 20 Oktober 2026. Laporan Triwulan II telah terbit.
+            <strong className="text-white font-semibold">{field('announcementTitle', 'RUPS Luar Biasa Kuartal 3')}</strong>{' '}{field('announcementText', 'dijadwalkan pada 20 Oktober 2026. Laporan Triwulan II telah terbit.')}
           </p>
 
           <div className="flex items-center justify-between gap-2 pt-1 border-t border-white/[0.08]">
             <span className="text-[11px] text-neutral-400">
-              Jadwal: 20 Okt 2026
+              {field('announcementBadge', 'Pengumuman')}
             </span>
             {onOpenDetail && (
               <button

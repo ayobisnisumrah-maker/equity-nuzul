@@ -1,3 +1,4 @@
+import { usePortalSection } from '../../context/PortalContentContext';
 import React from 'react';
 import { Phone, FileDown, ArrowRight } from 'lucide-react';
 import { Container } from '../layout/Container';
@@ -15,6 +16,7 @@ export const QuickActionSection: React.FC<QuickActionSectionProps> = ({
   onOpenInterest,
   onOpenPitchdeck,
 }) => {
+  const field = usePortalSection('quick_action');
   return (
     <section
       id="kontak"
@@ -110,7 +112,7 @@ export const QuickActionSection: React.FC<QuickActionSectionProps> = ({
           <div className="lg:col-span-4 flex flex-col">
             <div className="relative w-full h-full min-h-[320px] rounded-2xl overflow-hidden border border-white/15 flex flex-col justify-between p-7 text-white group">
               <img
-                src={IMAGES.quickActionBg}
+                src={field('imageUrl', IMAGES.quickActionBg)}
                 alt="Ekosistem Nuzultrip"
                 className="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
                 loading="lazy"
@@ -119,13 +121,13 @@ export const QuickActionSection: React.FC<QuickActionSectionProps> = ({
 
               <div className="relative z-10">
                 <span className="text-[11px] font-bold uppercase tracking-[0.16em] text-white/70">
-                  Langkah Awal Kemitraan
+                  {field('eyebrow', 'Langkah Awal Kemitraan')}
                 </span>
                 <h3 className="text-[22px] sm:text-[24px] font-bold text-white mt-2 leading-[1.2]">
-                  Siap Mengenal Nuzultrip Lebih Jauh?
+                  {field('headline', 'Siap Mengenal Nuzultrip Lebih Jauh?')}
                 </h3>
                 <p className="text-[14px] text-white/75 mt-2 leading-relaxed">
-                  Dapatkan konsultasi eksklusif mengenai struktur kepemilikan dan skema bagi hasil.
+                  {field('description', 'Dapatkan konsultasi eksklusif mengenai struktur kepemilikan dan skema bagi hasil.')}
                 </p>
               </div>
 
@@ -135,7 +137,7 @@ export const QuickActionSection: React.FC<QuickActionSectionProps> = ({
                   onClick={onOpenInterest}
                   className="w-full py-3.5 px-5 rounded-xl bg-white text-[#090909] font-bold text-[14px] flex items-center justify-center gap-2 hover:bg-emerald-600 hover:text-white border border-transparent hover:border-emerald-500/60 active:scale-98 transition-all duration-300 shadow-md hover:shadow-[0_6px_24px_rgba(16,185,129,0.35)] group cursor-pointer"
                 >
-                  <span>Ajukan Minat Equity</span>
+                  <span>{field('primaryCta', 'Ajukan Minat Equity')}</span>
                   <ArrowRight size={16} className="text-current group-hover:translate-x-1 group-hover:text-white transition-all duration-200" />
                 </button>
               </div>

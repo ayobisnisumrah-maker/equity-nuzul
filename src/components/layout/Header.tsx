@@ -1,3 +1,4 @@
+import { usePortalSection } from '../../context/PortalContentContext';
 import React, { useState, useEffect } from 'react';
 import { ArrowRight, Menu, X, Megaphone } from 'lucide-react';
 import { Container } from './Container';
@@ -19,6 +20,7 @@ export const Header: React.FC<HeaderProps> = ({
   isPastHero = false,
   onOpenAnnouncement,
 }) => {
+  const field = usePortalSection('header');
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState<string>('');
@@ -31,7 +33,7 @@ export const Header: React.FC<HeaderProps> = ({
     { key: 'jaringan', label: 'Jaringan', href: '#jaringan' },
     { key: 'investor', label: 'Investor', href: '#informasi' },
     { key: 'kontak', label: 'Kontak', href: '#kontak' },
-  ];
+  ].map((link, index) => ({ ...link, label: field('navLabels', [] as string[])[index] ?? link.label }));
 
   useEffect(() => {
     const SECTIONS_CONFIG: { id: string; key: string }[] = [
@@ -148,10 +150,10 @@ export const Header: React.FC<HeaderProps> = ({
           <div className="flex items-center justify-center gap-2 sm:gap-2.5 text-center flex-wrap">
             <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 text-[10px] font-bold uppercase tracking-wider shrink-0">
               <Megaphone size={11} className="shrink-0" />
-              <span>Pengumuman</span>
+              <span>{field('announcementBadge', 'Pengumuman')}</span>
             </span>
             <p className="text-[11.5px] sm:text-[12.5px] leading-tight text-neutral-200">
-              <strong className="text-white font-medium">RUPS Luar Biasa Kuartal 3</strong> dijadwalkan pada 20 Oktober 2026. Laporan Triwulan II telah terbit.
+              <strong className="text-white font-medium">{field('announcementTitle', 'RUPS Luar Biasa Kuartal 3')}</strong> {field('announcementText', 'dijadwalkan pada 20 Oktober 2026. Laporan Triwulan II telah terbit.')}
             </p>
           </div>
         </Container>
@@ -206,7 +208,7 @@ export const Header: React.FC<HeaderProps> = ({
                 onClick={onOpenLogin}
                 className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-white/10 hover:bg-[#10b981] border border-white/15 hover:border-[#10b981] text-white hover:text-white text-[14px] font-semibold transition-all duration-200 active:scale-98 shadow-sm hover:shadow-[0_4px_16px_rgba(16,185,129,0.35)] group backdrop-blur-sm cursor-pointer"
               >
-                <span>Masuk</span>
+                <span>{field('loginLabel', 'Masuk')}</span>
                 <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
               </button>
             </div>

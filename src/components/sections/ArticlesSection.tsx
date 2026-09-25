@@ -1,3 +1,4 @@
+import { usePortalSection } from '../../context/PortalContentContext';
 import React from 'react';
 import { ArrowRight } from 'lucide-react';
 import { Container } from '../layout/Container';
@@ -11,6 +12,8 @@ interface ArticlesSectionProps {
 }
 
 export const ArticlesSection: React.FC<ArticlesSectionProps> = ({ onSelectArticle }) => {
+  const field = usePortalSection('articles');
+  const cmsItems = field('itemsJson', ARTICLES_LIST);
   return (
     <section
       id="artikel"
@@ -21,18 +24,18 @@ export const ArticlesSection: React.FC<ArticlesSectionProps> = ({ onSelectArticl
           {/* Left Column: Title & CTA */}
           <div className="lg:col-span-4 flex flex-col justify-between h-full">
             <div>
-              <Eyebrow>ARTIKEL & BERITA</Eyebrow>
+              <Eyebrow>{field('eyebrow', 'ARTIKEL & BERITA')}</Eyebrow>
               <div className="mb-5 sm:mb-6">
                 <StaggerHeading
                   as="h2"
-                  text="Pahami Peluang. Ambil Keputusan."
+                  text={field('headline', 'Pahami Peluang. Ambil Keputusan.')}
                   className="font-h2 font-bold text-[#111111] leading-[1.08] tracking-tight"
                   highlightWord="Keputusan."
                   highlightClass="text-emerald-600"
                 />
               </div>
               <p className="text-[16px] sm:text-[17px] text-[#555555] leading-[1.65] max-w-[360px]">
-                Analisis pasar, panduan investasi syariah, dan pembaruan strategis industri perjalanan ibadah Indonesia.
+                {field('description', 'Analisis pasar, panduan investasi syariah, dan pembaruan strategis industri perjalanan ibadah Indonesia.')}
               </p>
             </div>
 
@@ -40,17 +43,17 @@ export const ArticlesSection: React.FC<ArticlesSectionProps> = ({ onSelectArticl
             <div className="pt-8 sm:pt-10 mt-auto">
               <ArrowButton
                 variant="link"
-                onClick={() => onSelectArticle(ARTICLES_LIST[0])}
+                onClick={() => cmsItems[0] && onSelectArticle(cmsItems[0])}
                 id="articles-cta-more"
               >
-                Lebih Artikel Lainnya
+                {field('moreCta', 'Lebih Artikel Lainnya')}
               </ArrowButton>
             </div>
           </div>
 
           {/* Right Column: 2 Editorial Cards */}
           <div className="lg:col-span-8 grid grid-cols-1 sm:grid-cols-2 gap-6">
-            {ARTICLES_LIST.map((article) => (
+            {cmsItems.map((article) => (
               <article
                 key={article.id}
                 onClick={() => onSelectArticle(article)}

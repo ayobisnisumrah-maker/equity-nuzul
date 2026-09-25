@@ -1,3 +1,4 @@
+import { usePortalSection } from './context/PortalContentContext';
 import React, { useState, useEffect } from 'react';
 import { Header } from './components/layout/Header';
 import { Footer } from './components/layout/Footer';
@@ -18,7 +19,7 @@ import { ServiceItem, InvestorInfoItem, ArticleItem } from './data/landingData';
 import { AdminDashboard } from './components/admin/AdminDashboard';
 import { InvestorDashboard } from './components/investor/InvestorDashboard';
 import { supabase } from './lib/supabase';
-import type { PortalIdentity, PortalRole } from './services/auth';
+import { resolvePortalIdentity, type PortalIdentity, type PortalRole } from './services/auth';
 
 // Code-split modals so initial landing page bundle is super lightweight
 const EquityInterestModal = React.lazy(() =>
@@ -35,6 +36,8 @@ const DetailInfoModal = React.lazy(() =>
 );
 
 export default function App() {
+  const modalField = usePortalSection('modals');
+  const [selectedUnits, setSelectedUnits] = useState(1);
   const [isInterestModalOpen, setIsInterestModalOpen] = useState(false);
   const [isPitchdeckModalOpen, setIsPitchdeckModalOpen] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
@@ -54,6 +57,26 @@ export default function App() {
     content: '',
     detailsList: [],
   });
+
+  useEffect(() => {
+    if (!supabase) return;
+    let active = true;
+    let revision = 0;
+    const sync = async () => {
+      const request = ++revision;
+      const { data: { user } } = await supabase!.auth.getUser();
+      try {
+        const identity = user ? await resolvePortalIdentity(user) : null;
+        if (!active || request !== revision) return;
+        setPortalIdentity(identity);
+        setDashboardRole(current => identity ? (current ? identity.role : null) : null);
+      } catch { if (active && request === revision) { setPortalIdentity(null); setDashboardRole(null); } }
+    };
+    void sync();
+    // Defer database requests outside Supabase's auth callback lock.
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(() => { window.setTimeout(() => { if (active) void sync(); }, 0); });
+    return () => { active = false; revision++; subscription.unsubscribe(); };
+  }, []);
 
   // Ensure landing page always starts at top (Header and Hero section) on refresh / initial load
   useEffect(() => {
@@ -103,7 +126,7 @@ export default function App() {
 
   // Handlers for detailed info
   const handleOpenAnnouncementDetail = () => {
-    setDetailModal({
+    setDetailModal({ ...modalField('announcementJson', {
       isOpen: true,
       title: 'RUPS Luar Biasa Kuartal 3 & Laporan Triwulan II',
       category: 'Pengumuman Resmi Pemegang Saham',
@@ -115,11 +138,11 @@ export default function App() {
         'Laporan Triwulan II: Dokumen lengkap dapat diunduh di dashboard investor',
         'Hak Suara: Berlaku bagi seluruh pemegang unit equity terdaftar',
       ],
-    });
+    }), isOpen: true });
   };
 
   const handleOpenEquityDetail = () => {
-    setDetailModal({
+    setDetailModal({ ...modalField('equityDetailJson', {
       isOpen: true,
       title: 'Detail Penawaran Equity Nuzultrip',
       category: 'Informasi Penawaran Resmi',
@@ -132,11 +155,11 @@ export default function App() {
         'Distribusi Bagi Hasil: Pelaporan dan pembagian hasil operasional berkala',
         'Hak Pemegang Unit: Akses portal investor, laporan keuangan teraudit, dan hak suara proporsional',
       ],
-    });
+    }), isOpen: true });
   };
 
   const handleOpenCompanyDetail = () => {
-    setDetailModal({
+    setDetailModal({ ...modalField('companyDetailJson', {
       isOpen: true,
       title: 'Struktur dan Visi Perusahaan Nuzultrip',
       category: 'Profil Korporasi',
@@ -148,11 +171,11 @@ export default function App() {
         'Infrastruktur kontrak langsung dengan hotel bintang dan muassasah resmi di Makkah & Madinah',
         'Sistem digitalisasi pemesanan terpusat untuk efisiensi rantai pasok travel ibadah',
       ],
-    });
+    }), isOpen: true });
   };
 
   const handleOpenProcessDetail = () => {
-    setDetailModal({
+    setDetailModal({ ...modalField('processDetailJson', {
       isOpen: true,
       title: 'Prosedur dan Alur Kepemilikan Equity',
       category: 'Tata Kelola & Kepatuhan',
@@ -164,11 +187,11 @@ export default function App() {
         'Tahap 3 (Perjanjian): Penandatanganan perjanjian pemegang saham dan setoran modal resmi',
         'Tahap 4 (Onboarding Portal): Penyerahan sertifikat kepemilikan dan aktivasi akun portal investor',
       ],
-    });
+    }), isOpen: true });
   };
 
   const handleOpenNetworkDetail = () => {
-    setDetailModal({
+    setDetailModal({ ...modalField('networkDetailJson', {
       isOpen: true,
       title: 'Jaringan Kemitraan Ekosistem Nuzultrip',
       category: 'Sinergi & Kemitraan',
@@ -180,7 +203,7 @@ export default function App() {
         'Pelatihan bisnis dan tools digital bagi agen perwakilan daerah',
         'Akses prioritas pada program-program promosi dan paket custom korporasi',
       ],
-    });
+    }), isOpen: true });
   };
 
   const handleOpenServiceDetail = (service: ServiceItem) => {
@@ -241,7 +264,7 @@ export default function App() {
   };
 
   const closeDashboard=()=>{setDashboardRole(null);window.scrollTo({top:0,left:0,behavior:'instant' as ScrollBehavior})};
-  const logout=async()=>{await supabase?.auth.signOut();closeDashboard()};
+  const logout=async()=>{const result=await supabase?.auth.signOut({scope:'local'});if(result?.error)return;setPortalIdentity(null);closeDashboard()};
   if(dashboardRole==='admin' && portalIdentity) return <AdminDashboard identity={portalIdentity} onBack={closeDashboard} onLogout={logout}/>;
   if(dashboardRole==='investor') return <InvestorDashboard onBack={closeDashboard} onLogout={logout}/>;
 
@@ -249,8 +272,8 @@ export default function App() {
     <div className="min-h-screen bg-[#F5F5F3] text-[#111111] flex flex-col selection:bg-[#090909] selection:text-white">
       {/* Sticky Header */}
       <Header
-        onOpenLogin={() => setIsLoginModalOpen(true)}
-        onOpenInterest={() => setIsInterestModalOpen(true)}
+        onOpenLogin={() => portalIdentity ? setDashboardRole(portalIdentity.role) : setIsLoginModalOpen(true)}
+        onOpenInterest={() => { setSelectedUnits(1); setIsInterestModalOpen(true); }}
         isPastHero={isPastHero}
         onOpenAnnouncement={handleOpenAnnouncementDetail}
       />
@@ -259,7 +282,7 @@ export default function App() {
       <main className="flex-1">
         {/* 01. Hero Section */}
         <HeroSection
-          onOpenInterest={() => setIsInterestModalOpen(true)}
+          onOpenInterest={() => { setSelectedUnits(1); setIsInterestModalOpen(true); }}
           onOpenPitchdeck={() => setIsPitchdeckModalOpen(true)}
         />
 
@@ -268,7 +291,7 @@ export default function App() {
 
         {/* 03. Peluang Equity Section */}
         <EquitySection
-          onOpenInterest={() => setIsInterestModalOpen(true)}
+          onOpenInterest={(units = 1) => { setSelectedUnits(units); setIsInterestModalOpen(true); }}
           onOpenDetail={handleOpenEquityDetail}
         />
 
@@ -281,7 +304,7 @@ export default function App() {
         {/* 06. Proses Section (Dark) */}
         <ProcessSection
           onOpenDetail={handleOpenProcessDetail}
-          onOpenInterest={() => setIsInterestModalOpen(true)}
+          onOpenInterest={() => { setSelectedUnits(1); setIsInterestModalOpen(true); }}
         />
 
         {/* 07. Roadmap Section */}
@@ -295,7 +318,7 @@ export default function App() {
 
         {/* 10. Quick Action Section (Dark) */}
         <QuickActionSection
-          onOpenInterest={() => setIsInterestModalOpen(true)}
+          onOpenInterest={() => { setSelectedUnits(1); setIsInterestModalOpen(true); }}
           onOpenPitchdeck={() => setIsPitchdeckModalOpen(true)}
         />
 
@@ -315,7 +338,7 @@ export default function App() {
       {/* Interactive Modals (Code-split on demand) */}
       <React.Suspense fallback={null}>
         {isInterestModalOpen && (
-          <EquityInterestModal
+          <EquityInterestModal initialUnits={selectedUnits}
             isOpen={isInterestModalOpen}
             onClose={() => setIsInterestModalOpen(false)}
           />
@@ -332,7 +355,7 @@ export default function App() {
           <LoginModal
             isOpen={isLoginModalOpen}
             onClose={() => setIsLoginModalOpen(false)}
-            onOpenInterest={() => setIsInterestModalOpen(true)}
+            onOpenInterest={() => { setSelectedUnits(1); setIsInterestModalOpen(true); }}
             onAuthenticated={(identity) => { setIsLoginModalOpen(false); setPortalIdentity(identity); setDashboardRole(identity.role); }}
           />
         )}
@@ -345,7 +368,7 @@ export default function App() {
             category={detailModal.category}
             content={detailModal.content}
             detailsList={detailModal.detailsList}
-            onOpenInterest={() => setIsInterestModalOpen(true)}
+            onOpenInterest={() => { setSelectedUnits(1); setIsInterestModalOpen(true); }}
           />
         )}
       </React.Suspense>

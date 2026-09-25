@@ -1,21 +1,28 @@
+import { submitEquityInquiry } from '../../services/publicActions';
 import React, { useState } from 'react';
 import { X, CheckCircle, Calculator, ShieldCheck, ArrowRight } from 'lucide-react';
 
 interface EquityInterestModalProps {
   isOpen: boolean;
   onClose: () => void;
+  initialUnits?: number;
 }
 
 export const EquityInterestModal: React.FC<EquityInterestModalProps> = ({
   isOpen,
   onClose,
+  initialUnits = 1,
 }) => {
-  const [units, setUnits] = useState<number>(1);
+  const [units, setUnits] = useState<number>(initialUnits);
   const [name, setName] = useState<string>('');
   const [phone, setPhone] = useState<string>('');
   const [email, setEmail] = useState<string>('');
   const [investorType, setInvestorType] = useState<string>('Individu');
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
+
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState('');
+  const [requestId] = useState(() => crypto.randomUUID());
 
   if (!isOpen) return null;
 
@@ -23,9 +30,13 @@ export const EquityInterestModal: React.FC<EquityInterestModalProps> = ({
   const totalInvestment = units * pricePerUnit;
   const totalOwnership = (units * 0.8).toFixed(1);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitted(true);
+    if (submitting) return;
+    setSubmitting(true); setError('');
+    try { await submitEquityInquiry({ id: requestId, name, phone, email, units, investor_type: investorType }); setIsSubmitted(true); }
+    catch (e) { setError(e instanceof Error ? e.message : 'Pengajuan belum tersimpan.'); }
+    finally { setSubmitting(false); }
   };
 
   const handleReset = () => {
@@ -61,7 +72,7 @@ export const EquityInterestModal: React.FC<EquityInterestModalProps> = ({
               Pengajuan Minat Diterima
             </h3>
             <p className="text-[14.5px] text-[#555555] leading-relaxed max-w-[420px] mx-auto mb-6">
-              Terima kasih, <strong>{name}</strong>. Tim Investor Relations Nuzultrip akan menghubungi Anda melalui WhatsApp ({phone}) dalam waktu 1x24 jam untuk verifikasi dokumen dan pengiriman Memorandum Informasi resmi.
+              Terima kasih, <strong>{name}</strong>. Tim Investor Relations Nuzultrip akan menghubungi Anda melalui WhatsApp ({phone}) untuk menindaklanjuti permintaan Anda. Pengajuan ini tidak membuat akun investor atau memesan unit.
             </p>
 
             <div className="bg-white rounded-2xl p-5 border border-black/10 text-left mb-6 max-w-md mx-auto space-y-2 text-[14px]">
@@ -180,7 +191,8 @@ export const EquityInterestModal: React.FC<EquityInterestModalProps> = ({
             </div>
 
             {/* Form Fields */}
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form aria-busy={submitting} onSubmit={handleSubmit} className="space-y-4">
+{error && <p role="alert" className="rounded-xl bg-red-50 p-3 text-sm text-red-700">{error}</p>}
               <div>
                 <label className="block text-[13px] font-bold text-[#111111] mb-1">
                   Nama Lengkap Sesuai KTP *
@@ -249,7 +261,7 @@ export const EquityInterestModal: React.FC<EquityInterestModalProps> = ({
 
               <div className="pt-3">
                 <button
-                  type="submit"
+                  type="submit" disabled={submitting}
                   className="w-full py-3.5 px-6 rounded-xl bg-[#090909] text-white font-bold text-[15px] flex items-center justify-center gap-2 hover:bg-[#222222] active:scale-98 transition-all shadow-md cursor-pointer"
                 >
                   <span>Kirim Pengajuan Minat</span>

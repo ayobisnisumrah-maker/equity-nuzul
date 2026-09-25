@@ -1,3 +1,4 @@
+import { downloadPublishedPitchdeck } from '../../services/publicActions';
 import React, { useState } from 'react';
 import { X, FileText, Download, Check, ShieldCheck } from 'lucide-react';
 
@@ -9,36 +10,16 @@ interface PitchdeckModalProps {
 export const PitchdeckModal: React.FC<PitchdeckModalProps> = ({ isOpen, onClose }) => {
   const [downloading, setDownloading] = useState(false);
   const [downloaded, setDownloaded] = useState(false);
-  const [email, setEmail] = useState('');
 
+  const [error, setError] = useState('');
   if (!isOpen) return null;
 
-  const handleDownload = (e: React.FormEvent) => {
-    e.preventDefault();
-    setDownloading(true);
-
-    setTimeout(() => {
-      setDownloading(false);
-      setDownloaded(true);
-
-      // Create a dummy document download blob
-      const content = `NUZULTRIP EQUITY — EXECUTIVE PITCHDECK SUMMARY 2025\n\n` +
-        `Target Equity: 40% (50 Unit @ Rp 100.000.000)\n` +
-        `Total Penawaran: Rp 5.000.000.000\n` +
-        `Dividen: Distribusi Bulanan Berdasarkan Kinerja Operasional\n` +
-        `Mitra dan Jaringan: Makkah, Madinah, Jeddah, Jakarta\n\n` +
-        `Terima kasih atas minat Anda pada Nuzultrip Equity.\n` +
-        `Tim Investor Relations: ir@nuzultrip.com | +62 812-3456-7890`;
-
-      const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.setAttribute('download', 'Pitchdeck-Nuzultrip-Equity-2025.txt');
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    }, 1200);
+  const handleDownload = async (e: React.FormEvent) => {
+    e.preventDefault(); if (downloading) return;
+    setDownloading(true); setError('');
+    try { await downloadPublishedPitchdeck(); setDownloaded(true); }
+    catch (e) { setError(e instanceof Error ? e.message : 'Unduhan gagal.'); }
+    finally { setDownloading(false); }
   };
 
   return (
@@ -81,7 +62,7 @@ export const PitchdeckModal: React.FC<PitchdeckModalProps> = ({ isOpen, onClose 
         <div className="bg-white rounded-2xl p-4 border border-black/10 mb-6 space-y-2 text-[13.5px]">
           <div className="flex items-center justify-between py-1 border-b border-black/[0.05]">
             <span className="text-[#666666]">Format Dokumen:</span>
-            <span className="font-semibold text-[#111111]">PDF Eksekutif (28 Halaman)</span>
+            <span className="font-semibold text-[#111111]">PDF Resmi</span>
           </div>
           <div className="flex items-center justify-between py-1 border-b border-black/[0.05]">
             <span className="text-[#666666]">Versi Terkini:</span>
@@ -100,9 +81,9 @@ export const PitchdeckModal: React.FC<PitchdeckModalProps> = ({ isOpen, onClose 
             <div className="w-12 h-12 rounded-full bg-emerald-100 text-emerald-700 mx-auto flex items-center justify-center mb-3">
               <Check size={24} />
             </div>
-            <h4 className="text-[17px] font-bold text-[#111111]">Dokumen Telah Diunduh</h4>
+            <h4 className="text-[17px] font-bold text-[#111111]">Unduhan PDF Dimulai</h4>
             <p className="text-[13.5px] text-[#666666] mt-1 mb-4">
-              File telah tersimpan di perangkat Anda. Salinan PDF lengkap juga dikirimkan ke <strong>{email}</strong>.
+              Periksa daftar unduhan pada browser Anda.
             </p>
             <button
               type="button"
@@ -113,20 +94,7 @@ export const PitchdeckModal: React.FC<PitchdeckModalProps> = ({ isOpen, onClose 
             </button>
           </div>
         ) : (
-          <form onSubmit={handleDownload} className="space-y-4">
-            <div>
-              <label className="block text-[13px] font-bold text-[#111111] mb-1">
-                Masukkan Email Anda untuk Menerima Dokumen *
-              </label>
-              <input
-                type="email"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="investor@example.com"
-                className="w-full px-4 py-2.5 rounded-xl border border-black/15 bg-white text-[14px] text-[#111111] placeholder:text-black/35 focus:border-black focus:ring-1 focus:ring-black outline-none"
-              />
-            </div>
+          <form onSubmit={handleDownload} className="space-y-4">{error && <p role="alert" className="rounded-xl bg-red-50 p-3 text-sm text-red-700">{error}</p>}
 
             <button
               type="submit"

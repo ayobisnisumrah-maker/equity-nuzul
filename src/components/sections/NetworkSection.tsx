@@ -1,3 +1,4 @@
+import { usePortalSection } from '../../context/PortalContentContext';
 import React from 'react';
 import { Users, Handshake, Building } from 'lucide-react';
 import { Container } from '../layout/Container';
@@ -10,6 +11,8 @@ interface NetworkSectionProps {
 }
 
 export const NetworkSection: React.FC<NetworkSectionProps> = ({ onOpenDetail }) => {
+  const field = usePortalSection('network');
+  const cmsItems = field('partnersJson', NETWORK_PARTNERS);
   const getIcon = (iconName: string) => {
     switch (iconName) {
       case 'user':
@@ -33,7 +36,7 @@ export const NetworkSection: React.FC<NetworkSectionProps> = ({ onOpenDetail }) 
           {/* Column 1: Left Editorial Content */}
           <div className="lg:col-span-4 flex flex-col justify-between h-full">
             <div>
-              <Eyebrow>JARINGAN & MITRA</Eyebrow>
+              <Eyebrow>{field('eyebrow', 'JARINGAN & MITRA')}</Eyebrow>
               <h2 className="font-h2 font-bold text-[#111111] leading-[1.05] tracking-tight mb-5 sm:mb-6">
                 Terhubung<br />
                 untuk<br />
@@ -60,7 +63,7 @@ export const NetworkSection: React.FC<NetworkSectionProps> = ({ onOpenDetail }) 
 
           {/* Column 2: 3 Stacked Cards */}
           <div className="lg:col-span-4 flex flex-col justify-between gap-4">
-            {NETWORK_PARTNERS.map((partner) => (
+            {cmsItems.map((partner) => (
               <div
                 key={partner.id}
                 className="bg-white rounded-2xl p-6 border border-black/[0.08] shadow-[0_2px_8px_rgba(0,0,0,0.02)] flex items-start gap-4 hover:shadow-md transition-all duration-300 group flex-1 cursor-pointer"
@@ -84,7 +87,7 @@ export const NetworkSection: React.FC<NetworkSectionProps> = ({ onOpenDetail }) 
           <div className="lg:col-span-4 flex flex-col h-full">
             <div className="relative w-full h-full min-h-[380px] sm:min-h-[460px] rounded-2xl overflow-hidden shadow-lg border border-black/10 flex flex-col justify-end p-7 text-white group">
               <img
-                src={IMAGES.partnerPortrait}
+                src={field('portraitUrl', IMAGES.partnerPortrait)}
                 alt="Mitra dan Ekosistem Profesional Nuzultrip"
                 className="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
                 loading="lazy"

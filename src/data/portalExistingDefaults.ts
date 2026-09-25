@@ -1,6 +1,8 @@
+import { PORTAL_MODAL_DEFAULTS } from './portalModalDefaults';
 import {ABOUT_METRICS,EQUITY_METRICS,COMPANY_METRICS,SERVICES_LIST,NETWORK_PARTNERS,INVESTOR_INFO_LIST,ARTICLES_LIST,IMAGES} from './landingData';
 
 export const PORTAL_EXISTING_STRUCTURED_DEFAULTS:Record<string,Record<string,unknown>>={
+ modals: PORTAL_MODAL_DEFAULTS,
  about:{metricsJson:ABOUT_METRICS},
  equity:{metricsJson:EQUITY_METRICS},
  company:{imagesJson:IMAGES.companySlices.map(imageUrl=>({imageUrl})),metricsJson:COMPANY_METRICS},
