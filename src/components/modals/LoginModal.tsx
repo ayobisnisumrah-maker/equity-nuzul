@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { X, Lock, Eye, EyeOff, ShieldCheck, ArrowRight } from 'lucide-react';
-import { signInPortal, type PortalRole } from '../../services/auth';
+import { signInPortal, type PortalIdentity } from '../../services/auth';
 
 interface LoginModalProps {
   isOpen: boolean;
   onClose: () => void;
   onOpenInterest: () => void;
-  onAuthenticated: (role: PortalRole) => void;
+  onAuthenticated: (identity: PortalIdentity) => void;
 }
 
 export const LoginModal: React.FC<LoginModalProps> = ({
@@ -20,14 +20,14 @@ export const LoginModal: React.FC<LoginModalProps> = ({
   const [password, setPassword] = useState('');
   const [isLoggingIn, setIsLoggingIn] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
-  const [authenticatedRole,setAuthenticatedRole]=useState<PortalRole>('investor');
+  const [identity,setIdentity]=useState<PortalIdentity|null>(null);
   const [loginError,setLoginError]=useState('');
 
   if (!isOpen) return null;
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault(); setIsLoggingIn(true); setLoginError('');
-    try { const result=await signInPortal(investorId,password); setAuthenticatedRole(result.role); setIsSuccess(true); }
+    try { const result=await signInPortal(investorId,password); const next={role:result.role,name:result.name,roleLabel:result.roleLabel}; setIdentity(next); setIsSuccess(true); window.setTimeout(()=>onAuthenticated(next),900); }
     catch(error){ setLoginError(error instanceof Error?error.message:'Gagal masuk.'); }
     finally { setIsLoggingIn(false); }
   };
@@ -59,14 +59,14 @@ export const LoginModal: React.FC<LoginModalProps> = ({
               Autentikasi Berhasil
             </h3>
             <p className="text-[14px] text-[#555555] leading-relaxed mb-6">
-              {authenticatedRole==='admin'?'Akses Admin Nuzultrip berhasil diverifikasi.':'Selamat datang di Portal Investor Nuzultrip. Sesi Anda telah aktif.'}
+              Selamat datang, <strong>{identity?.name}</strong>. Anda masuk sebagai <strong>{identity?.roleLabel}</strong>. Anda akan diarahkan otomatis ke dashboard.
             </p>
             <button
               type="button"
-              onClick={()=>onAuthenticated(authenticatedRole)}
+              onClick={()=>identity&&onAuthenticated(identity)}
               className="w-full py-3 px-5 rounded-xl bg-[#090909] text-white font-bold text-[14px]"
             >
-              {authenticatedRole==='admin'?'Masuk Dashboard Admin':'Masuk Dashboard Investor'}
+              Masuk Dashboard {identity?.roleLabel}
             </button>
           </div>
         ) : (
