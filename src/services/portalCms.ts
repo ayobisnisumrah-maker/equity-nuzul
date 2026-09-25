@@ -51,3 +51,11 @@ export async function uploadPortalImage(sectionKey:string,fieldKey:string,file:F
  const {error}=await supabase.from('portal_media').insert({section_key:sectionKey,field_key:fieldKey,file_name:file.name,file_url:url,storage_path:path,mime_type:file.type,created_by:user.id});
  if(error){await supabase.storage.from('portal-media').remove([path]);throw error}return url;
 }
+
+export async function ensurePortalContentSection(key:string,label:string,content:PortalContentMap,sortOrder:number):Promise<PortalCmsSection>{
+ if(!supabase)throw new Error('Supabase belum dikonfigurasi.');
+ const found=await supabase.from('portal_content').select('id,key,label,content,updated_at').eq('key',key).maybeSingle();
+ if(found.error)throw found.error;if(found.data)return found.data as PortalCmsSection;
+ const {data,error}=await supabase.from('portal_content').insert({key,label,content,sort_order:sortOrder,published:true}).select('id,key,label,content,updated_at').single();
+ if(error)throw error;return data as PortalCmsSection;
+}
