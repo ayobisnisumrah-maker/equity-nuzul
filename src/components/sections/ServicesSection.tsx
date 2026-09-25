@@ -5,12 +5,20 @@ import { Eyebrow } from '../ui/Eyebrow';
 import { ArrowButton } from '../ui/ArrowButton';
 import { StaggerHeading } from '../ui/LetterStagger';
 import { SERVICES_LIST, ServiceItem } from '../../data/landingData';
+import { usePortalContent } from '../../context/PortalContentContext';
 
 interface ServicesSectionProps {
   onOpenServiceDetail: (service: ServiceItem) => void;
 }
 
 export const ServicesSection: React.FC<ServicesSectionProps> = ({ onOpenServiceDetail }) => {
+  const { content } = usePortalContent();
+  const cms = content('services', {} as Record<string, unknown>);
+  const eyebrow = typeof cms.eyebrow === 'string' ? cms.eyebrow : 'LAYANAN UTAMA';
+  const headline = typeof cms.headline === 'string' ? cms.headline : 'Ekosistem Perjalanan Muslim Nuzultrip';
+  const description = typeof cms.description === 'string' ? cms.description : 'Menghubungkan mitra, vendor layanan, dan jaringan distribusi dalam satu kesatuan sistem yang transparan dan terstandar.';
+  const otherCta = typeof cms.otherCta === 'string' ? cms.otherCta : 'Layanan Lainnya';
+  const services = Array.isArray(cms.itemsJson) && cms.itemsJson.length ? cms.itemsJson as ServiceItem[] : SERVICES_LIST;
   const getIcon = (iconName: string) => {
     const iconClass = "transition-colors duration-200 text-[#111111] group-hover:text-white";
     switch (iconName) {
@@ -37,18 +45,18 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({ onOpenServiceD
           {/* Left Column: Title & Description */}
           <div className="lg:col-span-4 flex flex-col justify-between h-full">
             <div>
-              <Eyebrow>LAYANAN UTAMA</Eyebrow>
+              <Eyebrow>{eyebrow}</Eyebrow>
               <div className="mb-5 sm:mb-6">
                 <StaggerHeading
                   as="h2"
-                  text="Ekosistem Perjalanan Muslim Nuzultrip"
+                  text={headline}
                   className="font-h2 font-bold text-[#111111] leading-[1.12] tracking-tight"
                   highlightWord="Nuzultrip"
                   highlightClass="text-emerald-600"
                 />
               </div>
               <p className="text-[16px] sm:text-[17px] text-[#555555] leading-[1.65] max-w-[360px]">
-                Menghubungkan mitra, vendor layanan, dan jaringan distribusi dalam satu kesatuan sistem yang transparan dan terstandar.
+                {description}
               </p>
             </div>
 
@@ -56,10 +64,10 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({ onOpenServiceD
             <div className="pt-8 sm:pt-10 mt-auto">
               <ArrowButton
                 variant="link"
-                onClick={() => onOpenServiceDetail(SERVICES_LIST[0])}
+                onClick={() => onOpenServiceDetail(services[0])}
                 id="services-cta-other"
               >
-                Layanan Lainnya
+                {otherCta}
               </ArrowButton>
             </div>
           </div>
@@ -67,7 +75,7 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({ onOpenServiceD
           {/* Right Column: 2x2 Services Grid */}
           <div className="lg:col-span-8 flex flex-col justify-between">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
-              {SERVICES_LIST.map((service) => (
+              {services.map((service) => (
                 <div
                   key={service.id}
                   onClick={() => onOpenServiceDetail(service)}
