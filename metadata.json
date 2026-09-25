@@ -1,0 +1,6 @@
+{
+  "name": "Nuzultrip Equity",
+  "description": "Platform Investasi dan Kemitraan Ekosistem Perjalanan Muslim Indonesia - Nuzultrip Equity",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

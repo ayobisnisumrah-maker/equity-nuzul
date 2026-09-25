@@ -1,0 +1,334 @@
+@import "tailwindcss";
+
+:root {
+  --font-master: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  --bg-primary: #F5F5F3;
+  --bg-white: #FFFFFF;
+  --bg-hero: #131314;
+  --color-black: #090909;
+  --color-primary: #111111;
+  --color-secondary: #666666;
+  --color-muted: #8A8A8A;
+  --border-subtle: rgba(0, 0, 0, 0.12);
+  --border-dark: rgba(255, 255, 255, 0.16);
+  --text-dark-secondary: rgba(255, 255, 255, 0.68);
+
+  /* Hero animation variables */
+  --accent-primary: #10b981;
+  --accent-primary-glow: rgba(16, 185, 129, 0.35);
+}
+
+* {
+  font-family: var(--font-master);
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-master);
+  background-color: var(--bg-primary);
+  color: var(--color-primary);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Entrance Animations matching hero-animation-builder */
+.entrance {
+  opacity: 0;
+  transform: translateY(64px) scale(0.94) rotateX(4deg);
+}
+
+.entrance.visible {
+  animation: 1.8s cubic-bezier(0.16, 1, 0.3, 1) forwards deepEmerge;
+}
+
+.entrance.visible.stagger-1 {
+  animation-delay: 0s;
+}
+.entrance.visible.stagger-2 {
+  animation-delay: 0.18s;
+}
+.entrance.visible.stagger-3 {
+  animation-delay: 0.36s;
+}
+.entrance.visible.stagger-4 {
+  animation-delay: 0.54s;
+}
+.entrance.visible.stagger-5 {
+  animation-delay: 0.72s;
+}
+.entrance.visible.stagger-6 {
+  animation-delay: 0.9s;
+}
+
+@keyframes deepEmerge {
+  0% {
+    opacity: 0;
+    transform: translateY(64px) scale(0.94) rotateX(4deg);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1) rotateX(0);
+  }
+}
+
+@media (max-width: 640px) {
+  @keyframes deepEmerge {
+    0% {
+      opacity: 0;
+      transform: translateY(32px) scale(0.97) rotateX(2deg);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1) rotateX(0);
+    }
+  }
+  .entrance {
+    transform: translateY(32px) scale(0.97) rotateX(2deg);
+  }
+}
+
+/* Hero section layout matching hero-animation-builder with increased height and spacious clearance */
+.hero {
+  min-height: max(780px, min(114dvh, 1220px));
+  padding-top: 76px;
+  background-color: #131314;
+  perspective: 800px;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-content {
+  z-index: 2;
+  text-align: center;
+  align-items: center;
+  gap: 28px;
+  padding: clamp(36px, 7vh, 80px) 24px 36px;
+  width: 100%;
+  max-width: 1100px;
+  min-height: calc(max(780px, min(114dvh, 1220px)) - 76px);
+  flex-direction: column;
+  display: flex;
+  position: relative;
+}
+
+@media (max-width: 768px) {
+  .hero-content {
+    gap: 22px;
+    padding: clamp(28px, 5vh, 50px) 16px 28px;
+  }
+}
+
+.hero-spacer {
+  flex: 0 0 0;
+}
+
+.hero-overline {
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #10b981;
+}
+
+.hero-heading {
+  font-size: clamp(2.35rem, 5.2vw, 4.25rem);
+  font-weight: 700;
+  line-height: 1.08;
+  letter-spacing: -0.028em;
+  color: #f0f0f5;
+  max-width: 100%;
+}
+
+.hero-subtitle {
+  font-size: clamp(0.95rem, 1.2vw, 1.125rem);
+  line-height: 1.65;
+  color: #9ba1b4;
+  max-width: 860px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.hero-buttons {
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+  display: flex;
+}
+
+@media (max-width: 640px) {
+  .hero-buttons {
+    flex-direction: column;
+    width: 100%;
+    max-width: 320px;
+  }
+  .hero-buttons button {
+    width: 100%;
+  }
+}
+
+.hero-partners {
+  align-items: center;
+  gap: clamp(20px, 3.5vh, 32px);
+  width: 100%;
+  padding-top: 14px;
+  padding-bottom: 22px;
+  flex-direction: column;
+  margin-top: clamp(40px, 6vh, 72px);
+  display: flex;
+}
+
+.hero-partners-label-row {
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  max-width: 440px;
+  display: flex;
+}
+
+.hero-partners-label-line {
+  background: linear-gradient(to right, transparent, rgba(138, 143, 158, 0.35), transparent);
+  flex: 1;
+  height: 1px;
+}
+
+.hero-partners-label-line:last-child {
+  background: linear-gradient(to left, transparent, rgba(138, 143, 158, 0.35), transparent);
+}
+
+.hero-partners-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #10b981;
+  flex-shrink: 0;
+}
+
+.hero-partners-track {
+  width: 100%;
+  max-width: 820px;
+  padding: 4px 0;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 6% 94%, transparent 100%);
+  mask-image: linear-gradient(90deg, transparent 0%, #000 6% 94%, transparent 100%);
+}
+
+.hero-chip {
+  background: linear-gradient(180deg, rgba(22, 25, 36, 0.95) 0%, rgba(15, 17, 25, 0.95) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04), 0 2px 4px rgba(0, 0, 0, 0.35);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.015em;
+  color: #cbd5e1;
+  white-space: nowrap;
+  border-radius: 999px;
+  align-items: center;
+  gap: 6px;
+  padding: 4.5px 11px;
+  display: inline-flex;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.hero-chip:hover {
+  border-color: rgba(16, 185, 129, 0.4);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 4px 10px rgba(0, 0, 0, 0.4), 0 0 16px rgba(16, 185, 129, 0.22);
+  transform: translateY(-1px);
+}
+
+.hero-chip-dot {
+  background: #10b981;
+  width: 4.5px;
+  height: 4.5px;
+  box-shadow: 0 0 5px rgba(16, 185, 129, 0.8), 0 0 10px rgba(16, 185, 129, 0.35);
+  border-radius: 999px;
+  flex-shrink: 0;
+}
+
+/* Hero Partners Marquee */
+@keyframes hero-partners-scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee-slow {
+  display: flex;
+  width: max-content;
+  animation: hero-partners-scroll 35s linear infinite;
+}
+
+.animate-marquee-slow:hover {
+  animation-play-state: paused;
+}
+
+/* Fluid typography clamps */
+.font-display-xl {
+  font-size: clamp(2.5rem, 5.5vw, 4.75rem);
+  line-height: 0.98;
+  letter-spacing: -0.04em;
+}
+
+.font-h1 {
+  font-size: clamp(2.25rem, 4.5vw, 4rem);
+  line-height: 1.02;
+  letter-spacing: -0.035em;
+}
+
+.font-h2 {
+  font-size: clamp(1.85rem, 3.8vw, 3.25rem);
+  line-height: 1.06;
+  letter-spacing: -0.03em;
+}
+
+.font-h3 {
+  font-size: clamp(1.4rem, 2.4vw, 2.25rem);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+
+.font-stat-large {
+  font-size: clamp(2.25rem, 4vw, 3.75rem);
+  line-height: 1.0;
+  letter-spacing: -0.04em;
+  font-weight: 700;
+}
+
+.tracking-eyebrow {
+  letter-spacing: 0.16em;
+}
+
+/* Custom scrollbar for webkit */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #f1f1ee;
+}
+::-webkit-scrollbar-thumb {
+  background: #c5c5c0;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #999994;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
