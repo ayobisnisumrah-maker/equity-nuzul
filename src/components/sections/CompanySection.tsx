@@ -4,24 +4,19 @@ import { Eyebrow } from '../ui/Eyebrow';
 import { ArrowButton } from '../ui/ArrowButton';
 import { AnimatedNumber } from '../ui/AnimatedNumber';
 import { StaggerHeading } from '../ui/LetterStagger';
-import { PORTAL_DEFAULTS } from '../../data/portalDefaults';
-import { usePortalContent } from '../../context/PortalContentContext';
+import { COMPANY_METRICS, IMAGES } from '../../data/landingData';
 
 interface CompanySectionProps {
   onOpenDetail: () => void;
 }
 
 export const CompanySection: React.FC<CompanySectionProps> = ({ onOpenDetail }) => {
-  const {content}=usePortalContent();
-  const cms:any=content('company',PORTAL_DEFAULTS.company);
-  const images:string[]=Array.isArray(cms.images)?cms.images:[];
-  const metrics:any[]=Array.isArray(cms.metrics)?cms.metrics:[];
   const [activeImageIndex, setActiveImageIndex] = useState(0);
   const imageContainerRef = useRef<HTMLDivElement>(null);
 
   // Preload all 5 images on mount
   useEffect(() => {
-    images.forEach((url) => {
+    IMAGES.companySlices.forEach((url) => {
       const img = new Image();
       img.src = url;
     });
@@ -33,7 +28,7 @@ export const CompanySection: React.FC<CompanySectionProps> = ({ onOpenDetail }) 
     if (!isTouch) return;
 
     const interval = setInterval(() => {
-      setActiveImageIndex((prev) => (prev + 1) % images.length);
+      setActiveImageIndex((prev) => (prev + 1) % IMAGES.companySlices.length);
     }, 3200);
 
     return () => clearInterval(interval);
@@ -68,18 +63,19 @@ export const CompanySection: React.FC<CompanySectionProps> = ({ onOpenDetail }) 
           {/* Column 1: Left Description & CTA */}
           <div className="lg:col-span-4 flex flex-col justify-between h-full">
             <div>
-              <Eyebrow>{cms.eyebrow}</Eyebrow>
+              <Eyebrow>PERUSAHAAN</Eyebrow>
               <div className="mb-5 sm:mb-6">
                 <StaggerHeading
                   as="h2"
-                  text={cms.title}
+                  text="Perjalanan Muslim yang Bertumbuh"
                   className="font-h2 font-bold text-[#111111] leading-[1.08] tracking-tight"
-                  highlightWord={cms.highlightWord}
+                  highlightWord="Bertumbuh"
                   highlightClass="text-emerald-600"
                 />
               </div>
               <p className="text-[16px] sm:text-[17px] text-[#555555] leading-[1.65] max-w-[360px]">
-                {cms.description}
+                Menghadirkan layanan perjalanan ibadah yang bermakna melalui layanan,
+                jaringan, dan teknologi.
               </p>
             </div>
 
@@ -90,7 +86,7 @@ export const CompanySection: React.FC<CompanySectionProps> = ({ onOpenDetail }) 
                 onClick={onOpenDetail}
                 id="company-cta-detail"
               >
-                {cms.detailCta}
+                Lebih Detail Penawaran
               </ArrowButton>
             </div>
           </div>
@@ -103,7 +99,7 @@ export const CompanySection: React.FC<CompanySectionProps> = ({ onOpenDetail }) 
               onMouseLeave={handleMouseLeave}
               className="relative w-full h-[320px] sm:h-[400px] lg:h-[440px] rounded-2xl overflow-hidden border border-black/[0.1] bg-[#E8E8E4] shadow-sm cursor-crosshair group select-none"
             >
-              {images.map((url, idx) => (
+              {IMAGES.companySlices.map((url, idx) => (
                 <div
                   key={url}
                   className={`absolute inset-0 transition-opacity duration-300 ease-out ${
@@ -138,7 +134,7 @@ export const CompanySection: React.FC<CompanySectionProps> = ({ onOpenDetail }) 
           {/* Column 3: 5 Poin Metrik & Kredensial Disusun Vertikal */}
           <div className="lg:col-span-4 flex flex-col justify-between py-1 h-full">
             <div className="flex flex-col justify-between h-full gap-y-3 sm:gap-y-3.5">
-              {metrics.map((item, idx) => {
+              {COMPANY_METRICS.map((item, idx) => {
                 const isActive = activeImageIndex === idx;
                 return (
                   <div
@@ -179,7 +175,7 @@ export const CompanySection: React.FC<CompanySectionProps> = ({ onOpenDetail }) 
                 );
               })}
 
-              {/* Point 5: Headline Amanah dengan deskripsi {cms.credentialLabel} */}
+              {/* Point 5: Headline Amanah dengan deskripsi Terverifikasi PPIU Kemenag */}
               <div
                 onMouseEnter={() => setActiveImageIndex(4)}
                 onClick={() => setActiveImageIndex(4)}
