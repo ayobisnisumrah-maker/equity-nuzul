@@ -7,7 +7,7 @@ import {AdminSummary,SettingsModule} from './AdminOverview';
 import type {PortalIdentity} from '../../services/auth';
 import {getAdminAccess,type AdminModule} from '../../services/adminAccess';
 import {supabase} from '../../lib/supabase';
-import {BarChart3,BookOpen,Building2,CashRegister,FileText,LayoutDashboard,LogOut,Menu,ReceiptText,Settings,Users,WalletCards,X} from 'lucide-react';
+import {BarChart3,BookOpen,Building2,CashRegister,FileText,LayoutDashboard,LogOut,Menu,Settings,Users,WalletCards,X} from 'lucide-react';
 
 type Module=AdminModule;
 const modules:{id:Module;label:string;icon:any;description:string}[]=[
@@ -45,7 +45,7 @@ export const AdminDashboard:React.FC<{identity:PortalIdentity;onBack:()=>void;on
     active==='dokumen'?<DocumentsModule/>:
     active==='admin'?<AdminManagement/>:
     active==='pengaturan'?<SettingsModule/>:
-    <div className="bg-white border rounded-2xl p-6 min-h-[420px]"><div className="flex items-center gap-3"><current.icon size={20}/><h2 className="font-bold">{current.label}</h2></div><p className="text-sm text-black/50 mt-3">{current.description}. Modul ini disiapkan terpisah dari source tampilan portal agar isi portal yang sudah ada tetap utuh.</p>{active==='kasir'&&<div className="mt-6 border rounded-xl p-4 flex items-center gap-3"><ReceiptText size={18}/><span className="text-sm">Transaksi kasir akan menggunakan data transaksi production, bukan data dummy.</span></div>}</div>}
+    null}
    </div>
   </main>
  </div>
