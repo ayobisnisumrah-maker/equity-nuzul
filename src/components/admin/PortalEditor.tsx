@@ -1,0 +1,23 @@
+import React,{useEffect,useMemo,useState} from 'react';
+import {ChevronRight,Save} from 'lucide-react';
+import {PORTAL_SECTION_DEFINITIONS,type PortalField} from '../../data/portalEditorSchema';
+import {listPortalContent,savePortalContent,type PortalCmsSection} from '../../services/portalCms';
+
+const fieldValue=(v:PortalField['value'])=>Array.isArray(v)?v.join('\n'):String(v??'');
+export const PortalEditor:React.FC=()=>{
+ const [selected,setSelected]=useState(PORTAL_SECTION_DEFINITIONS[0].key);
+ const [rows,setRows]=useState<PortalCmsSection[]>([]);
+ const [draft,setDraft]=useState<Record<string,string>>({});
+ const [message,setMessage]=useState('');const [saving,setSaving]=useState(false);
+ const definition=useMemo(()=>PORTAL_SECTION_DEFINITIONS.find(s=>s.key===selected)!,[selected]);
+ useEffect(()=>{void listPortalContent().then(setRows).catch(()=>setRows([]))},[]);
+ useEffect(()=>{const stored=rows.find(r=>r.key===selected)?.content as Record<string,unknown>|undefined;const next:Record<string,string>={};for(const f of definition.fields){const v=stored?.[f.key]??f.value;next[f.key]=Array.isArray(v)?v.join('\n'):String(v??'')}setDraft(next)},[selected,definition,rows]);
+ const save=async()=>{const existing=rows.find(r=>r.key===selected);if(!existing){setMessage('Section database belum dibuat. Jalankan migration/seed CMS terlebih dahulu.');return}setSaving(true);setMessage('');try{const content:Record<string,unknown>={...(existing.content||{})};for(const f of definition.fields)content[f.key]=f.kind==='string-list'?draft[f.key].split('\n').map(x=>x.trim()).filter(Boolean):f.kind==='number'?Number(draft[f.key]):draft[f.key];const next={...existing,content};await savePortalContent(next);setRows(v=>v.map(r=>r.id===next.id?next:r));setMessage('Konten tersimpan.')}catch(e){setMessage(e instanceof Error?e.message:'Gagal menyimpan')}finally{setSaving(false)}};
+ return <div className="grid xl:grid-cols-[280px_1fr] gap-5">
+  <aside className="bg-white border rounded-2xl p-2 h-fit">{PORTAL_SECTION_DEFINITIONS.map(s=><button key={s.key} onClick={()=>{setSelected(s.key);setMessage('')}} className={`w-full px-3 py-2.5 rounded-xl flex items-center justify-between text-left text-sm ${selected===s.key?'bg-[#131314] text-white':'hover:bg-black/[0.04]'}`}><span>{s.label}</span><ChevronRight size={14}/></button>)}</aside>
+  <section className="bg-white border rounded-2xl p-5 sm:p-6"><div className="flex flex-wrap gap-4 items-start justify-between border-b pb-5"><div><h2 className="text-xl font-bold">{definition.label}</h2><p className="text-sm text-black/50 mt-1">{definition.description}</p><p className="text-xs text-emerald-700 mt-2 font-medium">Layout dikunci — hanya isi konten yang dapat diedit.</p></div><button onClick={save} disabled={saving||definition.fields.length===0} className="inline-flex items-center gap-2 bg-[#131314] text-white px-4 py-2.5 rounded-xl text-sm font-semibold disabled:opacity-40"><Save size={15}/>{saving?'Menyimpan...':'Simpan Perubahan'}</button></div>
+   {message&&<div className="mt-4 rounded-xl bg-black/[0.04] px-4 py-3 text-sm">{message}</div>}
+   {definition.fields.length?<div className="grid md:grid-cols-2 gap-5 pt-6">{definition.fields.map(f=><label key={f.key} className={f.kind==='textarea'||f.kind==='string-list'?'md:col-span-2':''}><span className="block text-xs font-bold mb-2">{f.label}</span>{f.kind==='textarea'||f.kind==='string-list'?<textarea value={draft[f.key]??fieldValue(f.value)} onChange={e=>setDraft(v=>({...v,[f.key]:e.target.value}))} rows={f.kind==='string-list'?6:4} className="w-full border rounded-xl px-3 py-2.5 text-sm outline-none focus:ring-2 focus:ring-black/10"/>:<input type={f.kind==='number'?'number':f.kind==='url'?'url':'text'} value={draft[f.key]??fieldValue(f.value)} onChange={e=>setDraft(v=>({...v,[f.key]:e.target.value}))} className="w-full border rounded-xl px-3 py-2.5 text-sm outline-none focus:ring-2 focus:ring-black/10"/>}</label>)}</div>:<div className="py-12 text-center"><p className="font-semibold">Editor detail sedang dipetakan dari source portal.</p><p className="text-sm text-black/50 mt-2">Konten portal tidak diubah selama pemetaan ini.</p></div>}
+  </section>
+ </div>
+};
