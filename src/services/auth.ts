@@ -3,7 +3,6 @@ import { supabase } from '../lib/supabase';
 
 export type PortalRole='admin'|'investor';
 export interface PortalIdentity{role:PortalRole;name:string;roleLabel:string}
-const authName=(user:User)=>String(user.user_metadata?.full_name||user.user_metadata?.name||user.email?.split('@')[0]||'Pengguna');
 
 export async function signInPortal(identifier:string,password:string){
  if(!supabase)throw new Error('Supabase belum dikonfigurasi.');
@@ -15,12 +14,12 @@ export async function signInPortal(identifier:string,password:string){
 }
 export async function resolvePortalIdentity(user:User):Promise<PortalIdentity>{
  if(!supabase)throw new Error('Supabase belum dikonfigurasi.');
- const admin=await supabase.from('portal_admins').select('user_id').eq('user_id',user.id).maybeSingle();
+ const admin=await supabase.from('portal_admins').select('user_id,full_name,role').eq('user_id',user.id).maybeSingle();
  if(admin.error)throw admin.error;
- if(admin.data)return {role:'admin',name:authName(user),roleLabel:'Admin'};
+ if(admin.data){if(!admin.data.full_name){await supabase.auth.signOut();throw new Error('Akun tidak terdaftar.');}return {role:'admin',name:admin.data.full_name,roleLabel:admin.data.role||'Admin'};}
  const investor=await supabase.from('investor_profiles').select('user_id,status,full_name').eq('user_id',user.id).eq('status','approved').maybeSingle();
  if(investor.error)throw investor.error;
- if(investor.data)return {role:'investor',name:investor.data.full_name||authName(user),roleLabel:'Investor'};
- await supabase.auth.signOut();throw new Error('Akun belum memiliki akses dashboard.');
+ if(investor.data){if(!investor.data.full_name){await supabase.auth.signOut();throw new Error('Akun tidak terdaftar.');}return {role:'investor',name:investor.data.full_name,roleLabel:'Investor'};}
+ await supabase.auth.signOut();throw new Error('Akun tidak terdaftar.');
 }
 export async function resolvePortalRole(user:User):Promise<PortalRole>{return (await resolvePortalIdentity(user)).role}
