@@ -8,6 +8,9 @@ export interface PortalCmsSection {
   label: string;
   content: PortalContentMap;
   updated_at?: string;
+  draft_content?: PortalContentMap|null;
+  draft_updated_at?: string|null;
+  published_at?: string|null;
 }
 
 export async function listPublishedPortalContent(): Promise<PortalCmsSection[]> {
@@ -25,19 +28,20 @@ export async function listPortalContent(): Promise<PortalCmsSection[]> {
   if (!supabase) return [];
   const { data, error } = await supabase
     .from('portal_content')
-    .select('id,key,label,content,updated_at')
+    .select('id,key,label,content,draft_content,updated_at,draft_updated_at,published_at')
     .order('sort_order');
   if (error) throw error;
   return (data ?? []) as PortalCmsSection[];
 }
 
 export async function savePortalContent(section: PortalCmsSection): Promise<void> {
-  if (!supabase) throw new Error('Supabase belum dikonfigurasi.');
-  const { error } = await supabase.from('portal_content').update({
-    content: section.content,
-    updated_at: new Date().toISOString(),
-  }).eq('id', section.id);
-  if (error) throw error;
+ if(!supabase)throw new Error('Supabase belum dikonfigurasi.');
+ const {error}=await supabase.rpc('save_portal_content_draft',{p_id:section.id,p_content:section.content});if(error)throw error;
+}
+
+export async function publishPortalContent(id:string):Promise<void>{
+ if(!supabase)throw new Error('Supabase belum dikonfigurasi.');
+ const {error}=await supabase.rpc('publish_portal_content',{p_id:id});if(error)throw error;
 }
 
 export async function uploadPortalImage(sectionKey:string,fieldKey:string,file:File):Promise<string>{
@@ -54,8 +58,8 @@ export async function uploadPortalImage(sectionKey:string,fieldKey:string,file:F
 
 export async function ensurePortalContentSection(key:string,label:string,content:PortalContentMap,sortOrder:number):Promise<PortalCmsSection>{
  if(!supabase)throw new Error('Supabase belum dikonfigurasi.');
- const found=await supabase.from('portal_content').select('id,key,label,content,updated_at').eq('key',key).maybeSingle();
+ const found=await supabase.from('portal_content').select('id,key,label,content,draft_content,updated_at,draft_updated_at,published_at').eq('key',key).maybeSingle();
  if(found.error)throw found.error;if(found.data)return found.data as PortalCmsSection;
- const {data,error}=await supabase.from('portal_content').insert({key,label,content,sort_order:sortOrder,published:true}).select('id,key,label,content,updated_at').single();
+ const {data,error}=await supabase.from('portal_content').insert({key,label,content,sort_order:sortOrder,published:true}).select('id,key,label,content,draft_content,updated_at,draft_updated_at,published_at').single();
  if(error)throw error;return data as PortalCmsSection;
 }
