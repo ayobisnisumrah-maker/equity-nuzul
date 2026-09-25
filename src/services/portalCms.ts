@@ -60,7 +60,7 @@ export async function ensurePortalContentSection(key:string,label:string,content
  if(!supabase)throw new Error('Supabase belum dikonfigurasi.');
  const found=await supabase.from('portal_content').select('id,key,label,content,draft_content,updated_at,draft_updated_at,published_at').eq('key',key).maybeSingle();
  if(found.error)throw found.error;if(found.data)return found.data as PortalCmsSection;
- const {data,error}=await supabase.from('portal_content').insert({key,label,content,sort_order:sortOrder,published:true}).select('id,key,label,content,draft_content,updated_at,draft_updated_at,published_at').single();
+ const {data,error}=await supabase.from('portal_content').insert({page:'home',section:key,title:label,slug:key,status:'published',key,label,content,draft_content:content,sort_order:sortOrder,published:true,published_at:new Date().toISOString()}).select('id,key,label,content,draft_content,updated_at,draft_updated_at,published_at').single();
  if(error)throw error;return data as PortalCmsSection;
 }
 
