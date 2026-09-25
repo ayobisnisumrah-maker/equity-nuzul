@@ -1,5 +1,6 @@
 import investorStrategiImage from '../assets/images/regenerated_image_1790328525170.jpg';
 import investorDokumenImage from '../assets/images/regenerated_image_1790328653051.jpg';
+import investorHasilImage from '../assets/images/regenerated_image_1790328757781.jpg';
 
 export interface StatisticItem {
   id: string;
@@ -272,7 +273,7 @@ export const INVESTOR_INFO_LIST: InvestorInfoItem[] = [
     title: 'Mekanisme Hasil & Pelaporan',
     description: 'Distribusi hasil dengan pelaporan berkala dan transparan.',
     details: 'Dividen didistribusikan setiap periode secara proporsional sesuai kepemilikan unit, didukung laporan berkala bulanan dan RUPS tahunan melalui portal investor online.',
-    imageUrl: 'https://images.unsplash.com/photo-1551836022-d5d88e9218df?q=80&w=1200&auto=format&fit=crop'
+    imageUrl: investorHasilImage
   }
 ];
 
