@@ -19,6 +19,7 @@ import { AdminDashboard } from './components/admin/AdminDashboard';
 import { InvestorDashboard } from './components/investor/InvestorDashboard';
 import { supabase } from './lib/supabase';
 import type { PortalIdentity, PortalRole } from './services/auth';
+import { usePortalContent } from './context/PortalContentContext';
 
 // Code-split modals so initial landing page bundle is super lightweight
 const EquityInterestModal = React.lazy(() =>
@@ -34,7 +35,10 @@ const DetailInfoModal = React.lazy(() =>
   import('./components/modals/DetailInfoModal').then((m) => ({ default: m.DetailInfoModal }))
 );
 
+type DetailContent = { title: string; category?: string; content: string; detailsList?: string[] };
+
 export default function App() {
+  const { content } = usePortalContent();
   const [isInterestModalOpen, setIsInterestModalOpen] = useState(false);
   const [isPitchdeckModalOpen, setIsPitchdeckModalOpen] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
@@ -101,10 +105,21 @@ export default function App() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Handlers for detailed info
-  const handleOpenAnnouncementDetail = () => {
+  // Handlers for detailed info. CMS only changes content; layout and component structure stay untouched.
+  const openCmsDetail = (key: string, fallback: DetailContent) => {
+    const modals = content<Record<string, unknown>>('modals', {});
+    const value = modals[key] as Partial<DetailContent> | undefined;
     setDetailModal({
       isOpen: true,
+      title: value?.title || fallback.title,
+      category: value?.category || fallback.category,
+      content: value?.content || fallback.content,
+      detailsList: Array.isArray(value?.detailsList) ? value.detailsList : (fallback.detailsList || []),
+    });
+  };
+
+  const handleOpenAnnouncementDetail = () =>
+    openCmsDetail('announcementJson', {
       title: 'RUPS Luar Biasa Kuartal 3 & Laporan Triwulan II',
       category: 'Pengumuman Resmi Pemegang Saham',
       content:
@@ -116,11 +131,9 @@ export default function App() {
         'Hak Suara: Berlaku bagi seluruh pemegang unit equity terdaftar',
       ],
     });
-  };
 
-  const handleOpenEquityDetail = () => {
-    setDetailModal({
-      isOpen: true,
+  const handleOpenEquityDetail = () =>
+    openCmsDetail('equityDetailJson', {
       title: 'Detail Penawaran Equity Nuzultrip',
       category: 'Informasi Penawaran Resmi',
       content:
@@ -133,11 +146,9 @@ export default function App() {
         'Hak Pemegang Unit: Akses portal investor, laporan keuangan teraudit, dan hak suara proporsional',
       ],
     });
-  };
 
-  const handleOpenCompanyDetail = () => {
-    setDetailModal({
-      isOpen: true,
+  const handleOpenCompanyDetail = () =>
+    openCmsDetail('companyDetailJson', {
       title: 'Struktur dan Visi Perusahaan Nuzultrip',
       category: 'Profil Korporasi',
       content:
@@ -149,11 +160,9 @@ export default function App() {
         'Sistem digitalisasi pemesanan terpusat untuk efisiensi rantai pasok travel ibadah',
       ],
     });
-  };
 
-  const handleOpenProcessDetail = () => {
-    setDetailModal({
-      isOpen: true,
+  const handleOpenProcessDetail = () =>
+    openCmsDetail('processDetailJson', {
       title: 'Prosedur dan Alur Kepemilikan Equity',
       category: 'Tata Kelola & Kepatuhan',
       content:
@@ -165,11 +174,9 @@ export default function App() {
         'Tahap 4 (Onboarding Portal): Penyerahan sertifikat kepemilikan dan aktivasi akun portal investor',
       ],
     });
-  };
 
-  const handleOpenNetworkDetail = () => {
-    setDetailModal({
-      isOpen: true,
+  const handleOpenNetworkDetail = () =>
+    openCmsDetail('networkDetailJson', {
       title: 'Jaringan Kemitraan Ekosistem Nuzultrip',
       category: 'Sinergi & Kemitraan',
       content:
@@ -181,62 +188,88 @@ export default function App() {
         'Akses prioritas pada program-program promosi dan paket custom korporasi',
       ],
     });
-  };
 
   const handleOpenServiceDetail = (service: ServiceItem) => {
+    const services = content<Record<string, unknown>>('services', {});
+    const detailMap = services.detailMap as Record<string, Partial<DetailContent>> | undefined;
+    const value = detailMap?.[service.code];
     setDetailModal({
       isOpen: true,
-      title: `Layanan: ${service.title}`,
-      category: `Ekosistem Layanan • ${service.code}`,
-      content: `${service.description} Nuzultrip menjamin standar kenyamanan optimal, kepastian jadwal penerbangan, serta bimbingan ibadah yang sesuai sunnah.`,
-      detailsList: [
-        'Standar hotel berbintang dengan akses dekat ke Masjidil Haram dan Masjid Nabawi',
-        'Transportasi bus full-AC model terbaru dan muthowif berpengalaman',
-        'Konsumsi masakan nusantara dengan menu higienis dan terstandar',
-        'Handling kedatangan dan kepulangan bandara dengan staf profesional',
-      ],
+      title: value?.title || `Layanan: ${service.title}`,
+      category: value?.category || `Ekosistem Layanan • ${service.code}`,
+      content:
+        value?.content ||
+        `${service.description} Nuzultrip menjamin standar kenyamanan optimal, kepastian jadwal penerbangan, serta bimbingan ibadah yang sesuai sunnah.`,
+      detailsList: Array.isArray(value?.detailsList)
+        ? value.detailsList
+        : [
+            'Standar hotel berbintang dengan akses dekat ke Masjidil Haram dan Masjid Nabawi',
+            'Transportasi bus full-AC model terbaru dan muthowif berpengalaman',
+            'Konsumsi masakan nusantara dengan menu higienis dan terstandar',
+            'Handling kedatangan dan kepulangan bandara dengan staf profesional',
+          ],
     });
   };
 
   const handleOpenInvestorInfo = (item: InvestorInfoItem) => {
+    const investor = content<Record<string, unknown>>('investor', {});
+    const detailMap = investor.detailMap as Record<string, Partial<DetailContent>> | undefined;
+    const value = detailMap?.[item.id] || detailMap?.[item.title];
     setDetailModal({
       isOpen: true,
-      title: item.title,
-      category: 'Informasi Investor Terstruktur',
-      content: item.details,
-      detailsList: [
-        'Pembaruan berkala melalui portal investor online',
-        'Transparansi pembukuan keuangan sesuai prinsip akuntansi yang berlaku',
-        'Akses konsultasi langsung dengan tim manajemen dan Investor Relations',
-      ],
+      title: value?.title || item.title,
+      category: value?.category || 'Informasi Investor Terstruktur',
+      content: value?.content || item.details,
+      detailsList: Array.isArray(value?.detailsList)
+        ? value.detailsList
+        : [
+            'Pembaruan berkala melalui portal investor online',
+            'Transparansi pembukuan keuangan sesuai prinsip akuntansi yang berlaku',
+            'Akses konsultasi langsung dengan tim manajemen dan Investor Relations',
+          ],
     });
   };
 
   const handleOpenArticle = (article: ArticleItem) => {
+    const articles = content<Record<string, unknown>>('articles', {});
+    const detailMap = articles.detailMap as Record<string, Partial<DetailContent>> | undefined;
+    const value = detailMap?.[article.id] || detailMap?.[article.title];
     setDetailModal({
       isOpen: true,
-      title: article.title,
-      category: article.category,
-      content: `${article.description}\n\nDi era modernisasi ekosistem haji dan umroh pasca-Visi Saudi 2030, transformasi digital menjadi kunci peningkatan efisiensi operasional. Dengan memadukan kontrak langsung, automasi reservasi hotel, dan transparansi bagi hasil, Nuzultrip membuktikan bahwa bisnis perjalanan ibadah dapat tumbuh berkelanjutan sekaligus memberikan nilai investasi yang solid bagi para pemegang sahamnya.`,
-      detailsList: [
-        `Waktu Baca: ${article.readTime}`,
-        `Tanggal Publikasi: ${article.date}`,
-        'Penulis: Tim Riset & Analisis Pasar Nuzultrip Equity',
-      ],
+      title: value?.title || article.title,
+      category: value?.category || article.category,
+      content:
+        value?.content ||
+        `${article.description}\n\nDi era modernisasi ekosistem haji dan umroh pasca-Visi Saudi 2030, transformasi digital menjadi kunci peningkatan efisiensi operasional. Dengan memadukan kontrak langsung, automasi reservasi hotel, dan transparansi bagi hasil, Nuzultrip membuktikan bahwa bisnis perjalanan ibadah dapat tumbuh berkelanjutan sekaligus memberikan nilai investasi yang solid bagi para pemegang sahamnya.`,
+      detailsList: Array.isArray(value?.detailsList)
+        ? value.detailsList
+        : [
+            `Waktu Baca: ${article.readTime}`,
+            `Tanggal Publikasi: ${article.date}`,
+            'Penulis: Tim Riset & Analisis Pasar Nuzultrip Equity',
+          ],
     });
   };
 
   const handleOpenFooterDetail = (title?: string) => {
+    const footer = content<Record<string, unknown>>('footer', {});
+    const detailMap = footer.detailMap as Record<string, Partial<DetailContent>> | undefined;
+    const key = title || 'Informasi Korporasi';
+    const value = detailMap?.[key];
     setDetailModal({
       isOpen: true,
-      title: title || 'Informasi Korporasi',
-      category: 'Legal & Kepatuhan',
-      content: `Informasi resmi terkait ${title || 'Nuzultrip Equity'}. Seluruh kegiatan operasional dan penawaran investasi dijalankan sesuai peraturan perundang-undangan Republik Indonesia dan prinsip syariah yang berkeadilan. Untuk dokumen legalitas lengkap, Anda dapat menghubungi tim Investor Relations kami.`,
-      detailsList: [
-        'SK Kemenkumham dan Akta Pendirian Perseroan Terdaftar',
-        'Izin Penyelenggara Perjalanan Ibadah Umrah (PPIU) Resmi',
-        'Kebijakan privasi data berstandar perlindungan data pribadi (PDP)',
-      ],
+      title: value?.title || key,
+      category: value?.category || 'Legal & Kepatuhan',
+      content:
+        value?.content ||
+        `Informasi resmi terkait ${key}. Seluruh kegiatan operasional dan penawaran investasi dijalankan sesuai peraturan perundang-undangan Republik Indonesia dan prinsip syariah yang berkeadilan. Untuk dokumen legalitas lengkap, Anda dapat menghubungi tim Investor Relations kami.`,
+      detailsList: Array.isArray(value?.detailsList)
+        ? value.detailsList
+        : [
+            'SK Kemenkumham dan Akta Pendirian Perseroan Terdaftar',
+            'Izin Penyelenggara Perjalanan Ibadah Umrah (PPIU) Resmi',
+            'Kebijakan privasi data berstandar perlindungan data pribadi (PDP)',
+          ],
     });
   };
 
