@@ -18,7 +18,7 @@ import { ServiceItem, InvestorInfoItem, ArticleItem } from './data/landingData';
 import { AdminDashboard } from './components/admin/AdminDashboard';
 import { InvestorDashboard } from './components/investor/InvestorDashboard';
 import { supabase } from './lib/supabase';
-import type { PortalIdentity, PortalRole } from './services/auth';
+import { resolvePortalIdentity, type PortalIdentity, type PortalRole } from './services/auth';
 import { usePortalContent } from './context/PortalContentContext';
 
 // Code-split modals so initial landing page bundle is super lightweight
@@ -65,6 +65,29 @@ export default function App() {
       window.history.scrollRestoration = 'manual';
     }
     window.scrollTo({ top: 0, left: 0, behavior: 'instant' as ScrollBehavior });
+  }, []);
+
+  // Restore authenticated Admin/Investor dashboard after refresh and keep role state synced with Supabase Auth.
+  useEffect(() => {
+    if (!supabase) return;
+    let alive = true;
+    const applyUser = async (user: import('@supabase/supabase-js').User | null) => {
+      if (!alive) return;
+      if (!user) { setPortalIdentity(null); setDashboardRole(null); return; }
+      try {
+        const identity = await resolvePortalIdentity(user);
+        if (!alive) return;
+        setPortalIdentity(identity);
+        setDashboardRole(identity.role);
+      } catch {
+        if (!alive) return;
+        setPortalIdentity(null);
+        setDashboardRole(null);
+      }
+    };
+    void supabase.auth.getSession().then(({ data }) => applyUser(data.session?.user ?? null));
+    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => { void applyUser(session?.user ?? null); });
+    return () => { alive = false; listener.subscription.unsubscribe(); };
   }, []);
 
   // Handle global Escape key to close modals
@@ -273,10 +296,10 @@ export default function App() {
     });
   };
 
-  const closeDashboard=()=>{setDashboardRole(null);window.scrollTo({top:0,left:0,behavior:'instant' as ScrollBehavior})};
+  const closeDashboard=()=>{setDashboardRole(null);setPortalIdentity(null);window.scrollTo({top:0,left:0,behavior:'instant' as ScrollBehavior})};
   const logout=async()=>{await supabase?.auth.signOut();closeDashboard()};
   if(dashboardRole==='admin' && portalIdentity) return <AdminDashboard identity={portalIdentity} onBack={closeDashboard} onLogout={logout}/>;
-  if(dashboardRole==='investor') return <InvestorDashboard onBack={closeDashboard} onLogout={logout}/>;
+  if(dashboardRole==='investor' && portalIdentity) return <InvestorDashboard onBack={closeDashboard} onLogout={logout}/>;
 
   return (
     <div className="min-h-screen bg-[#F5F5F3] text-[#111111] flex flex-col selection:bg-[#090909] selection:text-white">
