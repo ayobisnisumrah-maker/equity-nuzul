@@ -1,32 +1,35 @@
 import React, { useState } from 'react';
 import { X, Lock, Eye, EyeOff, ShieldCheck, ArrowRight } from 'lucide-react';
+import { signInPortal, type PortalRole } from '../../services/auth';
 
 interface LoginModalProps {
   isOpen: boolean;
   onClose: () => void;
   onOpenInterest: () => void;
+  onAuthenticated: (role: PortalRole) => void;
 }
 
 export const LoginModal: React.FC<LoginModalProps> = ({
   isOpen,
   onClose,
   onOpenInterest,
+  onAuthenticated,
 }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [investorId, setInvestorId] = useState('');
   const [password, setPassword] = useState('');
   const [isLoggingIn, setIsLoggingIn] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [authenticatedRole,setAuthenticatedRole]=useState<PortalRole>('investor');
+  const [loginError,setLoginError]=useState('');
 
   if (!isOpen) return null;
 
-  const handleLogin = (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoggingIn(true);
-    setTimeout(() => {
-      setIsLoggingIn(false);
-      setIsSuccess(true);
-    }, 1000);
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault(); setIsLoggingIn(true); setLoginError('');
+    try { const result=await signInPortal(investorId,password); setAuthenticatedRole(result.role); setIsSuccess(true); }
+    catch(error){ setLoginError(error instanceof Error?error.message:'Gagal masuk.'); }
+    finally { setIsLoggingIn(false); }
   };
 
   return (
@@ -56,14 +59,14 @@ export const LoginModal: React.FC<LoginModalProps> = ({
               Autentikasi Berhasil
             </h3>
             <p className="text-[14px] text-[#555555] leading-relaxed mb-6">
-              Selamat datang di Portal Investor Nuzultrip. Sesi terenkripsi Anda telah aktif. Anda dapat meninjau data portfolio dan laporan dividen berkala.
+              {authenticatedRole==='admin'?'Akses Admin Nuzultrip berhasil diverifikasi.':'Selamat datang di Portal Investor Nuzultrip. Sesi Anda telah aktif.'}
             </p>
             <button
               type="button"
-              onClick={onClose}
+              onClick={()=>onAuthenticated(authenticatedRole)}
               className="w-full py-3 px-5 rounded-xl bg-[#090909] text-white font-bold text-[14px]"
             >
-              Masuk Dashboard Investor
+              {authenticatedRole==='admin'?'Masuk Dashboard Admin':'Masuk Dashboard Investor'}
             </button>
           </div>
         ) : (
@@ -87,6 +90,7 @@ export const LoginModal: React.FC<LoginModalProps> = ({
             </p>
 
             <form onSubmit={handleLogin} className="space-y-4">
+              {loginError&&<div className="rounded-xl bg-red-50 border border-red-200 px-3 py-2 text-[12px] text-red-700">{loginError}</div>}
               <div>
                 <label className="block text-[13px] font-bold text-[#111111] mb-1">
                   ID Investor / Email Terdaftar
