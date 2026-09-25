@@ -1,5 +1,6 @@
 import React,{useEffect,useMemo,useState} from 'react';
 import {PortalEditor} from './PortalEditor';
+import {CashierModule,DocumentsModule,FinanceModule,InvestorModule,ReportsModule} from './OperationsModules';
 import type {PortalIdentity} from '../../services/auth';
 import {getAdminAccess,type AdminModule} from '../../services/adminAccess';
 import {supabase} from '../../lib/supabase';
@@ -34,6 +35,11 @@ export const AdminDashboard:React.FC<{identity:PortalIdentity;onBack:()=>void;on
    <div className="p-5 lg:p-8">
     {active==='ringkasan'?<div className="space-y-6"><div className="grid sm:grid-cols-2 xl:grid-cols-4 gap-4">{[['Investor','—'],['Transaksi Kasir','—'],['Pemasukan','—'],['Dokumen','—']].map(([l,v])=><div key={l} className="bg-white border rounded-2xl p-5"><p className="text-xs text-black/45">{l}</p><p className="text-2xl font-bold mt-2">{v}</p></div>)}</div><div className="bg-white border rounded-2xl p-6"><h2 className="font-bold">Aktivitas Portal</h2><p className="text-sm text-black/50 mt-2">Data operasional akan ditampilkan dari database production setelah modul terkait terhubung.</p></div></div>:
     active==='portal'?<PortalEditor/>:
+    active==='investor'?<InvestorModule/>:
+    active==='kasir'?<CashierModule/>:
+    active==='keuangan'?<FinanceModule/>:
+    active==='laporan'?<ReportsModule/>:
+    active==='dokumen'?<DocumentsModule/>:
     <div className="bg-white border rounded-2xl p-6 min-h-[420px]"><div className="flex items-center gap-3"><current.icon size={20}/><h2 className="font-bold">{current.label}</h2></div><p className="text-sm text-black/50 mt-3">{current.description}. Modul ini disiapkan terpisah dari source tampilan portal agar isi portal yang sudah ada tetap utuh.</p>{active==='kasir'&&<div className="mt-6 border rounded-xl p-4 flex items-center gap-3"><ReceiptText size={18}/><span className="text-sm">Transaksi kasir akan menggunakan data transaksi production, bukan data dummy.</span></div>}</div>}
    </div>
   </main>
