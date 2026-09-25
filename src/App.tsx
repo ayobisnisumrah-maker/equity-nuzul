@@ -242,7 +242,7 @@ export default function App() {
 
   const closeDashboard=()=>{setDashboardRole(null);window.scrollTo({top:0,left:0,behavior:'instant' as ScrollBehavior})};
   const logout=async()=>{await supabase?.auth.signOut();closeDashboard()};
-  if(dashboardRole==='admin') return <AdminDashboard onBack={closeDashboard}/>;
+  if(dashboardRole==='admin' && portalIdentity) return <AdminDashboard identity={portalIdentity} onBack={closeDashboard} onLogout={logout}/>;
   if(dashboardRole==='investor') return <InvestorDashboard onBack={closeDashboard} onLogout={logout}/>;
 
   return (
