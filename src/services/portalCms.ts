@@ -63,3 +63,11 @@ export async function ensurePortalContentSection(key:string,label:string,content
  const {data,error}=await supabase.from('portal_content').insert({key,label,content,sort_order:sortOrder,published:true}).select('id,key,label,content,draft_content,updated_at,draft_updated_at,published_at').single();
  if(error)throw error;return data as PortalCmsSection;
 }
+
+export interface PortalContentVersion{ id:string;portal_content_id:string;section_key:string;version_no:number;content:PortalContentMap;action:'publish'|'rollback';source_version_id?:string|null;created_at:string; }
+export async function listPortalContentVersions(portalContentId:string):Promise<PortalContentVersion[]>{
+ if(!supabase)return[];const {data,error}=await supabase.from('portal_content_versions').select('id,portal_content_id,section_key,version_no,content,action,source_version_id,created_at').eq('portal_content_id',portalContentId).order('version_no',{ascending:false}).limit(20);if(error)throw error;return(data??[]) as PortalContentVersion[];
+}
+export async function rollbackPortalContent(portalContentId:string,versionId:string):Promise<void>{
+ if(!supabase)throw new Error('Supabase belum dikonfigurasi.');const {error}=await supabase.rpc('rollback_portal_content',{p_id:portalContentId,p_version_id:versionId});if(error)throw error;
+}
