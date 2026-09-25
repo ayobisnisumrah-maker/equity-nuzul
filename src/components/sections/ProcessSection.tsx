@@ -11,6 +11,7 @@ import {
 import { Container } from '../layout/Container';
 import { Eyebrow } from '../ui/Eyebrow';
 import { StaggerText, StaggerHeading } from '../ui/LetterStagger';
+import { usePortalContent } from '../../context/PortalContentContext';
 
 interface ProcessSectionProps {
   onOpenDetail: () => void;
@@ -74,6 +75,21 @@ export const ProcessSection: React.FC<ProcessSectionProps> = ({
   onOpenDetail,
   onOpenInterest,
 }) => {
+  const { content } = usePortalContent();
+  const cms = content('process', {} as Record<string, unknown>);
+  const eyebrow = typeof cms.eyebrow === 'string' ? cms.eyebrow : 'ALUR & TAHAPAN INVESTASI';
+  const headline = typeof cms.headline === 'string' ? cms.headline : 'Langkah Mudah Menjadi Bagian dari Kami';
+  const description = typeof cms.description === 'string' ? cms.description : 'Empat tahapan transparan dan berkepastian hukum untuk menjadi pemegang unit equity resmi ekosistem Nuzultrip.';
+  const primaryCta = typeof cms.primaryCta === 'string' ? cms.primaryCta : 'Ajukan Minat Unit Equity';
+  const secondaryCta = typeof cms.secondaryCta === 'string' ? cms.secondaryCta : 'Pelajari Prosedur Lengkap';
+  const rawSteps = Array.isArray(cms.stepsJson) && cms.stepsJson.length === 4 ? cms.stepsJson as Array<Omit<StepItem, 'icon'> & { iconName?: string }> : null;
+  const iconFor = (name: string | undefined, index: number) => {
+    const icons = [FileText, SearchCheck, Scale, Award];
+    const map: Record<string, React.ElementType> = { file: FileText, search: SearchCheck, scale: Scale, award: Award };
+    const Icon = (name && map[name]) || icons[index] || FileText;
+    return <Icon size={20} className="text-emerald-400" />;
+  };
+  const steps: StepItem[] = rawSteps ? rawSteps.map((step, index) => ({ ...step, icon: iconFor(step.iconName, index) })) : STEPS;
   const [activeStep, setActiveStep] = useState<number>(0);
 
   return (
@@ -90,25 +106,25 @@ export const ProcessSection: React.FC<ProcessSectionProps> = ({
       <Container size="default">
         {/* Section Header - Clean & Focused */}
         <div className="text-center max-w-2xl mx-auto mb-12 sm:mb-16 flex flex-col items-center px-4">
-          <Eyebrow variant="dark">ALUR & TAHAPAN INVESTASI</Eyebrow>
+          <Eyebrow variant="dark">{eyebrow}</Eyebrow>
           <div className="mb-3 sm:mb-4 text-center">
             <StaggerHeading
               as="h2"
-              text="Langkah Mudah Menjadi Bagian dari Kami"
+              text={headline}
               className="font-h2 font-bold text-white leading-[1.14] tracking-tight justify-center text-center"
               highlightWord="Kami"
               highlightClass="text-emerald-400"
             />
           </div>
           <p className="text-[15px] sm:text-[16px] text-white/70 leading-[1.6] max-w-lg">
-            Empat tahapan transparan dan berkepastian hukum untuk menjadi pemegang unit equity resmi ekosistem Nuzultrip.
+            {description}
           </p>
         </div>
 
         {/* Minimalist 4-Step Progressive Grid */}
         <div className="relative mb-12 sm:mb-16">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 relative z-10">
-            {STEPS.map((step, index) => {
+            {steps.map((step, index) => {
               const isSelected = activeStep === index;
 
               return (
@@ -209,7 +225,7 @@ export const ProcessSection: React.FC<ProcessSectionProps> = ({
             onClick={onOpenInterest || onOpenDetail}
             className="group w-full sm:w-auto px-7 py-3.5 rounded-full bg-emerald-500 hover:bg-emerald-400 text-black font-bold text-sm transition-all duration-200 shadow-lg shadow-emerald-500/20 flex items-center justify-center gap-2 cursor-pointer active:scale-98"
           >
-            <StaggerText text="Ajukan Minat Unit Equity" />
+            <StaggerText text={primaryCta} />
             <ArrowRight size={16} className="transition-transform duration-200 group-hover:translate-x-1" />
           </button>
 
@@ -219,7 +235,7 @@ export const ProcessSection: React.FC<ProcessSectionProps> = ({
             onClick={onOpenDetail}
             className="group w-full sm:w-auto px-6 py-3.5 rounded-full bg-white/[0.06] hover:bg-white/[0.12] border border-white/15 text-white font-medium text-sm transition-all duration-200 cursor-pointer text-center"
           >
-            <StaggerText text="Pelajari Prosedur Lengkap" />
+            <StaggerText text={secondaryCta} />
           </button>
         </div>
       </Container>
