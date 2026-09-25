@@ -18,7 +18,7 @@ import { ServiceItem, InvestorInfoItem, ArticleItem } from './data/landingData';
 import { AdminDashboard } from './components/admin/AdminDashboard';
 import { InvestorDashboard } from './components/investor/InvestorDashboard';
 import { supabase } from './lib/supabase';
-import type { PortalRole } from './services/auth';
+import type { PortalIdentity, PortalRole } from './services/auth';
 
 // Code-split modals so initial landing page bundle is super lightweight
 const EquityInterestModal = React.lazy(() =>
@@ -40,6 +40,7 @@ export default function App() {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isPastHero, setIsPastHero] = useState(false);
   const [dashboardRole,setDashboardRole]=useState<PortalRole|null>(null);
+  const [portalIdentity,setPortalIdentity]=useState<PortalIdentity|null>(null);
   const [detailModal, setDetailModal] = useState<{
     isOpen: boolean;
     title: string;
@@ -332,7 +333,7 @@ export default function App() {
             isOpen={isLoginModalOpen}
             onClose={() => setIsLoginModalOpen(false)}
             onOpenInterest={() => setIsInterestModalOpen(true)}
-            onAuthenticated={(role) => { setIsLoginModalOpen(false); setDashboardRole(role); }}
+            onAuthenticated={(identity) => { setIsLoginModalOpen(false); setPortalIdentity(identity); setDashboardRole(identity.role); }}
           />
         )}
 
