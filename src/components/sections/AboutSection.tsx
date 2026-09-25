@@ -4,8 +4,14 @@ import { Eyebrow } from '../ui/Eyebrow';
 import { AnimatedNumber } from '../ui/AnimatedNumber';
 import { StaggerHeading } from '../ui/LetterStagger';
 import { ABOUT_METRICS } from '../../data/landingData';
+import { usePortalContent } from '../../context/PortalContentContext';
 
 export const AboutSection: React.FC = () => {
+  const { content } = usePortalContent();
+  const cms = content('about', {} as Record<string, unknown>);
+  const eyebrow = typeof cms.eyebrow === 'string' ? cms.eyebrow : 'TENTANG KAMI';
+  const headline = typeof cms.headline === 'string' ? cms.headline : 'Menghadirkan Inovasi Teknologi dengan Integrasi Berkelanjutan';
+  const metrics = Array.isArray(cms.metricsJson) && cms.metricsJson.length ? cms.metricsJson as typeof ABOUT_METRICS : ABOUT_METRICS;
   return (
     <section
       id="tentang"
@@ -14,11 +20,11 @@ export const AboutSection: React.FC = () => {
       <Container size="default">
         {/* Header - Eyebrow & Headline 2 Baris Rata Tengah */}
         <div className="text-center max-w-[860px] mx-auto mb-12 sm:mb-16 flex flex-col items-center">
-          <Eyebrow>TENTANG KAMI</Eyebrow>
+          <Eyebrow>{eyebrow}</Eyebrow>
           <div className="max-w-[820px] text-center">
             <StaggerHeading
               as="h2"
-              text="Menghadirkan Inovasi Teknologi dengan Integrasi Berkelanjutan"
+              text={headline}
               className="font-h2 font-bold text-[#111111] leading-[1.18] tracking-tight justify-center text-center"
               highlightWord="Berkelanjutan"
               highlightClass="text-emerald-600"
@@ -29,7 +35,7 @@ export const AboutSection: React.FC = () => {
         {/* Outline Grid System - Semua tulisan rata tengah, garis pemisah sejajar */}
         <div className="border border-black/[0.14] rounded-2xl overflow-hidden bg-white/50 backdrop-blur-xs shadow-xs">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 divide-y sm:divide-y-0 lg:divide-x divide-black/[0.12]">
-            {ABOUT_METRICS.map((item, index) => (
+            {metrics.map((item, index) => (
               <div
                 key={item.id}
                 className={`p-6 sm:p-7 flex flex-col justify-between items-center text-center transition-colors duration-200 hover:bg-black/[0.03] group ${
