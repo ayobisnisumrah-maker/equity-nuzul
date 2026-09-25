@@ -19,7 +19,7 @@ export const CompanySection: React.FC<CompanySectionProps> = ({ onOpenDetail }) 
   const description = typeof cms.description === 'string' ? cms.description : 'Menghadirkan layanan perjalanan ibadah yang bermakna melalui layanan, jaringan, dan teknologi.';
   const detailCta = typeof cms.detailCta === 'string' ? cms.detailCta : 'Lebih Detail Penawaran';
   const metrics = Array.isArray(cms.metricsJson) && cms.metricsJson.length ? cms.metricsJson as typeof COMPANY_METRICS : COMPANY_METRICS;
-  const images = Array.isArray(cms.imagesJson) && cms.imagesJson.length === 5 && cms.imagesJson.every((v) => typeof v === 'string') ? cms.imagesJson as string[] : images;
+  const images = Array.isArray(cms.imagesJson) && cms.imagesJson.length === 5 && cms.imagesJson.every((v) => typeof v === 'string') ? cms.imagesJson as string[] : IMAGES.companySlices;
   const [activeImageIndex, setActiveImageIndex] = useState(0);
   const imageContainerRef = useRef<HTMLDivElement>(null);
 
@@ -41,7 +41,7 @@ export const CompanySection: React.FC<CompanySectionProps> = ({ onOpenDetail }) 
     }, 3200);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [images]);
 
   // Mouse move handler for 5 horizontal segment divisions
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
