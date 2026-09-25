@@ -45,11 +45,34 @@ export const PORTAL_SECTION_DEFINITIONS:PortalSectionDefinition[]=[
   {key:'description',label:'Deskripsi',kind:'textarea',value:'Menghubungkan mitra, vendor layanan, dan jaringan distribusi dalam satu kesatuan sistem yang transparan dan terstandar.'},
   {key:'moreCta',label:'CTA',kind:'text',value:'Layanan Lainnya'}
  ]},
- {key:'process',label:'Proses',description:'Tahapan dan informasi proses kepemilikan.',fields:[]},
- {key:'roadmap',label:'Roadmap',description:'Judul, deskripsi, fase dan milestone roadmap.',fields:[]},
- {key:'network',label:'Jaringan & Mitra',description:'Konten jaringan, mitra dan gambar.',fields:[]},
- {key:'investor',label:'Informasi Investor',description:'Seluruh kartu informasi dan dokumen investor.',fields:[]},
- {key:'quick_action',label:'Quick Action',description:'CTA penutup sebelum artikel.',fields:[]},
+ {key:'process',label:'Proses',description:'Tahapan dan informasi proses kepemilikan.',fields:[
+  {key:'eyebrow',label:'Eyebrow',kind:'text',value:'ALUR & TAHAPAN INVESTASI'},
+  {key:'headline',label:'Headline',kind:'text',value:'Langkah Mudah Menjadi Bagian dari Kami'},
+  {key:'description',label:'Deskripsi',kind:'textarea',value:'Empat tahapan transparan dan berkepastian hukum untuk menjadi pemegang unit equity resmi ekosistem Nuzultrip.'},
+  {key:'primaryCta',label:'CTA Utama',kind:'text',value:'Ajukan Minat Unit Equity'},
+  {key:'secondaryCta',label:'CTA Detail',kind:'text',value:'Pelajari Prosedur Lengkap'},
+  {key:'stepsJson',label:'Tahapan Proses (JSON)',kind:'textarea',value:'[]'}
+ ]},
+ {key:'roadmap',label:'Roadmap',description:'Judul, deskripsi, fase dan milestone roadmap.',fields:[
+  {key:'eyebrow',label:'Eyebrow',kind:'text',value:'ROADMAP PERUSAHAAN'},
+  {key:'headline',label:'Headline',kind:'text',value:'Peta Jalan Pertumbuhan Nuzultrip'},
+  {key:'description',label:'Deskripsi',kind:'textarea',value:'Tahapan strategis pengembangan bisnis, platform teknologi, dan tata kelola investasi jangka panjang.'},
+  {key:'phasesJson',label:'Fase Roadmap (JSON)',kind:'textarea',value:'[]'}
+ ]},
+ {key:'network',label:'Jaringan & Mitra',description:'Konten jaringan, mitra dan gambar.',fields:[
+  {key:'partnersJson',label:'Daftar Mitra (JSON)',kind:'textarea',value:'[]'},
+  {key:'portraitUrl',label:'Gambar Utama',kind:'url',value:''}
+ ]},
+ {key:'investor',label:'Informasi Investor',description:'Seluruh kartu informasi dan dokumen investor.',fields:[
+  {key:'itemsJson',label:'Kartu Informasi Investor (JSON)',kind:'textarea',value:'[]'}
+ ]},
+ {key:'quick_action',label:'Quick Action',description:'CTA penutup sebelum artikel.',fields:[
+  {key:'eyebrow',label:'Eyebrow',kind:'text',value:'Langkah Awal Kemitraan'},
+  {key:'headline',label:'Headline',kind:'text',value:'Siap Mengenal Nuzultrip Lebih Jauh?'},
+  {key:'description',label:'Deskripsi',kind:'textarea',value:'Dapatkan konsultasi eksklusif mengenai struktur kepemilikan dan skema bagi hasil.'},
+  {key:'primaryCta',label:'CTA Utama',kind:'text',value:'Ajukan Minat Equity'},
+  {key:'imageUrl',label:'Gambar',kind:'url',value:''}
+ ]},
  {key:'articles',label:'Artikel & Berita',description:'Artikel, gambar, kategori dan metadata.',fields:[
   {key:'eyebrow',label:'Eyebrow',kind:'text',value:'ARTIKEL & BERITA'},
   {key:'headline',label:'Headline',kind:'text',value:'Pahami Peluang. Ambil Keputusan.'},
@@ -67,5 +90,11 @@ export const PORTAL_SECTION_DEFINITIONS:PortalSectionDefinition[]=[
   {key:'tiktokUrl',label:'TikTok URL',kind:'url',value:'https://tiktok.com'},
   {key:'copyright',label:'Copyright',kind:'text',value:'© 2026 Nuzultrip. All Rights Reserved.'}
  ]},
- {key:'modals',label:'Popup & Modal',description:'Isi popup pengumuman, detail, login, pitchdeck dan minat equity.',fields:[]}
+ {key:'modals',label:'Popup & Modal',description:'Isi popup pengumuman, detail, login, pitchdeck dan minat equity.',fields:[
+  {key:'announcementJson',label:'Popup Pengumuman (JSON)',kind:'textarea',value:'{}'},
+  {key:'equityDetailJson',label:'Popup Detail Equity (JSON)',kind:'textarea',value:'{}'},
+  {key:'companyDetailJson',label:'Popup Detail Perusahaan (JSON)',kind:'textarea',value:'{}'},
+  {key:'processDetailJson',label:'Popup Detail Proses (JSON)',kind:'textarea',value:'{}'},
+  {key:'networkDetailJson',label:'Popup Detail Jaringan (JSON)',kind:'textarea',value:'{}'}
+ ]}
 ];
