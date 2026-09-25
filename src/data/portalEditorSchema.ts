@@ -48,7 +48,8 @@ export const PORTAL_SECTION_DEFINITIONS:PortalSectionDefinition[]=[
   {key:'headline',label:'Headline',kind:'text',value:'Ekosistem Perjalanan Muslim Nuzultrip'},
   {key:'description',label:'Deskripsi',kind:'textarea',value:'Menghubungkan mitra, vendor layanan, dan jaringan distribusi dalam satu kesatuan sistem yang transparan dan terstandar.'},
   {key:'moreCta',label:'CTA',kind:'text',value:'Layanan Lainnya'},
-  {key:'itemsJson',label:'Daftar Layanan (JSON)',kind:'json-list',value:'[]'}
+  {key:'itemsJson',label:'Daftar Layanan (JSON)',kind:'json-list',value:'[]'},
+  {key:'detailMap',label:'Detail Layanan / Popup (JSON)',kind:'json-object',value:'{}'}
  ]},
  {key:'process',label:'Proses',description:'Tahapan dan informasi proses kepemilikan.',fields:[
   {key:'eyebrow',label:'Eyebrow',kind:'text',value:'ALUR & TAHAPAN INVESTASI'},
@@ -69,7 +70,8 @@ export const PORTAL_SECTION_DEFINITIONS:PortalSectionDefinition[]=[
   {key:'portraitUrl',label:'Gambar Utama',kind:'url',value:'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=1200&auto=format&fit=crop'}
  ]},
  {key:'investor',label:'Informasi Investor',description:'Seluruh kartu informasi dan dokumen investor.',fields:[
-  {key:'itemsJson',label:'Kartu Informasi Investor (JSON)',kind:'json-list',value:'[]'}
+  {key:'itemsJson',label:'Kartu Informasi Investor (JSON)',kind:'json-list',value:'[]'},
+  {key:'detailMap',label:'Detail Informasi Investor / Popup (JSON)',kind:'json-object',value:'{}'}
  ]},
  {key:'quick_action',label:'Quick Action',description:'CTA penutup sebelum artikel.',fields:[
   {key:'eyebrow',label:'Eyebrow',kind:'text',value:'Langkah Awal Kemitraan'},
@@ -83,7 +85,8 @@ export const PORTAL_SECTION_DEFINITIONS:PortalSectionDefinition[]=[
   {key:'headline',label:'Headline',kind:'text',value:'Pahami Peluang. Ambil Keputusan.'},
   {key:'description',label:'Deskripsi',kind:'textarea',value:'Analisis pasar, panduan investasi syariah, dan pembaruan strategis industri perjalanan ibadah Indonesia.'},
   {key:'moreCta',label:'CTA',kind:'text',value:'Lebih Artikel Lainnya'},
-  {key:'itemsJson',label:'Daftar Artikel (JSON)',kind:'json-list',value:'[]'}
+  {key:'itemsJson',label:'Daftar Artikel (JSON)',kind:'json-list',value:'[]'},
+  {key:'detailMap',label:'Detail Artikel / Popup (JSON)',kind:'json-object',value:'{}'}
  ]},
  {key:'footer',label:'Footer',description:'Tagline, tautan, kontak, sosial media dan legal.',fields:[
   {key:'tagline',label:'Tagline',kind:'textarea',value:'Melayani perjalanan Muslim Indonesia dengan hati, profesionalisme, dan teknologi.'},
@@ -97,7 +100,8 @@ export const PORTAL_SECTION_DEFINITIONS:PortalSectionDefinition[]=[
   {key:'copyright',label:'Copyright',kind:'text',value:'© 2026 Nuzultrip. All Rights Reserved.'},
   {key:'logoUrl',label:'Logo Footer',kind:'url',value:''},
   {key:'aboutLinks',label:'Tautan Tentang',kind:'string-list',value:['Model Bisnis','Ekosistem Bisnis','Perkembangan','Agen dan Kemitraan','Informasi','Ringkasan Penawaran','Pemegang Equity']},
-  {key:'infoLinks',label:'Tautan Informasi',kind:'string-list',value:['Penggunaan Dana','Tata Kelola','Faktor Risiko','Mekanisme Hasil','Legal','Risk Disclosure']}
+  {key:'infoLinks',label:'Tautan Informasi',kind:'string-list',value:['Penggunaan Dana','Tata Kelola','Faktor Risiko','Mekanisme Hasil','Legal','Risk Disclosure']},
+  {key:'detailMap',label:'Detail Footer / Legal Popup (JSON)',kind:'json-object',value:'{}'}
  ]},
  {key:'modals',label:'Popup & Modal',description:'Isi popup pengumuman, detail, login, pitchdeck dan minat equity.',fields:[
   {key:'announcementJson',label:'Popup Pengumuman (JSON)',kind:'json-object',value:'{}'},
