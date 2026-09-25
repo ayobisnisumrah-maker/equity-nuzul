@@ -112,7 +112,7 @@ export const LoginModal: React.FC<LoginModalProps> = ({
                   <label className="block text-[13px] font-bold text-[#111111]">
                     Kata Sandi
                   </label>
-                  <button type="button" onClick={async()=>{setLoginError('');setResetMessage('');try{await requestPasswordReset(email);setResetMessage('Tautan atur ulang sandi telah dikirim ke email terdaftar.')}catch(error){setLoginError(error instanceof Error?error.message:'Gagal mengirim tautan reset sandi.')}} className="text-[12px] text-[#666666] hover:text-black">Lupa sandi?</button>
+                  <button type="button" onClick={async()=>{setLoginError('');setResetMessage('');try{await requestPasswordReset(email);setResetMessage('Tautan atur ulang sandi telah dikirim ke email terdaftar.')}catch(error){setLoginError(error instanceof Error?error.message:'Gagal mengirim tautan reset sandi.')}}} className="text-[12px] text-[#666666] hover:text-black">Lupa sandi?</button>
                 </div>
 
                 <div className="relative">
