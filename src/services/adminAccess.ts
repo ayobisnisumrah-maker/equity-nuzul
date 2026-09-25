@@ -1,6 +1,6 @@
 import {supabase} from '../lib/supabase';
 export type AdminModule='ringkasan'|'portal'|'investor'|'kasir'|'keuangan'|'laporan'|'dokumen'|'admin'|'pengaturan';
-export interface AdminAccess{role:string;permissions:AdminModule[]}
+export interface AdminAccess{role:string;permissions:AdminModule[];permissionKeys:string[]}
 const permissionMap:Record<Exclude<AdminModule,'ringkasan'>,string[]>={
  portal:['portal.view'],
  investor:['investors.view'],
@@ -18,5 +18,5 @@ export async function getAdminAccess(_userId?:string):Promise<AdminAccess>{
  const keys=new Set<string>((row.permission_keys??[]) as string[]);
  const permissions:AdminModule[]=['ringkasan'];
  for(const [module,required] of Object.entries(permissionMap) as [Exclude<AdminModule,'ringkasan'>,string[]][])if(required.some(key=>keys.has(key)))permissions.push(module);
- return {role:String(row.role_label||'Admin'),permissions};
+ return {role:String(row.role_label||'Admin'),permissions,permissionKeys:Array.from(keys)};
 }
