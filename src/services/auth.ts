@@ -33,3 +33,5 @@ export async function resolvePortalIdentity(user:User):Promise<PortalIdentity>{
  throw new Error('Akun tidak terdaftar.');
 }
 export async function resolvePortalRole(user:User):Promise<PortalRole>{return (await resolvePortalIdentity(user)).role}
+
+export async function requestPasswordReset(email:string){if(!supabase)throw new Error('Supabase belum dikonfigurasi.');const value=email.trim().toLowerCase();if(!value.includes('@'))throw new Error('Masukkan email terdaftar.');const redirectTo=new URL('/atur-sandi',window.location.origin).toString();const {error}=await supabase.auth.resetPasswordForEmail(value,{redirectTo});if(error)throw error}
