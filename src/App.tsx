@@ -48,6 +48,7 @@ export default function App() {
   const [isPastHero, setIsPastHero] = useState(false);
   const [dashboardRole,setDashboardRole]=useState<PortalRole|null>(null);
   const [portalIdentity,setPortalIdentity]=useState<PortalIdentity|null>(null);
+  const [authReady,setAuthReady]=useState(false);
   const [detailModal, setDetailModal] = useState<{
     isOpen: boolean;
     title: string;
@@ -72,20 +73,22 @@ export default function App() {
 
   // Restore authenticated Admin/Investor dashboard after refresh and keep role state synced with Supabase Auth.
   useEffect(() => {
-    if (!supabase) return;
+    if (!supabase) { setAuthReady(true); return; }
     let alive = true;
     const applyUser = async (user: import('@supabase/supabase-js').User | null) => {
       if (!alive) return;
-      if (!user) { setPortalIdentity(null); setDashboardRole(null); return; }
+      if (!user) { setPortalIdentity(null); setDashboardRole(null); setAuthReady(true); return; }
       try {
         const identity = await resolvePortalIdentity(user);
         if (!alive) return;
         setPortalIdentity(identity);
         setDashboardRole(identity.role);
+        setAuthReady(true);
       } catch {
         if (!alive) return;
         setPortalIdentity(null);
         setDashboardRole(null);
+        setAuthReady(true);
       }
     };
     void supabase.auth.getSession().then(({ data }) => applyUser(data.session?.user ?? null));
@@ -299,6 +302,19 @@ export default function App() {
     });
   };
 
+  const protectedPath=path==='/admin'||path==='/investor';
+  const requestedRole:PortalRole|null=path==='/admin'?'admin':path==='/investor'?'investor':null;
+  if(protectedPath&&!authReady)return <div className="min-h-screen bg-[#F5F5F3] flex items-center justify-center text-sm text-black/50">Memverifikasi akses...</div>;
+  if(protectedPath&&(!portalIdentity||portalIdentity.role!==requestedRole)){
+    if(path!=='/masuk') window.history.replaceState({},'', '/masuk');
+    if(!isLoginModalOpen) queueMicrotask(()=>setIsLoginModalOpen(true));
+  }
+  if(path==='/masuk'&&!portalIdentity&&!isLoginModalOpen)queueMicrotask(()=>setIsLoginModalOpen(true));
+  if(path==='/auth/callback'&&authReady){
+    const destination=portalIdentity?.role==='admin'?'/admin':portalIdentity?.role==='investor'?'/investor':'/masuk';
+    if(window.location.pathname!==destination)window.history.replaceState({},'',destination);
+  }
+
   const closeDashboard=()=>{setDashboardRole(null);setPortalIdentity(null);window.scrollTo({top:0,left:0,behavior:'instant' as ScrollBehavior})};
   const logout=async()=>{await supabase?.auth.signOut();closeDashboard()};
   if(dashboardRole==='admin' && portalIdentity) return <AdminDashboard identity={portalIdentity} onBack={closeDashboard} onLogout={logout}/>;
@@ -392,7 +408,7 @@ export default function App() {
             isOpen={isLoginModalOpen}
             onClose={() => setIsLoginModalOpen(false)}
             onOpenInterest={() => setIsInterestModalOpen(true)}
-            onAuthenticated={(identity) => { setIsLoginModalOpen(false); setPortalIdentity(identity); setDashboardRole(identity.role); }}
+            onAuthenticated={(identity) => { setIsLoginModalOpen(false); setPortalIdentity(identity); setDashboardRole(identity.role); window.history.replaceState({},'',identity.role==='admin'?'/admin':'/investor'); }}
           />
         )}
 
