@@ -1,6 +1,7 @@
 import React,{useEffect,useMemo,useState} from 'react';
 import {PortalEditor} from './PortalEditor';
-import {CashierModule,DocumentsModule,FinanceModule,InvestorModule,ReportsModule} from './OperationsModules';
+import {CashierModule,DocumentsModule,FinanceModule,ReportsModule} from './OperationsModules';
+import {InvestorManagement} from './InvestorManagement';
 import type {PortalIdentity} from '../../services/auth';
 import {getAdminAccess,type AdminModule} from '../../services/adminAccess';
 import {supabase} from '../../lib/supabase';
@@ -35,7 +36,7 @@ export const AdminDashboard:React.FC<{identity:PortalIdentity;onBack:()=>void;on
    <div className="p-5 lg:p-8">
     {active==='ringkasan'?<div className="space-y-6"><div className="grid sm:grid-cols-2 xl:grid-cols-4 gap-4">{[['Investor','—'],['Transaksi Kasir','—'],['Pemasukan','—'],['Dokumen','—']].map(([l,v])=><div key={l} className="bg-white border rounded-2xl p-5"><p className="text-xs text-black/45">{l}</p><p className="text-2xl font-bold mt-2">{v}</p></div>)}</div><div className="bg-white border rounded-2xl p-6"><h2 className="font-bold">Aktivitas Portal</h2><p className="text-sm text-black/50 mt-2">Data operasional akan ditampilkan dari database production setelah modul terkait terhubung.</p></div></div>:
     active==='portal'?<PortalEditor/>:
-    active==='investor'?<InvestorModule/>:
+    active==='investor'?<InvestorManagement/>:
     active==='kasir'?<CashierModule/>:
     active==='keuangan'?<FinanceModule/>:
     active==='laporan'?<ReportsModule/>:
