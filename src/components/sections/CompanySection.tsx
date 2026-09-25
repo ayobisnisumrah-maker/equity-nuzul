@@ -5,22 +5,31 @@ import { ArrowButton } from '../ui/ArrowButton';
 import { AnimatedNumber } from '../ui/AnimatedNumber';
 import { StaggerHeading } from '../ui/LetterStagger';
 import { COMPANY_METRICS, IMAGES } from '../../data/landingData';
+import { usePortalContent } from '../../context/PortalContentContext';
 
 interface CompanySectionProps {
   onOpenDetail: () => void;
 }
 
 export const CompanySection: React.FC<CompanySectionProps> = ({ onOpenDetail }) => {
+  const { content } = usePortalContent();
+  const cms = content('company', {} as Record<string, unknown>);
+  const eyebrow = typeof cms.eyebrow === 'string' ? cms.eyebrow : 'PERUSAHAAN';
+  const headline = typeof cms.headline === 'string' ? cms.headline : 'Perjalanan Muslim yang Bertumbuh';
+  const description = typeof cms.description === 'string' ? cms.description : 'Menghadirkan layanan perjalanan ibadah yang bermakna melalui layanan, jaringan, dan teknologi.';
+  const detailCta = typeof cms.detailCta === 'string' ? cms.detailCta : 'Lebih Detail Penawaran';
+  const metrics = Array.isArray(cms.metricsJson) && cms.metricsJson.length ? cms.metricsJson as typeof COMPANY_METRICS : COMPANY_METRICS;
+  const images = Array.isArray(cms.imagesJson) && cms.imagesJson.length === 5 && cms.imagesJson.every((v) => typeof v === 'string') ? cms.imagesJson as string[] : images;
   const [activeImageIndex, setActiveImageIndex] = useState(0);
   const imageContainerRef = useRef<HTMLDivElement>(null);
 
   // Preload all 5 images on mount
   useEffect(() => {
-    IMAGES.companySlices.forEach((url) => {
+    images.forEach((url) => {
       const img = new Image();
       img.src = url;
     });
-  }, []);
+  }, [images]);
 
   // Automatic slideshow for mobile or when not hovered
   useEffect(() => {
@@ -28,7 +37,7 @@ export const CompanySection: React.FC<CompanySectionProps> = ({ onOpenDetail }) 
     if (!isTouch) return;
 
     const interval = setInterval(() => {
-      setActiveImageIndex((prev) => (prev + 1) % IMAGES.companySlices.length);
+      setActiveImageIndex((prev) => (prev + 1) % images.length);
     }, 3200);
 
     return () => clearInterval(interval);
@@ -63,19 +72,18 @@ export const CompanySection: React.FC<CompanySectionProps> = ({ onOpenDetail }) 
           {/* Column 1: Left Description & CTA */}
           <div className="lg:col-span-4 flex flex-col justify-between h-full">
             <div>
-              <Eyebrow>PERUSAHAAN</Eyebrow>
+              <Eyebrow>{eyebrow}</Eyebrow>
               <div className="mb-5 sm:mb-6">
                 <StaggerHeading
                   as="h2"
-                  text="Perjalanan Muslim yang Bertumbuh"
+                  text={headline}
                   className="font-h2 font-bold text-[#111111] leading-[1.08] tracking-tight"
                   highlightWord="Bertumbuh"
                   highlightClass="text-emerald-600"
                 />
               </div>
               <p className="text-[16px] sm:text-[17px] text-[#555555] leading-[1.65] max-w-[360px]">
-                Menghadirkan layanan perjalanan ibadah yang bermakna melalui layanan,
-                jaringan, dan teknologi.
+                {description}
               </p>
             </div>
 
@@ -86,7 +94,7 @@ export const CompanySection: React.FC<CompanySectionProps> = ({ onOpenDetail }) 
                 onClick={onOpenDetail}
                 id="company-cta-detail"
               >
-                Lebih Detail Penawaran
+                {detailCta}
               </ArrowButton>
             </div>
           </div>
@@ -99,7 +107,7 @@ export const CompanySection: React.FC<CompanySectionProps> = ({ onOpenDetail }) 
               onMouseLeave={handleMouseLeave}
               className="relative w-full h-[320px] sm:h-[400px] lg:h-[440px] rounded-2xl overflow-hidden border border-black/[0.1] bg-[#E8E8E4] shadow-sm cursor-crosshair group select-none"
             >
-              {IMAGES.companySlices.map((url, idx) => (
+              {images.map((url, idx) => (
                 <div
                   key={url}
                   className={`absolute inset-0 transition-opacity duration-300 ease-out ${
@@ -134,7 +142,7 @@ export const CompanySection: React.FC<CompanySectionProps> = ({ onOpenDetail }) 
           {/* Column 3: 5 Poin Metrik & Kredensial Disusun Vertikal */}
           <div className="lg:col-span-4 flex flex-col justify-between py-1 h-full">
             <div className="flex flex-col justify-between h-full gap-y-3 sm:gap-y-3.5">
-              {COMPANY_METRICS.map((item, idx) => {
+              {metrics.map((item, idx) => {
                 const isActive = activeImageIndex === idx;
                 return (
                   <div
