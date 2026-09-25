@@ -3,13 +3,9 @@ import { Container } from '../layout/Container';
 import { Eyebrow } from '../ui/Eyebrow';
 import { AnimatedNumber } from '../ui/AnimatedNumber';
 import { StaggerHeading } from '../ui/LetterStagger';
-import { PORTAL_DEFAULTS } from '../../data/portalDefaults';
-import { usePortalContent } from '../../context/PortalContentContext';
+import { ABOUT_METRICS } from '../../data/landingData';
 
 export const AboutSection: React.FC = () => {
-  const {content}=usePortalContent();
-  const cms:any=content('about',PORTAL_DEFAULTS.about);
-  const metrics:any[]=Array.isArray(cms.metrics)?cms.metrics:[];
   return (
     <section
       id="tentang"
@@ -18,13 +14,13 @@ export const AboutSection: React.FC = () => {
       <Container size="default">
         {/* Header - Eyebrow & Headline 2 Baris Rata Tengah */}
         <div className="text-center max-w-[860px] mx-auto mb-12 sm:mb-16 flex flex-col items-center">
-          <Eyebrow>{cms.eyebrow}</Eyebrow>
+          <Eyebrow>TENTANG KAMI</Eyebrow>
           <div className="max-w-[820px] text-center">
             <StaggerHeading
               as="h2"
-              text={cms.title}
+              text="Menghadirkan Inovasi Teknologi dengan Integrasi Berkelanjutan"
               className="font-h2 font-bold text-[#111111] leading-[1.18] tracking-tight justify-center text-center"
-              highlightWord={cms.highlightWord}
+              highlightWord="Berkelanjutan"
               highlightClass="text-emerald-600"
             />
           </div>
@@ -33,7 +29,7 @@ export const AboutSection: React.FC = () => {
         {/* Outline Grid System - Semua tulisan rata tengah, garis pemisah sejajar */}
         <div className="border border-black/[0.14] rounded-2xl overflow-hidden bg-white/50 backdrop-blur-xs shadow-xs">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 divide-y sm:divide-y-0 lg:divide-x divide-black/[0.12]">
-            {metrics.map((item, index) => (
+            {ABOUT_METRICS.map((item, index) => (
               <div
                 key={item.id}
                 className={`p-6 sm:p-7 flex flex-col justify-between items-center text-center transition-colors duration-200 hover:bg-black/[0.03] group ${
@@ -46,7 +42,7 @@ export const AboutSection: React.FC = () => {
                 {/* Top Stat Value Section - Tinggi seragam agar garis pemisah tepat sejajar dari metrik 1 hingga 5 */}
                 <div className="w-full flex flex-col items-center justify-end h-[96px] sm:h-[105px] pb-3">
                   <div className="text-[10px] font-bold text-[#8A8A8A] uppercase tracking-[0.16em] mb-2 text-center">
-                    {cms.metricPrefix} 0{index + 1}
+                    Metrik 0{index + 1}
                   </div>
                   <div className="font-stat-large text-[#111111] font-extrabold tracking-tight text-center group-hover:scale-105 transition-transform duration-200">
                     <AnimatedNumber
