@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { X, Lock, Eye, EyeOff, ShieldCheck, ArrowRight } from 'lucide-react';
-import { signInPortal, type PortalIdentity } from '../../services/auth';
+import { requestPasswordReset, signInPortal, type PortalIdentity } from '../../services/auth';
 
 interface LoginModalProps {
   isOpen: boolean;
@@ -16,18 +16,19 @@ export const LoginModal: React.FC<LoginModalProps> = ({
   onAuthenticated,
 }) => {
   const [showPassword, setShowPassword] = useState(false);
-  const [investorId, setInvestorId] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoggingIn, setIsLoggingIn] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [identity,setIdentity]=useState<PortalIdentity|null>(null);
   const [loginError,setLoginError]=useState('');
+  const [resetMessage,setResetMessage]=useState('');
 
   if (!isOpen) return null;
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault(); setIsLoggingIn(true); setLoginError('');
-    try { const result=await signInPortal(investorId,password); const next={role:result.role,name:result.name,roleLabel:result.roleLabel}; setIdentity(next); setIsSuccess(true); window.setTimeout(()=>onAuthenticated(next),900); }
+    try { const result=await signInPortal(email,password); const next={role:result.role,name:result.name,roleLabel:result.roleLabel}; setIdentity(next); setIsSuccess(true); window.setTimeout(()=>onAuthenticated(next),900); }
     catch(error){ setLoginError(error instanceof Error?error.message:'Gagal masuk.'); }
     finally { setIsLoggingIn(false); }
   };
@@ -80,27 +81,28 @@ export const LoginModal: React.FC<LoginModalProps> = ({
                   Portal Resmi
                 </span>
                 <h3 className="text-[20px] sm:text-[22px] font-extrabold text-[#111111]">
-                  Masuk Portal Investor
+                  Masuk Portal
                 </h3>
               </div>
             </div>
 
             <p className="text-[13.5px] text-[#666666] leading-relaxed mb-6">
-              Khusus bagi pemegang unit equity terdaftar dan mitra strategis Nuzultrip.
+              Akses resmi untuk Admin dan Investor Nuzultrip yang telah terdaftar.
             </p>
 
             <form onSubmit={handleLogin} className="space-y-4">
+              {resetMessage&&<div className="rounded-xl bg-black/[.04] border border-black/10 px-3 py-2 text-[12px] text-black/70">{resetMessage}</div>}
               {loginError&&<div className="rounded-xl bg-red-50 border border-red-200 px-3 py-2 text-[12px] text-red-700">{loginError}</div>}
               <div>
                 <label className="block text-[13px] font-bold text-[#111111] mb-1">
-                  ID Investor / Email Terdaftar
+                  Email Terdaftar
                 </label>
                 <input
-                  type="text"
+                  type="email"
                   required
-                  value={investorId}
-                  onChange={(e) => setInvestorId(e.target.value)}
-                  placeholder="Contoh: NZ-INV-2024-001"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="nama@email.com"
                   className="w-full px-4 py-2.5 rounded-xl border border-black/15 bg-white text-[14px] text-[#111111] placeholder:text-black/35 focus:border-black focus:ring-1 focus:ring-black outline-none"
                 />
               </div>
@@ -110,14 +112,7 @@ export const LoginModal: React.FC<LoginModalProps> = ({
                   <label className="block text-[13px] font-bold text-[#111111]">
                     Kata Sandi
                   </label>
-                  <a
-                    href="https://wa.me/6281234567890?text=Halo%20Admin%20Nuzultrip,%20saya%20membutuhkan%20bantuan%20reset%20kata%20sandi%20portal%20investor"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-[12px] text-[#666666] hover:text-black"
-                  >
-                    Lupa sandi?
-                  </a>
+                  <button type="button" onClick={async()=>{setLoginError('');setResetMessage('');try{await requestPasswordReset(email);setResetMessage('Tautan atur ulang sandi telah dikirim ke email terdaftar.')}catch(error){setLoginError(error instanceof Error?error.message:'Gagal mengirim tautan reset sandi.')}} className="text-[12px] text-[#666666] hover:text-black">Lupa sandi?</button>
                 </div>
 
                 <div className="relative">
@@ -158,7 +153,7 @@ export const LoginModal: React.FC<LoginModalProps> = ({
 
               <div className="pt-3 border-t border-black/[0.08] text-center">
                 <p className="text-[13px] text-[#666666]">
-                  Belum memiliki akun investor?{' '}
+                  Belum terdaftar sebagai investor?{' '}
                   <button
                     type="button"
                     onClick={() => {
