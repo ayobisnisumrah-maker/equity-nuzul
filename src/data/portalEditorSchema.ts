@@ -1,4 +1,4 @@
-export type FieldKind='text'|'textarea'|'url'|'number'|'string-list';
+export type FieldKind='text'|'textarea'|'url'|'number'|'string-list'|'json-list'|'json-object';
 export type PortalField={key:string;label:string;kind:FieldKind;value:string|number|string[]};
 export type PortalSectionDefinition={key:string;label:string;description:string;fields:PortalField[]};
 
@@ -23,7 +23,7 @@ export const PORTAL_SECTION_DEFINITIONS:PortalSectionDefinition[]=[
  {key:'about',label:'Tentang Kami',description:'Headline dan metrik Tentang Kami.',fields:[
   {key:'eyebrow',label:'Eyebrow',kind:'text',value:'TENTANG KAMI'},
   {key:'headline',label:'Headline',kind:'text',value:'Menghadirkan Inovasi Teknologi dengan Integrasi Berkelanjutan'},
-  {key:'metricsJson',label:'Metrik Tentang Kami (JSON)',kind:'textarea',value:'[]'}
+  {key:'metricsJson',label:'Metrik Tentang Kami (JSON)',kind:'json-list',value:'[]'}
  ]},
  {key:'equity',label:'Peluang Equity',description:'Penawaran dan kalkulator equity.',fields:[
   {key:'eyebrow',label:'Eyebrow',kind:'text',value:'PELUANG EQUITY'},
@@ -32,7 +32,7 @@ export const PORTAL_SECTION_DEFINITIONS:PortalSectionDefinition[]=[
   {key:'detailCta',label:'CTA Detail',kind:'text',value:'Lebih Detail Penawaran'},
   {key:'calculatorTitle',label:'Judul Kalkulator',kind:'text',value:'Simulasi Bagi Hasil'},
   {key:'calculatorNote',label:'Catatan Kalkulator',kind:'textarea',value:'*Pencairan dividen ditransfer bulanan sesuai pembukuan riil.'},
-  {key:'metricsJson',label:'Metrik Equity (JSON)',kind:'textarea',value:'[]'}
+  {key:'metricsJson',label:'Metrik Equity (JSON)',kind:'json-list',value:'[]'}
  ]},
  {key:'company',label:'Perusahaan',description:'Profil, galeri, metrik dan kredensial perusahaan.',fields:[
   {key:'eyebrow',label:'Eyebrow',kind:'text',value:'PERUSAHAAN'},
@@ -40,15 +40,15 @@ export const PORTAL_SECTION_DEFINITIONS:PortalSectionDefinition[]=[
   {key:'description',label:'Deskripsi',kind:'textarea',value:'Menghadirkan layanan perjalanan ibadah yang bermakna melalui layanan, jaringan, dan teknologi.'},
   {key:'credential',label:'Kredensial',kind:'text',value:'Amanah'},
   {key:'credentialDescription',label:'Deskripsi Kredensial',kind:'text',value:'Terverifikasi PPIU Kemenag'},
-  {key:'imagesJson',label:'Galeri Perusahaan (JSON URL)',kind:'textarea',value:'[]'},
-  {key:'metricsJson',label:'Metrik Perusahaan (JSON)',kind:'textarea',value:'[]'}
+  {key:'imagesJson',label:'Galeri Perusahaan (JSON URL)',kind:'json-list',value:'[]'},
+  {key:'metricsJson',label:'Metrik Perusahaan (JSON)',kind:'json-list',value:'[]'}
  ]},
  {key:'services',label:'Layanan Utama',description:'Judul, deskripsi, dan kartu layanan.',fields:[
   {key:'eyebrow',label:'Eyebrow',kind:'text',value:'LAYANAN UTAMA'},
   {key:'headline',label:'Headline',kind:'text',value:'Ekosistem Perjalanan Muslim Nuzultrip'},
   {key:'description',label:'Deskripsi',kind:'textarea',value:'Menghubungkan mitra, vendor layanan, dan jaringan distribusi dalam satu kesatuan sistem yang transparan dan terstandar.'},
   {key:'moreCta',label:'CTA',kind:'text',value:'Layanan Lainnya'},
-  {key:'itemsJson',label:'Daftar Layanan (JSON)',kind:'textarea',value:'[]'}
+  {key:'itemsJson',label:'Daftar Layanan (JSON)',kind:'json-list',value:'[]'}
  ]},
  {key:'process',label:'Proses',description:'Tahapan dan informasi proses kepemilikan.',fields:[
   {key:'eyebrow',label:'Eyebrow',kind:'text',value:'ALUR & TAHAPAN INVESTASI'},
@@ -56,20 +56,20 @@ export const PORTAL_SECTION_DEFINITIONS:PortalSectionDefinition[]=[
   {key:'description',label:'Deskripsi',kind:'textarea',value:'Empat tahapan transparan dan berkepastian hukum untuk menjadi pemegang unit equity resmi ekosistem Nuzultrip.'},
   {key:'primaryCta',label:'CTA Utama',kind:'text',value:'Ajukan Minat Unit Equity'},
   {key:'secondaryCta',label:'CTA Detail',kind:'text',value:'Pelajari Prosedur Lengkap'},
-  {key:'stepsJson',label:'Tahapan Proses (JSON)',kind:'textarea',value:'[]'}
+  {key:'stepsJson',label:'Tahapan Proses (JSON)',kind:'json-list',value:'[]'}
  ]},
  {key:'roadmap',label:'Roadmap',description:'Judul, deskripsi, fase dan milestone roadmap.',fields:[
   {key:'eyebrow',label:'Eyebrow',kind:'text',value:'ROADMAP PERUSAHAAN'},
   {key:'headline',label:'Headline',kind:'text',value:'Peta Jalan Pertumbuhan Nuzultrip'},
   {key:'description',label:'Deskripsi',kind:'textarea',value:'Tahapan strategis pengembangan bisnis, platform teknologi, dan tata kelola investasi jangka panjang.'},
-  {key:'phasesJson',label:'Fase Roadmap (JSON)',kind:'textarea',value:'[]'}
+  {key:'phasesJson',label:'Fase Roadmap (JSON)',kind:'json-list',value:'[]'}
  ]},
  {key:'network',label:'Jaringan & Mitra',description:'Konten jaringan, mitra dan gambar.',fields:[
-  {key:'partnersJson',label:'Daftar Mitra (JSON)',kind:'textarea',value:'[]'},
+  {key:'partnersJson',label:'Daftar Mitra (JSON)',kind:'json-list',value:'[]'},
   {key:'portraitUrl',label:'Gambar Utama',kind:'url',value:'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=1200&auto=format&fit=crop'}
  ]},
  {key:'investor',label:'Informasi Investor',description:'Seluruh kartu informasi dan dokumen investor.',fields:[
-  {key:'itemsJson',label:'Kartu Informasi Investor (JSON)',kind:'textarea',value:'[]'}
+  {key:'itemsJson',label:'Kartu Informasi Investor (JSON)',kind:'json-list',value:'[]'}
  ]},
  {key:'quick_action',label:'Quick Action',description:'CTA penutup sebelum artikel.',fields:[
   {key:'eyebrow',label:'Eyebrow',kind:'text',value:'Langkah Awal Kemitraan'},
@@ -83,7 +83,7 @@ export const PORTAL_SECTION_DEFINITIONS:PortalSectionDefinition[]=[
   {key:'headline',label:'Headline',kind:'text',value:'Pahami Peluang. Ambil Keputusan.'},
   {key:'description',label:'Deskripsi',kind:'textarea',value:'Analisis pasar, panduan investasi syariah, dan pembaruan strategis industri perjalanan ibadah Indonesia.'},
   {key:'moreCta',label:'CTA',kind:'text',value:'Lebih Artikel Lainnya'},
-  {key:'itemsJson',label:'Daftar Artikel (JSON)',kind:'textarea',value:'[]'}
+  {key:'itemsJson',label:'Daftar Artikel (JSON)',kind:'json-list',value:'[]'}
  ]},
  {key:'footer',label:'Footer',description:'Tagline, tautan, kontak, sosial media dan legal.',fields:[
   {key:'tagline',label:'Tagline',kind:'textarea',value:'Melayani perjalanan Muslim Indonesia dengan hati, profesionalisme, dan teknologi.'},
@@ -100,10 +100,10 @@ export const PORTAL_SECTION_DEFINITIONS:PortalSectionDefinition[]=[
   {key:'infoLinks',label:'Tautan Informasi',kind:'string-list',value:['Penggunaan Dana','Tata Kelola','Faktor Risiko','Mekanisme Hasil','Legal','Risk Disclosure']}
  ]},
  {key:'modals',label:'Popup & Modal',description:'Isi popup pengumuman, detail, login, pitchdeck dan minat equity.',fields:[
-  {key:'announcementJson',label:'Popup Pengumuman (JSON)',kind:'textarea',value:'{}'},
-  {key:'equityDetailJson',label:'Popup Detail Equity (JSON)',kind:'textarea',value:'{}'},
-  {key:'companyDetailJson',label:'Popup Detail Perusahaan (JSON)',kind:'textarea',value:'{}'},
-  {key:'processDetailJson',label:'Popup Detail Proses (JSON)',kind:'textarea',value:'{}'},
-  {key:'networkDetailJson',label:'Popup Detail Jaringan (JSON)',kind:'textarea',value:'{}'}
+  {key:'announcementJson',label:'Popup Pengumuman (JSON)',kind:'json-object',value:'{}'},
+  {key:'equityDetailJson',label:'Popup Detail Equity (JSON)',kind:'json-object',value:'{}'},
+  {key:'companyDetailJson',label:'Popup Detail Perusahaan (JSON)',kind:'json-object',value:'{}'},
+  {key:'processDetailJson',label:'Popup Detail Proses (JSON)',kind:'json-object',value:'{}'},
+  {key:'networkDetailJson',label:'Popup Detail Jaringan (JSON)',kind:'json-object',value:'{}'}
  ]}
 ];
