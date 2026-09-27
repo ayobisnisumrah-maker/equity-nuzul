@@ -10,16 +10,28 @@ export async function signInPortal(identifier:string,password:string){
  if(!email.includes('@'))throw new Error('Gunakan email terdaftar untuk masuk.');
  const {data,error}=await supabase.auth.signInWithPassword({email,password});if(error)throw error;
  if(!data.user)throw new Error('Akun tidak ditemukan.');
- const identity=await resolvePortalIdentity(data.user);return {user:data.user,...identity};
+ try{return {user:data.user,...await resolvePortalIdentity(data.user)}}catch(error){await supabase.auth.signOut();throw error}
 }
 export async function resolvePortalIdentity(user:User):Promise<PortalIdentity>{
  if(!supabase)throw new Error('Supabase belum dikonfigurasi.');
- const admin=await supabase.from('portal_admins').select('user_id,full_name,role').eq('user_id',user.id).maybeSingle();
+ const account=await supabase.from('user_accounts').select('id,status,full_name').eq('id',user.id).maybeSingle();
+ if(account.error)throw account.error;
+ if(!account.data||account.data.status!=='active'||!account.data.full_name)throw new Error('Akun tidak terdaftar.');
+
+ const admin=await supabase.from('admins').select('id,is_active,title,role_id').eq('id',user.id).maybeSingle();
  if(admin.error)throw admin.error;
- if(admin.data){if(!admin.data.full_name){await supabase.auth.signOut();throw new Error('Akun tidak terdaftar.');}return {role:'admin',name:admin.data.full_name,roleLabel:admin.data.role||'Admin'};}
- const investor=await supabase.from('investor_profiles').select('user_id,status,full_name').eq('user_id',user.id).eq('status','approved').maybeSingle();
+ if(admin.data?.is_active){
+  const roleLabel=admin.data.title||'Admin';
+  return {role:'admin',name:account.data.full_name,roleLabel};
+ }
+
+ const investor=await supabase.from('investors').select('id,status,legal_name').eq('id',user.id).maybeSingle();
  if(investor.error)throw investor.error;
- if(investor.data){if(!investor.data.full_name){await supabase.auth.signOut();throw new Error('Akun tidak terdaftar.');}return {role:'investor',name:investor.data.full_name,roleLabel:'Investor'};}
- await supabase.auth.signOut();throw new Error('Akun tidak terdaftar.');
+ if(investor.data&&['approved','active'].includes(String(investor.data.status))){
+  return {role:'investor',name:investor.data.legal_name||account.data.full_name,roleLabel:'Investor'};
+ }
+ throw new Error('Akun tidak terdaftar.');
 }
 export async function resolvePortalRole(user:User):Promise<PortalRole>{return (await resolvePortalIdentity(user)).role}
+
+export async function requestPasswordReset(email:string){if(!supabase)throw new Error('Supabase belum dikonfigurasi.');const value=email.trim().toLowerCase();if(!value.includes('@'))throw new Error('Masukkan email terdaftar.');const redirectTo=new URL('/atur-sandi',window.location.origin).toString();const {error}=await supabase.auth.resetPasswordForEmail(value,{redirectTo});if(error)throw error}

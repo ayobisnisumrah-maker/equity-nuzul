@@ -4,6 +4,7 @@ import { Container } from '../layout/Container';
 import { Eyebrow } from '../ui/Eyebrow';
 import { StaggerText, StaggerHeading } from '../ui/LetterStagger';
 import { INVESTOR_INFO_LIST, InvestorInfoItem } from '../../data/landingData';
+import { usePortalContent } from '../../context/PortalContentContext';
 
 interface InvestorInformationSectionProps {
   onSelectItem: (item: InvestorInfoItem) => void;
@@ -12,8 +13,14 @@ interface InvestorInformationSectionProps {
 export const InvestorInformationSection: React.FC<InvestorInformationSectionProps> = ({
   onSelectItem,
 }) => {
+  const { content } = usePortalContent();
+  const cms = content('investor', {} as Record<string, unknown>);
+  const eyebrow = typeof cms.eyebrow === 'string' ? cms.eyebrow : 'INFORMASI INVESTOR';
+  const headline = typeof cms.headline === 'string' ? cms.headline : 'Informasi penting dalam satu tempat';
+  const moreLabel = typeof cms.moreLabel === 'string' ? cms.moreLabel : 'Selengkapnya';
+  const items = Array.isArray(cms.itemsJson) && cms.itemsJson.length ? cms.itemsJson as InvestorInfoItem[] : INVESTOR_INFO_LIST;
   const [hoveredCard, setHoveredCard] = useState<string | null>(null);
-  const activeId = hoveredCard || INVESTOR_INFO_LIST[0].id;
+  const activeId = hoveredCard || items[0].id;
 
   return (
     <section
@@ -23,10 +30,10 @@ export const InvestorInformationSection: React.FC<InvestorInformationSectionProp
       <Container size="default">
         {/* Section Header */}
         <div className="max-w-[720px] mb-12 sm:mb-16">
-          <Eyebrow>INFORMASI INVESTOR</Eyebrow>
+          <Eyebrow>{eyebrow}</Eyebrow>
           <StaggerHeading
             as="h2"
-            text="Informasi penting dalam satu tempat"
+            text={headline}
             className="font-h2 font-bold text-[#111111] leading-[1.08] tracking-tight"
             highlightWord="tempat"
             highlightClass="text-emerald-600"
@@ -37,7 +44,7 @@ export const InvestorInformationSection: React.FC<InvestorInformationSectionProp
           {/* Left Column: Image that dynamically updates on card hover (gambar saja tanpa text atau keterangan) */}
           <div className="lg:col-span-5 flex flex-col">
             <div className="relative w-full h-full min-h-[380px] sm:min-h-[500px] rounded-2xl overflow-hidden border border-black/[0.08] shadow-sm bg-[#E8E8E4]">
-              {INVESTOR_INFO_LIST.map((item) => (
+              {items.map((item) => (
                 <img
                   key={item.id}
                   src={item.imageUrl}
@@ -55,7 +62,7 @@ export const InvestorInformationSection: React.FC<InvestorInformationSectionProp
 
           {/* Right Column: 6 Investor Information Cards in 2 columns x 3 rows */}
           <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {INVESTOR_INFO_LIST.map((item) => {
+            {items.map((item) => {
               const isItemActive = item.id === activeId;
               return (
                 <div
@@ -78,7 +85,7 @@ export const InvestorInformationSection: React.FC<InvestorInformationSectionProp
                   </div>
 
                   <div className="mt-4 pt-3 border-t border-black/[0.05] flex items-center justify-between text-[13px] font-semibold text-[#111111]">
-                    <StaggerText text="Selengkapnya" />
+                    <StaggerText text={moreLabel} />
                     <ArrowRight
                       size={14}
                       className="transition-transform duration-200 group-hover:translate-x-1"

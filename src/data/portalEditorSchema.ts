@@ -8,6 +8,8 @@ export const PORTAL_SECTION_DEFINITIONS:PortalSectionDefinition[]=[
   {key:'announcementTitle',label:'Judul Pengumuman',kind:'text',value:'RUPS Luar Biasa Kuartal 3'},
   {key:'announcementText',label:'Isi Pengumuman',kind:'textarea',value:'dijadwalkan pada 20 Oktober 2026. Laporan Triwulan II telah terbit.'},
   {key:'loginLabel',label:'Tombol Masuk',kind:'text',value:'Masuk'},
+  {key:'interestLabel',label:'CTA Minat Mobile',kind:'text',value:'Ajukan Minat Equity'},
+  {key:'investorLoginLabel',label:'Tombol Login Investor Mobile',kind:'text',value:'Masuk Portal Investor'},
   {key:'navLabels',label:'Menu Navigasi',kind:'string-list',value:['Tentang','Peluang','Proses','Roadmap','Jaringan','Investor','Kontak']}
  ]},
  {key:'hero',label:'Hero',description:'Konten utama halaman.',fields:[
@@ -32,6 +34,9 @@ export const PORTAL_SECTION_DEFINITIONS:PortalSectionDefinition[]=[
   {key:'detailCta',label:'CTA Detail',kind:'text',value:'Lebih Detail Penawaran'},
   {key:'calculatorTitle',label:'Judul Kalkulator',kind:'text',value:'Simulasi Bagi Hasil'},
   {key:'calculatorNote',label:'Catatan Kalkulator',kind:'textarea',value:'*Pencairan dividen ditransfer bulanan sesuai pembukuan riil.'},
+  {key:'calculatorCta',label:'CTA Kalkulator',kind:'text',value:'Ajukan Minat Equity'},
+  {key:'sharePercentPerUnit',label:'Persentase per Unit',kind:'number',value:0.8},
+  {key:'calculatorOptionsJson',label:'Opsi Unit Kalkulator (JSON)',kind:'json-list',value:'[]'},
   {key:'metricsJson',label:'Metrik Equity (JSON)',kind:'json-list',value:'[]'}
  ]},
  {key:'company',label:'Perusahaan',description:'Profil, galeri, metrik dan kredensial perusahaan.',fields:[
@@ -66,18 +71,28 @@ export const PORTAL_SECTION_DEFINITIONS:PortalSectionDefinition[]=[
   {key:'phasesJson',label:'Fase Roadmap (JSON)',kind:'json-list',value:'[]'}
  ]},
  {key:'network',label:'Jaringan & Mitra',description:'Konten jaringan, mitra dan gambar.',fields:[
+  {key:'eyebrow',label:'Eyebrow',kind:'text',value:'JARINGAN & MITRA'},
+  {key:'description',label:'Deskripsi',kind:'textarea',value:'Menjadi bagian dari perjalanan bersama Nuzultrip melalui kepemilikan equity dan sinergi ekosistem.'},
+  {key:'detailCta',label:'CTA Detail',kind:'text',value:'Pelajari Selengkapnya'},
   {key:'partnersJson',label:'Daftar Mitra (JSON)',kind:'json-list',value:'[]'},
-  {key:'portraitUrl',label:'Gambar Utama',kind:'url',value:'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=1200&auto=format&fit=crop'}
+  {key:'imageUrl',label:'Gambar Utama',kind:'url',value:'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=1200&auto=format&fit=crop'}
  ]},
  {key:'investor',label:'Informasi Investor',description:'Seluruh kartu informasi dan dokumen investor.',fields:[
+  {key:'eyebrow',label:'Eyebrow',kind:'text',value:'INFORMASI INVESTOR'},
+  {key:'headline',label:'Headline',kind:'text',value:'Informasi penting dalam satu tempat'},
+  {key:'moreLabel',label:'Label Detail',kind:'text',value:'Selengkapnya'},
   {key:'itemsJson',label:'Kartu Informasi Investor (JSON)',kind:'json-list',value:'[]'},
   {key:'detailMap',label:'Detail Informasi Investor / Popup (JSON)',kind:'json-object',value:'{}'}
  ]},
  {key:'quick_action',label:'Quick Action',description:'CTA penutup sebelum artikel.',fields:[
-  {key:'eyebrow',label:'Eyebrow',kind:'text',value:'Langkah Awal Kemitraan'},
-  {key:'headline',label:'Headline',kind:'text',value:'Siap Mengenal Nuzultrip Lebih Jauh?'},
-  {key:'description',label:'Deskripsi',kind:'textarea',value:'Dapatkan konsultasi eksklusif mengenai struktur kepemilikan dan skema bagi hasil.'},
-  {key:'primaryCta',label:'CTA Utama',kind:'text',value:'Ajukan Minat Equity'},
+  {key:'eyebrow',label:'Eyebrow',kind:'text',value:'QUICK ACTION'},
+  {key:'headline',label:'Headline',kind:'text',value:'Kenali. Pelajari. Tentukan Langkah Anda.'},
+  {key:'description',label:'Deskripsi',kind:'textarea',value:'Tim Investor Relations kami siap memberikan pendampingan personal bagi calon mitra dan investor strategis.'},
+  {key:'discussCta',label:'CTA Diskusi',kind:'text',value:'Diskusikan Peluang'},
+  {key:'phone',label:'Nomor Investor Relations',kind:'text',value:'+62 812-3456-7890'},
+  {key:'whatsappUrl',label:'WhatsApp URL',kind:'url',value:'https://wa.me/6281234567890'},
+  {key:'invitationTitle',label:'Judul Invitation Card',kind:'text',value:'Siap Mengenal Nuzultrip Lebih Jauh?'},
+  {key:'invitationDescription',label:'Deskripsi Invitation Card',kind:'textarea',value:'Dapatkan konsultasi eksklusif mengenai struktur kepemilikan dan skema bagi hasil.'},
   {key:'imageUrl',label:'Gambar',kind:'url',value:'https://images.unsplash.com/photo-1580418827493-f2b22c0a76cb?q=80&w=1200&auto=format&fit=crop'}
  ]},
  {key:'articles',label:'Artikel & Berita',description:'Artikel, gambar, kategori dan metadata.',fields:[
@@ -85,6 +100,7 @@ export const PORTAL_SECTION_DEFINITIONS:PortalSectionDefinition[]=[
   {key:'headline',label:'Headline',kind:'text',value:'Pahami Peluang. Ambil Keputusan.'},
   {key:'description',label:'Deskripsi',kind:'textarea',value:'Analisis pasar, panduan investasi syariah, dan pembaruan strategis industri perjalanan ibadah Indonesia.'},
   {key:'moreCta',label:'CTA',kind:'text',value:'Lebih Artikel Lainnya'},
+  {key:'readMore',label:'Label Baca Artikel',kind:'text',value:'Baca Selengkapnya'},
   {key:'itemsJson',label:'Daftar Artikel (JSON)',kind:'json-list',value:'[]'},
   {key:'detailMap',label:'Detail Artikel / Popup (JSON)',kind:'json-object',value:'{}'}
  ]},
