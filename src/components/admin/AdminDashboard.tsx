@@ -7,14 +7,14 @@ import {AdminSummary,SettingsModule} from './AdminOverview';
 import type {PortalIdentity} from '../../services/auth';
 import {getAdminAccess,type AdminModule} from '../../services/adminAccess';
 import {supabase} from '../../lib/supabase';
-import {BarChart3,BookOpen,Building2,CashRegister,FileText,LayoutDashboard,LogOut,Menu,Settings,Users,WalletCards,X} from 'lucide-react';
+import {BarChart3,BookOpen,Building2,BadgeDollarSign,FileText,LayoutDashboard,LogOut,Menu,Settings,Users,WalletCards,X} from 'lucide-react';
 
 type Module=AdminModule;
 const modules:{id:Module;label:string;icon:any;description:string}[]=[
  {id:'ringkasan',label:'Ringkasan',icon:LayoutDashboard,description:'Ringkasan operasional Nuzultrip Equity'},
  {id:'portal',label:'Portal',icon:Building2,description:'Kelola isi portal tanpa mengubah layout'},
  {id:'investor',label:'Investor',icon:Users,description:'Pendaftaran, verifikasi, dan data investor'},
- {id:'kasir',label:'Kasir',icon:CashRegister,description:'Pencatatan penerimaan dan transaksi'},
+ {id:'kasir',label:'Kasir',icon:BadgeDollarSign,description:'Pencatatan penerimaan dan transaksi'},
  {id:'keuangan',label:'Keuangan',icon:WalletCards,description:'Pemasukan, pengeluaran, dan rekonsiliasi'},
  {id:'laporan',label:'Laporan',icon:BarChart3,description:'Laporan operasional, investor, dan keuangan'},
  {id:'dokumen',label:'Dokumen Portal',icon:FileText,description:'Dokumen PDF publik dan investor'},
