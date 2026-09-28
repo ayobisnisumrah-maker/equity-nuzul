@@ -8,6 +8,8 @@ export const PORTAL_SECTION_DEFINITIONS:PortalSectionDefinition[]=[
   {key:'announcementTitle',label:'Judul Pengumuman',kind:'text',value:'RUPS Luar Biasa Kuartal 3'},
   {key:'announcementText',label:'Isi Pengumuman',kind:'textarea',value:'dijadwalkan pada 20 Oktober 2026. Laporan Triwulan II telah terbit.'},
   {key:'loginLabel',label:'Tombol Masuk',kind:'text',value:'Masuk'},
+  {key:'announcementTooltip',label:'Tooltip Pengumuman',kind:'text',value:'Klik untuk melihat rincian pengumuman resmi'},
+  {key:'logoUrl',label:'Logo Header',kind:'url',value:''},
   {key:'interestLabel',label:'CTA Minat Mobile',kind:'text',value:'Ajukan Minat Equity'},
   {key:'investorLoginLabel',label:'Tombol Login Investor Mobile',kind:'text',value:'Masuk Portal Investor'},
   {key:'navLabels',label:'Menu Navigasi',kind:'string-list',value:['Tentang','Peluang','Proses','Roadmap','Jaringan','Investor','Kontak']}
@@ -20,16 +22,19 @@ export const PORTAL_SECTION_DEFINITIONS:PortalSectionDefinition[]=[
   {key:'primaryCta',label:'CTA Utama',kind:'text',value:'Ajukan Minat Equity'},
   {key:'secondaryCta',label:'CTA Pitchdeck',kind:'text',value:'Unduh Pitchdeck 2025'},
   {key:'highlightsLabel',label:'Label Sorotan',kind:'text',value:'SOROTAN EKOSISTEM NUZULTRIP'},
+  {key:'heroImageUrl',label:'Gambar Hero',kind:'url',value:''},
   {key:'highlights',label:'Daftar Sorotan',kind:'string-list',value:['40% Alokasi Equity','50 Unit Terbatas','Rp 100 Juta / Unit','Dividen Berkala','Jaringan 4 Negara','1000+ Jamaah Tahunan','Izin PPIU Kemenag Resmi','Kontrak Hotel Langsung Makkah-Madinah']}
  ]},
  {key:'about',label:'Tentang Kami',description:'Headline dan metrik Tentang Kami.',fields:[
   {key:'eyebrow',label:'Eyebrow',kind:'text',value:'TENTANG KAMI'},
   {key:'headline',label:'Headline',kind:'text',value:'Menghadirkan Inovasi Teknologi dengan Integrasi Berkelanjutan'},
+  {key:'highlightWord',label:'Kata Highlight',kind:'text',value:'Berkelanjutan'},
   {key:'metricsJson',label:'Metrik Tentang Kami (JSON)',kind:'json-list',value:'[]'}
  ]},
  {key:'equity',label:'Peluang Equity',description:'Penawaran dan kalkulator equity.',fields:[
   {key:'eyebrow',label:'Eyebrow',kind:'text',value:'PELUANG EQUITY'},
   {key:'headline',label:'Headline',kind:'text',value:'Kesempatan Bertumbuh Bersama'},
+  {key:'highlightWord',label:'Kata Highlight',kind:'text',value:'Bersama'},
   {key:'description',label:'Deskripsi',kind:'textarea',value:'Jadilah bagian dari perjalanan besar Nuzultrip dengan kepemilikan yang jelas, transparan, dan terstruktur.'},
   {key:'detailCta',label:'CTA Detail',kind:'text',value:'Lebih Detail Penawaran'},
   {key:'calculatorTitle',label:'Judul Kalkulator',kind:'text',value:'Simulasi Bagi Hasil'},
@@ -42,6 +47,8 @@ export const PORTAL_SECTION_DEFINITIONS:PortalSectionDefinition[]=[
  {key:'company',label:'Perusahaan',description:'Profil, galeri, metrik dan kredensial perusahaan.',fields:[
   {key:'eyebrow',label:'Eyebrow',kind:'text',value:'PERUSAHAAN'},
   {key:'headline',label:'Headline',kind:'text',value:'Perjalanan Muslim yang Bertumbuh'},
+  {key:'highlightWord',label:'Kata Highlight',kind:'text',value:'Bertumbuh'},
+  {key:'detailCta',label:'CTA Detail',kind:'text',value:'Lebih Detail Penawaran'},
   {key:'description',label:'Deskripsi',kind:'textarea',value:'Menghadirkan layanan perjalanan ibadah yang bermakna melalui layanan, jaringan, dan teknologi.'},
   {key:'credential',label:'Kredensial',kind:'text',value:'Amanah'},
   {key:'credentialDescription',label:'Deskripsi Kredensial',kind:'text',value:'Terverifikasi PPIU Kemenag'},
@@ -72,6 +79,9 @@ export const PORTAL_SECTION_DEFINITIONS:PortalSectionDefinition[]=[
  ]},
  {key:'network',label:'Jaringan & Mitra',description:'Konten jaringan, mitra dan gambar.',fields:[
   {key:'eyebrow',label:'Eyebrow',kind:'text',value:'JARINGAN & MITRA'},
+  {key:'headline',label:'Headline',kind:'text',value:'Tumbuh Bersama Dalam Jaringan yang Kuat'},
+  {key:'highlightWord',label:'Kata Highlight',kind:'text',value:'Bersama'},
+  {key:'imageHeadline',label:'Headline Overlay Gambar',kind:'text',value:'Jaringan yang Terus Bertumbuh'},
   {key:'description',label:'Deskripsi',kind:'textarea',value:'Menjadi bagian dari perjalanan bersama Nuzultrip melalui kepemilikan equity dan sinergi ekosistem.'},
   {key:'detailCta',label:'CTA Detail',kind:'text',value:'Pelajari Selengkapnya'},
   {key:'partnersJson',label:'Daftar Mitra (JSON)',kind:'json-list',value:'[]'},
@@ -93,6 +103,9 @@ export const PORTAL_SECTION_DEFINITIONS:PortalSectionDefinition[]=[
   {key:'whatsappUrl',label:'WhatsApp URL',kind:'url',value:'https://wa.me/6281234567890'},
   {key:'invitationTitle',label:'Judul Invitation Card',kind:'text',value:'Siap Mengenal Nuzultrip Lebih Jauh?'},
   {key:'invitationDescription',label:'Deskripsi Invitation Card',kind:'textarea',value:'Dapatkan konsultasi eksklusif mengenai struktur kepemilikan dan skema bagi hasil.'},
+  {key:'phoneLabel',label:'Label Kartu Telepon',kind:'text',value:'Investor Relations'},
+  {key:'documentLabel',label:'Label Kartu Dokumen',kind:'text',value:'Dokumen Investor'},
+  {key:'documentTitle',label:'Judul Kartu Dokumen',kind:'text',value:'Unduh Dokumen Informasi'},
   {key:'imageUrl',label:'Gambar',kind:'url',value:'https://images.unsplash.com/photo-1580418827493-f2b22c0a76cb?q=80&w=1200&auto=format&fit=crop'}
  ]},
  {key:'articles',label:'Artikel & Berita',description:'Artikel, gambar, kategori dan metadata.',fields:[
@@ -114,6 +127,10 @@ export const PORTAL_SECTION_DEFINITIONS:PortalSectionDefinition[]=[
   {key:'facebookUrl',label:'Facebook URL',kind:'url',value:'https://facebook.com'},
   {key:'tiktokUrl',label:'TikTok URL',kind:'url',value:'https://tiktok.com'},
   {key:'copyright',label:'Copyright',kind:'text',value:'© 2026 Nuzultrip. All Rights Reserved.'},
+  {key:'aboutTitle',label:'Judul Kolom Tentang',kind:'text',value:'TENTANG NUZULTRIP'},
+  {key:'infoTitle',label:'Judul Kolom Informasi',kind:'text',value:'INFORMASI'},
+  {key:'privacyLabel',label:'Label Kebijakan Privasi',kind:'text',value:'Kebijakan Privasi'},
+  {key:'termsLabel',label:'Label Syarat Ketentuan',kind:'text',value:'Syarat dan Ketentuan'},
   {key:'logoUrl',label:'Logo Footer',kind:'url',value:''},
   {key:'aboutLinks',label:'Tautan Tentang',kind:'string-list',value:['Model Bisnis','Ekosistem Bisnis','Perkembangan','Agen dan Kemitraan','Informasi','Ringkasan Penawaran','Pemegang Equity']},
   {key:'infoLinks',label:'Tautan Informasi',kind:'string-list',value:['Penggunaan Dana','Tata Kelola','Faktor Risiko','Mekanisme Hasil','Legal','Risk Disclosure']},
@@ -124,6 +141,9 @@ export const PORTAL_SECTION_DEFINITIONS:PortalSectionDefinition[]=[
   {key:'equityDetailJson',label:'Popup Detail Equity (JSON)',kind:'json-object',value:'{}'},
   {key:'companyDetailJson',label:'Popup Detail Perusahaan (JSON)',kind:'json-object',value:'{}'},
   {key:'processDetailJson',label:'Popup Detail Proses (JSON)',kind:'json-object',value:'{}'},
-  {key:'networkDetailJson',label:'Popup Detail Jaringan (JSON)',kind:'json-object',value:'{}'}
+  {key:'networkDetailJson',label:'Popup Detail Jaringan (JSON)',kind:'json-object',value:'{}'},
+  {key:'loginJson',label:'Popup Login (JSON)',kind:'json-object',value:'{}'},
+  {key:'pitchdeckJson',label:'Popup Pitchdeck (JSON)',kind:'json-object',value:'{}'},
+  {key:'interestJson',label:'Popup Minat Equity (JSON)',kind:'json-object',value:'{}'}
  ]}
 ];
