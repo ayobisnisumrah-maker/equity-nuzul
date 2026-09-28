@@ -45,6 +45,14 @@ export const EquityCalculator: React.FC<EquityCalculatorProps> = ({ onOpenIntere
   const calculatorTitle = typeof cms.calculatorTitle === 'string' ? cms.calculatorTitle : 'Simulasi Bagi Hasil';
   const calculatorNote = typeof cms.calculatorNote === 'string' ? cms.calculatorNote : '*Pencairan dividen ditransfer bulanan sesuai pembukuan riil.';
   const calculatorCta = typeof cms.calculatorCta === 'string' ? cms.calculatorCta : 'Ajukan Minat Equity';
+  const unitSelectLabel = typeof cms.unitSelectLabel === 'string' ? cms.unitSelectLabel : '{unitSelectLabel}';
+  const ownershipSuffix = typeof cms.ownershipSuffix === 'string' ? cms.ownershipSuffix : 'Saham';
+  const selectedUnitLabel = typeof cms.selectedUnitLabel === 'string' ? cms.selectedUnitLabel : '{selectedUnitLabel}';
+  const investmentValueLabel = typeof cms.investmentValueLabel === 'string' ? cms.investmentValueLabel : '{investmentValueLabel}';
+  const monthlyShareLabel = typeof cms.monthlyShareLabel === 'string' ? cms.monthlyShareLabel : '{monthlyShareLabel}';
+  const monthlySuffix = typeof cms.monthlySuffix === 'string' ? cms.monthlySuffix : '/bulan';
+  const annualProjectionLabel = typeof cms.annualProjectionLabel === 'string' ? cms.annualProjectionLabel : 'Proyeksi Tahunan';
+  const yieldLabel = typeof cms.yieldLabel === 'string' ? cms.yieldLabel : 'Estimasi Yield';
   const configuredOptions = Array.isArray(cms.calculatorOptionsJson) ? cms.calculatorOptionsJson.filter((v): v is UnitOption => Boolean(v) && typeof v === 'object' && Number.isFinite((v as UnitOption).units) && Number.isFinite((v as UnitOption).price) && Number.isFinite((v as UnitOption).monthlyShare)) : [];
   const unitOptions = configuredOptions.length >= 2 ? configuredOptions : UNIT_OPTIONS;
   const sharePercentPerUnit = typeof cms.sharePercentPerUnit === 'number' && cms.sharePercentPerUnit > 0 ? cms.sharePercentPerUnit : SHARE_PERCENT_PER_UNIT;
@@ -75,7 +83,7 @@ export const EquityCalculator: React.FC<EquityCalculatorProps> = ({ onOpenIntere
             Pilih Jumlah Unit
           </span>
           <span className="text-[12px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200/80 px-2.5 py-0.5 rounded-full shrink-0">
-            {formatPercentage(ownershipPercentage)} Saham
+            {formatPercentage(ownershipPercentage)} {ownershipSuffix}
           </span>
         </div>
 
@@ -167,20 +175,20 @@ export const EquityCalculator: React.FC<EquityCalculatorProps> = ({ onOpenIntere
               {formatRupiah(monthlyShare)}
             </span>
             <span className="text-[12px] font-semibold text-[#666666]">
-              /bulan
+              {monthlySuffix}
             </span>
           </div>
         </div>
 
         <div className="pt-2 border-t border-black/[0.06] flex items-center justify-between text-[12px]">
           <div>
-            <span className="text-[#777777] block text-[11px]">Proyeksi Tahunan</span>
+            <span className="text-[#777777] block text-[11px]">{annualProjectionLabel}</span>
             <span className="font-bold text-[#111111]">
               {formatRupiah(annualShare)}
             </span>
           </div>
           <div className="text-right">
-            <span className="text-[#777777] block text-[11px]">Estimasi Yield</span>
+            <span className="text-[#777777] block text-[11px]">{yieldLabel}</span>
             <span className="font-bold text-emerald-700">
               ~{yieldRoi}% p.a.
             </span>
