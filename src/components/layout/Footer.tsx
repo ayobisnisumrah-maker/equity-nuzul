@@ -74,7 +74,7 @@ export const Footer: React.FC<FooterProps> = ({
                 href={instagramUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                aria-label="Instagram Nuzultrip"
+                aria-label={typeof cms.instagramAria === 'string' ? cms.instagramAria : 'Instagram Nuzultrip'}
                 className="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors cursor-pointer"
               >
                 <Instagram size={17} />
@@ -83,7 +83,7 @@ export const Footer: React.FC<FooterProps> = ({
                 href={facebookUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                aria-label="Facebook Nuzultrip"
+                aria-label={typeof cms.facebookAria === 'string' ? cms.facebookAria : 'Facebook Nuzultrip'}
                 className="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors cursor-pointer"
               >
                 <Facebook size={17} />
@@ -92,7 +92,7 @@ export const Footer: React.FC<FooterProps> = ({
                 href={tiktokUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                aria-label="TikTok Nuzultrip"
+                aria-label={typeof cms.tiktokAria === 'string' ? cms.tiktokAria : 'TikTok Nuzultrip'}
                 className="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors cursor-pointer"
               >
                 <TikTokIcon size={17} />
@@ -103,7 +103,7 @@ export const Footer: React.FC<FooterProps> = ({
           {/* Col 2: Tentang Nuzultrip */}
           <div className="lg:col-span-3">
             <h4 className="text-[12px] font-bold uppercase tracking-[0.16em] text-white/50 mb-5">
-              TENTANG NUZULTRIP
+              {aboutTitle}
             </h4>
             <ul className="space-y-2.5">
               {tentangLinks.map((item) => (
@@ -123,7 +123,7 @@ export const Footer: React.FC<FooterProps> = ({
           {/* Col 3: Informasi & Legal */}
           <div className="lg:col-span-2">
             <h4 className="text-[12px] font-bold uppercase tracking-[0.16em] text-white/50 mb-5">
-              INFORMASI
+              {infoTitle}
             </h4>
             <ul className="space-y-2.5">
               {infoLinks.map((item) => (
@@ -172,7 +172,7 @@ export const Footer: React.FC<FooterProps> = ({
           <div className="flex items-center gap-4 sm:gap-5 text-center sm:text-right">
             <button
               type="button"
-              onClick={() => onOpenDetail('Kebijakan Privasi')}
+              onClick={() => onOpenDetail(privacyLabel)}
               className="text-white/60 hover:text-white transition-colors cursor-pointer focus-visible:outline-none"
             >
               Kebijakan Privasi
@@ -180,7 +180,7 @@ export const Footer: React.FC<FooterProps> = ({
             <span className="text-white/30">•</span>
             <button
               type="button"
-              onClick={() => onOpenDetail('Syarat & Ketentuan')}
+              onClick={() => onOpenDetail(termsLabel)}
               className="text-white/60 hover:text-white transition-colors cursor-pointer focus-visible:outline-none"
             >
               Syarat dan Ketentuan
