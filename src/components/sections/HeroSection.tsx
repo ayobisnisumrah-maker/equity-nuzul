@@ -33,7 +33,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   const primaryCta = typeof cms.primaryCta === 'string' ? cms.primaryCta : 'Ajukan Minat Equity';
   const secondaryCta = typeof cms.secondaryCta === 'string' ? cms.secondaryCta : 'Unduh Pitchdeck 2025';
   const highlightsLabel = typeof cms.highlightsLabel === 'string' ? cms.highlightsLabel : 'SOROTAN EKOSISTEM NUZULTRIP';
-  const scrollLabel = typeof cms.scrollLabel === 'string' ? cms.scrollLabel : '{scrollLabel}';
+  const scrollLabel = typeof cms.scrollLabel === 'string' ? cms.scrollLabel : 'Scroll Eksplorasi';
   const highlights = Array.isArray(cms.highlights) && cms.highlights.every((v) => typeof v === 'string') ? cms.highlights as string[] : HIGHLIGHT_BADGES;
   const [isEntranceVisible, setIsEntranceVisible] = useState(false);
   const [scrollY, setScrollY] = useState(0);
@@ -229,7 +229,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           aria-hidden="true"
         >
           <span className="text-[9.5px] tracking-[0.22em] uppercase font-bold text-white/35">
-            Scroll Eksplorasi
+            {scrollLabel}
           </span>
           <ChevronDown size={14} className="text-emerald-400/70 animate-bounce" />
         </div>
