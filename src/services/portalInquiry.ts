@@ -19,7 +19,7 @@ export async function submitEquityInterest(input:EquityInterestInput){
     `Porsi: ${input.ownershipPercent.toLocaleString('id-ID')}%`,
     `Nilai: Rp ${input.investmentValue.toLocaleString('id-ID')}`
   ].join('\n');
-  const {data,error}=await supabase.from('portal_inquiries').insert({
+  const {error}=await supabase.from('portal_inquiries').insert({
     name:input.name.trim(),
     email:input.email.trim().toLowerCase(),
     phone:input.phone.trim(),
@@ -28,7 +28,6 @@ export async function submitEquityInterest(input:EquityInterestInput){
     source_page:'equity-interest',
     user_agent:navigator.userAgent,
     status:'new'
-  }).select('id').single();
+  });
   if(error) throw error;
-  return data;
 }
