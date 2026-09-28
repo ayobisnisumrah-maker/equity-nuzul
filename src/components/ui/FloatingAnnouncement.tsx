@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Megaphone, X, ArrowRight, ExternalLink } from 'lucide-react';
+import { Megaphone, X, ArrowRight } from 'lucide-react';
+import { usePortalContent } from '../../context/PortalContentContext';
 
 interface FloatingAnnouncementProps {
   isVisible: boolean;
@@ -11,6 +12,16 @@ export const FloatingAnnouncement: React.FC<FloatingAnnouncementProps> = ({
   onOpenDetail,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const { content } = usePortalContent();
+  const cms=content('header',{} as Record<string,unknown>);
+  const label=typeof cms.announcementBadge==='string'?cms.announcementBadge:'Pengumuman Resmi';
+  const title=typeof cms.announcementTitle==='string'?cms.announcementTitle:'RUPS Luar Biasa Kuartal 3';
+  const body=typeof cms.announcementText==='string'?cms.announcementText:'dijadwalkan pada 20 Oktober 2026. Laporan Triwulan II telah terbit.';
+  const schedule=typeof cms.announcementSchedule==='string'?cms.announcementSchedule:'Jadwal: 20 Okt 2026';
+  const detailLabel=typeof cms.announcementDetailLabel==='string'?cms.announcementDetailLabel:'Detail';
+  const closeLabel=typeof cms.announcementCloseLabel==='string'?cms.announcementCloseLabel:'Tutup Pengumuman';
+  const openLabel=typeof cms.announcementOpenLabel==='string'?cms.announcementOpenLabel:'Buka Pengumuman RUPS';
+  const tooltip=typeof cms.announcementTooltip==='string'?cms.announcementTooltip:'Pengumuman Resmi Nuzultrip';
 
   return (
     <div
@@ -32,26 +43,26 @@ export const FloatingAnnouncement: React.FC<FloatingAnnouncementProps> = ({
                 <Megaphone size={12} className="animate-pulse" />
               </span>
               <span className="text-[11px] font-bold uppercase tracking-wider text-emerald-400">
-                Pengumuman Resmi
+                {label}
               </span>
             </div>
             <button
               type="button"
               onClick={() => setIsOpen(false)}
               className="p-1 rounded-lg text-white/50 hover:text-white hover:bg-white/10 transition-colors"
-              aria-label="Tutup Pengumuman"
+              aria-label={closeLabel}
             >
               <X size={16} />
             </button>
           </div>
 
           <p className="text-[13px] text-neutral-200 leading-relaxed mb-4">
-            <strong className="text-white font-semibold">RUPS Luar Biasa Kuartal 3</strong> dijadwalkan pada 20 Oktober 2026. Laporan Triwulan II telah terbit.
+            <strong className="text-white font-semibold">{title}</strong> {body}
           </p>
 
           <div className="flex items-center justify-between gap-2 pt-1 border-t border-white/[0.08]">
             <span className="text-[11px] text-neutral-400">
-              Jadwal: 20 Okt 2026
+              {schedule}
             </span>
             {onOpenDetail && (
               <button
@@ -62,7 +73,7 @@ export const FloatingAnnouncement: React.FC<FloatingAnnouncementProps> = ({
                 }}
                 className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-500/20 hover:bg-emerald-500 border border-emerald-500/40 text-emerald-300 hover:text-black text-[12px] font-semibold transition-all duration-200"
               >
-                <span>Detail</span>
+                <span>{detailLabel}</span>
                 <ArrowRight size={12} />
               </button>
             )}
@@ -77,8 +88,8 @@ export const FloatingAnnouncement: React.FC<FloatingAnnouncementProps> = ({
         className={`relative w-12 h-12 sm:w-13 sm:h-13 rounded-full bg-white hover:bg-neutral-50 text-[#111111] border border-neutral-300 shadow-[0_8px_24px_rgba(0,0,0,0.12)] hover:border-neutral-400 hover:shadow-[0_12px_28px_rgba(0,0,0,0.16)] flex items-center justify-center transition-all duration-300 hover:scale-105 active:scale-95 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-400 ${
           isOpen ? 'ring-2 ring-neutral-800 bg-neutral-100' : ''
         }`}
-        aria-label="Buka Pengumuman RUPS"
-        title="Pengumuman Resmi Nuzultrip"
+        aria-label={openLabel}
+        title={tooltip}
       >
         <Megaphone
           size={20}
