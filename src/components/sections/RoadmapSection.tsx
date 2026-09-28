@@ -112,6 +112,10 @@ export const RoadmapSection: React.FC = () => {
   const eyebrow = typeof cms.eyebrow === 'string' ? cms.eyebrow : 'ROADMAP PERUSAHAAN';
   const headline = typeof cms.headline === 'string' ? cms.headline : 'Peta Jalan Pertumbuhan Nuzultrip';
   const description = typeof cms.description === 'string' ? cms.description : 'Tahapan strategis pengembangan bisnis, platform teknologi, dan tata kelola investasi jangka panjang.';
+  const highlightWord=typeof cms.highlightWord==='string'?cms.highlightWord:'Nuzultrip';
+  const phaseLabel=typeof cms.phaseLabel==='string'?cms.phaseLabel:'Fase';
+  const swipeLabel=typeof cms.swipeLabel==='string'?cms.swipeLabel:'Geser card ke samping';
+  const previousLabel=typeof cms.previousLabel==='string'?cms.previousLabel:'Sebelumnya';
   const phases = Array.isArray(cms.phasesJson) && cms.phasesJson.length ? cms.phasesJson as RoadmapPhase[] : ROADMAP_PHASES;
   const [activeIndex, setActiveIndex] = useState(0); // Default to first phase (Fase 01)
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -270,7 +274,7 @@ export const RoadmapSection: React.FC = () => {
               as="h2"
               text={headline}
               className="font-h2 font-bold text-[#111111] leading-[1.12] tracking-tight"
-              highlightWord="Nuzultrip"
+              highlightWord={highlightWord}
               highlightClass="text-emerald-600"
             />
             <p className="text-[14.5px] sm:text-[15.5px] text-[#666666] mt-2 max-w-xl">
@@ -295,7 +299,7 @@ export const RoadmapSection: React.FC = () => {
                 }`}
               >
                 <div className="flex items-center justify-between text-[11px] font-bold">
-                  <span className={isCurrent ? 'text-[#111111]' : ''}>FASE {phase.step}</span>
+                  <span className={isCurrent ? 'text-[#111111]' : ''}>{phaseLabel} {phase.step}</span>
                   {phase.status === 'completed' && (
                     <span className="text-emerald-600 font-bold">✓</span>
                   )}
@@ -342,10 +346,10 @@ export const RoadmapSection: React.FC = () => {
         <div className="flex sm:hidden items-center justify-between mb-3 text-[12px] text-[#666666]">
           <span className="font-semibold text-[#111111] flex items-center gap-1.5">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-            Fase {phases[activeIndex].step} dari {String(phases.length).padStart(2, '0')}
+            {phaseLabel} {phases[activeIndex].step} dari {String(phases.length).padStart(2, '0')}
           </span>
           <span className="text-[11.5px] text-[#777777] flex items-center gap-1">
-            <span>Geser card ke samping</span>
+            <span>{swipeLabel}</span>
             <ArrowRight size={13} className="text-emerald-600 animate-pulse" />
           </span>
         </div>
@@ -385,7 +389,7 @@ export const RoadmapSection: React.FC = () => {
                 <div>
                   <div className="flex items-center justify-between mb-3.5">
                     <span className="text-[12px] font-extrabold text-[#111111] tracking-wider uppercase">
-                      FASE {item.step}
+                      {phaseLabel} {item.step}
                     </span>
                     <span
                       className={`text-[11px] font-semibold px-2.5 py-1 rounded-full border inline-flex items-center gap-1.5 ${
@@ -477,7 +481,7 @@ export const RoadmapSection: React.FC = () => {
                       ? 'w-7 sm:w-8 h-2.5 bg-emerald-500 shadow-sm'
                       : 'w-2.5 h-2.5 bg-black/15 hover:bg-black/30'
                   }`}
-                  aria-label={`Lihat Fase ${phase.step}`}
+                  aria-label={`Lihat ${phaseLabel} ${phase.step}`}
                 />
               );
             })}
@@ -494,10 +498,10 @@ export const RoadmapSection: React.FC = () => {
                   ? 'text-black/25 border-black/5 bg-black/[0.02] cursor-not-allowed'
                   : 'text-[#111111] border-black/15 bg-white hover:bg-black/5 active:scale-95 shadow-xs cursor-pointer'
               }`}
-              aria-label="Fase sebelumnya"
+              aria-label={`${phaseLabel} sebelumnya`}
             >
               <ChevronLeft size={14} />
-              <span>Sebelumnya</span>
+              <span>{previousLabel}</span>
             </button>
 
             <button
@@ -509,9 +513,9 @@ export const RoadmapSection: React.FC = () => {
                   ? 'text-black/25 border-black/5 bg-black/[0.02] cursor-not-allowed'
                   : 'text-white border-emerald-600 bg-emerald-600 hover:bg-emerald-700 active:scale-95 shadow-xs cursor-pointer'
               }`}
-              aria-label="Fase selanjutnya"
+              aria-label={`${phaseLabel} selanjutnya`}
             >
-              <span>Fase {phases[Math.min(phases.length - 1, activeIndex + 1)].step}</span>
+              <span>{phaseLabel} {phases[Math.min(phases.length - 1, activeIndex + 1)].step}</span>
               <ChevronRight size={14} />
             </button>
           </div>
