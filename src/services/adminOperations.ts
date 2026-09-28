@@ -41,3 +41,8 @@ export type SalesInvoiceEvent={id:string;invoice_id:string;event_type:string;fro
 export async function listSalesInvoiceEvents(invoice_id:string){const rows=await listSalesPayments(invoice_id);return rows.map(x=>({id:x.id,invoice_id:x.invoice_id,event_type:x.kind==='refund'?'refund':'payment',from_status:null,to_status:null,amount:x.amount,reference_no:x.reference_no,notes:x.notes,created_at:x.created_at}))}
 export async function voidSalesInvoice(_invoice_id:string,_reason:string){throw new Error('Pembatalan invoice production harus melalui workflow finance yang diaudit.')}
 
+
+export type FinancialPeriodRow={id:string;period_type:string;fiscal_year:number;period_index:number;starts_on:string;ends_on:string;currency:string;status:string};
+export async function listFinancialPeriods(){const {data,error}=await client().from('financial_periods').select('id,period_type,fiscal_year,period_index,starts_on,ends_on,currency,status').order('starts_on',{ascending:false});if(error)throw error;return (data||[]) as FinancialPeriodRow[]}
+export async function createMonthlyFinancialPeriod(year:number,month:number){const {data,error}=await client().schema('app').rpc('create_monthly_financial_period',{p_year:year,p_month:month});if(error)throw error;return data as FinancialPeriodRow}
+export async function closeFinancialPeriod(id:string){const {data,error}=await client().from('financial_periods').update({status:'closed'}).eq('id',id).select('id,period_type,fiscal_year,period_index,starts_on,ends_on,currency,status').single();if(error)throw error;return data as FinancialPeriodRow}
