@@ -24,7 +24,7 @@ export const EquityInterestModal: React.FC<EquityInterestModalProps> = ({
   const eyebrow = typeof cfg.eyebrow === 'string' ? cfg.eyebrow : 'Formulir Resmi Calon Investor';
   const description = typeof cfg.description === 'string' ? cfg.description : 'Langkah awal pendaftaran kepemilikan unit equity Nuzultrip. Tanpa komitmen finansial di muka.';
   const whatsappUrl = typeof cfg.whatsappUrl === 'string' ? cfg.whatsappUrl : (typeof quickCms.whatsappUrl === 'string' ? quickCms.whatsappUrl : '');
-  const successTitle = typeof cfg.successTitle === 'string' ? cfg.successTitle : '{successTitle}';
+  const successTitle = typeof cfg.successTitle === 'string' ? cfg.successTitle : 'Pengajuan Minat Diterima';
   const successMessage = typeof cfg.successMessage === 'string' ? cfg.successMessage : 'Tim Investor Relations Nuzultrip akan menghubungi Anda melalui WhatsApp dalam waktu 1x24 jam untuk verifikasi dokumen dan pengiriman Memorandum Informasi resmi.';
   const calculatorLabel = typeof cfg.calculatorLabel === 'string' ? cfg.calculatorLabel : 'Kalkulator Unit Equity';
   const confirmWhatsappLabel = typeof cfg.confirmWhatsappLabel === 'string' ? cfg.confirmWhatsappLabel : 'Konfirmasi via WhatsApp';
@@ -84,7 +84,7 @@ export const EquityInterestModal: React.FC<EquityInterestModalProps> = ({
               <CheckCircle size={36} />
             </div>
             <h3 className="text-[22px] sm:text-[24px] font-bold text-[#111111] mb-2">
-              Pengajuan Minat Diterima
+              {successTitle}
             </h3>
             <p className="text-[14.5px] text-[#555555] leading-relaxed max-w-[420px] mx-auto mb-6">
               Terima kasih, <strong>{name}</strong>. {successMessage} ({phone})
