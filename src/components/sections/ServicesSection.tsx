@@ -17,7 +17,8 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({ onOpenServiceD
   const eyebrow = typeof cms.eyebrow === 'string' ? cms.eyebrow : 'LAYANAN UTAMA';
   const headline = typeof cms.headline === 'string' ? cms.headline : 'Ekosistem Perjalanan Muslim Nuzultrip';
   const description = typeof cms.description === 'string' ? cms.description : 'Menghubungkan mitra, vendor layanan, dan jaringan distribusi dalam satu kesatuan sistem yang transparan dan terstandar.';
-  const otherCta = typeof cms.otherCta === 'string' ? cms.otherCta : 'Layanan Lainnya';
+  const otherCta = typeof cms.moreCta === 'string' ? cms.moreCta : 'Layanan Lainnya';
+  const highlightWord = typeof cms.highlightWord === 'string' ? cms.highlightWord : 'Nuzultrip';
   const services = Array.isArray(cms.itemsJson) && cms.itemsJson.length ? cms.itemsJson as ServiceItem[] : SERVICES_LIST;
   const getIcon = (iconName: string) => {
     const iconClass = "transition-colors duration-200 text-[#111111] group-hover:text-white";
@@ -51,7 +52,7 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({ onOpenServiceD
                   as="h2"
                   text={headline}
                   className="font-h2 font-bold text-[#111111] leading-[1.12] tracking-tight"
-                  highlightWord="Nuzultrip"
+                  highlightWord={highlightWord}
                   highlightClass="text-emerald-600"
                 />
               </div>
