@@ -23,6 +23,7 @@ export const PORTAL_SECTION_DEFINITIONS:PortalSectionDefinition[]=[
   {key:'secondaryCta',label:'CTA Pitchdeck',kind:'text',value:'Unduh Pitchdeck 2025'},
   {key:'highlightsLabel',label:'Label Sorotan',kind:'text',value:'SOROTAN EKOSISTEM NUZULTRIP'},
   {key:'heroImageUrl',label:'Gambar Hero',kind:'url',value:''},
+  {key:'scrollLabel',label:'Label Scroll',kind:'text',value:'Scroll Eksplorasi'},
   {key:'highlights',label:'Daftar Sorotan',kind:'string-list',value:['40% Alokasi Equity','50 Unit Terbatas','Rp 100 Juta / Unit','Dividen Berkala','Jaringan 4 Negara','1000+ Jamaah Tahunan','Izin PPIU Kemenag Resmi','Kontrak Hotel Langsung Makkah-Madinah']}
  ]},
  {key:'about',label:'Tentang Kami',description:'Headline dan metrik Tentang Kami.',fields:[
@@ -104,8 +105,12 @@ export const PORTAL_SECTION_DEFINITIONS:PortalSectionDefinition[]=[
   {key:'invitationTitle',label:'Judul Invitation Card',kind:'text',value:'Siap Mengenal Nuzultrip Lebih Jauh?'},
   {key:'invitationDescription',label:'Deskripsi Invitation Card',kind:'textarea',value:'Dapatkan konsultasi eksklusif mengenai struktur kepemilikan dan skema bagi hasil.'},
   {key:'phoneLabel',label:'Label Kartu Telepon',kind:'text',value:'Investor Relations'},
+  {key:'phoneTitle',label:'Judul Kartu Telepon',kind:'text',value:'Hubungi Tim'},
   {key:'documentLabel',label:'Label Kartu Dokumen',kind:'text',value:'Dokumen Investor'},
-  {key:'documentTitle',label:'Judul Kartu Dokumen',kind:'text',value:'Unduh Dokumen Informasi'},
+  {key:'documentTitle',label:'Judul Kartu Dokumen',kind:'text',value:'Unduh Pitchdeck'},
+  {key:'documentDescription',label:'Deskripsi Kartu Dokumen',kind:'text',value:'Pelajari ringkasan model bisnis & proyeksi'},
+  {key:'invitationLabel',label:'Label Invitation Card',kind:'text',value:'Langkah Awal Kemitraan'},
+  {key:'invitationCta',label:'CTA Invitation Card',kind:'text',value:'Ajukan Minat Equity'},
   {key:'imageUrl',label:'Gambar',kind:'url',value:'https://images.unsplash.com/photo-1580418827493-f2b22c0a76cb?q=80&w=1200&auto=format&fit=crop'}
  ]},
  {key:'articles',label:'Artikel & Berita',description:'Artikel, gambar, kategori dan metadata.',fields:[

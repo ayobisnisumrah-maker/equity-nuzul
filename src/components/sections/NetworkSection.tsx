@@ -14,6 +14,9 @@ export const NetworkSection: React.FC<NetworkSectionProps> = ({ onOpenDetail }) 
   const { content } = usePortalContent();
   const cms = content('network', {} as Record<string, unknown>);
   const eyebrow = typeof cms.eyebrow === 'string' ? cms.eyebrow : 'JARINGAN & MITRA';
+  const headline = typeof cms.headline === 'string' ? cms.headline : 'Terhubung untuk Bertumbuh Bersama';
+  const highlightWord = typeof cms.highlightWord === 'string' ? cms.highlightWord : 'Bersama';
+  const imageHeadline = typeof cms.imageHeadline === 'string' ? cms.imageHeadline : 'Satu Ekosistem, Banyak Peluang';
   const description = typeof cms.description === 'string' ? cms.description : 'Menjadi bagian dari perjalanan bersama Nuzultrip melalui kepemilikan equity dan sinergi ekosistem.';
   const detailCta = typeof cms.detailCta === 'string' ? cms.detailCta : 'Pelajari Selengkapnya';
   const partners = Array.isArray(cms.partnersJson) && cms.partnersJson.length ? cms.partnersJson as typeof NETWORK_PARTNERS : NETWORK_PARTNERS;
@@ -43,10 +46,7 @@ export const NetworkSection: React.FC<NetworkSectionProps> = ({ onOpenDetail }) 
             <div>
               <Eyebrow>{eyebrow}</Eyebrow>
               <h2 className="font-h2 font-bold text-[#111111] leading-[1.05] tracking-tight mb-5 sm:mb-6">
-                Terhubung<br />
-                untuk<br />
-                Bertumbuh<br />
-                <span className="text-emerald-600">Bersama</span>
+                {headline.endsWith(highlightWord) ? <>{headline.slice(0, -highlightWord.length)}<span className="text-emerald-600">{highlightWord}</span></> : headline}
               </h2>
               <p className="text-[16px] sm:text-[17px] text-[#555555] leading-[1.65] max-w-[360px]">
                 {description}
@@ -100,10 +100,7 @@ export const NetworkSection: React.FC<NetworkSectionProps> = ({ onOpenDetail }) 
 
               <div className="relative z-10">
                 <h3 className="text-[28px] sm:text-[32px] font-bold leading-[1.1] tracking-tight">
-                  Satu<br />
-                  Ekosistem,<br />
-                  Banyak<br />
-                  Peluang
+                  {imageHeadline}
                 </h3>
               </div>
             </div>

@@ -26,6 +26,10 @@ export const Footer: React.FC<FooterProps> = ({
   const facebookUrl = safeUrl(cms.facebookUrl, 'https://facebook.com', /^https:\/\/(www\.)?facebook\.com\//i);
   const tiktokUrl = safeUrl(cms.tiktokUrl, 'https://tiktok.com', /^https:\/\/(www\.)?tiktok\.com\//i);
   const copyright = typeof cms.copyright === 'string' ? cms.copyright : '© 2026 Nuzultrip. All Rights Reserved.';
+  const aboutTitle = typeof cms.aboutTitle === 'string' ? cms.aboutTitle : 'TENTANG NUZULTRIP';
+  const infoTitle = typeof cms.infoTitle === 'string' ? cms.infoTitle : 'INFORMASI';
+  const privacyLabel = typeof cms.privacyLabel === 'string' ? cms.privacyLabel : 'Kebijakan Privasi';
+  const termsLabel = typeof cms.termsLabel === 'string' ? cms.termsLabel : 'Syarat dan Ketentuan';
   const footerLogo = typeof cms.logoUrl === 'string' && /^https:\/\//i.test(cms.logoUrl) ? cms.logoUrl : logoSrc || LOGO_CONFIG.footerLogoSrc;
   const defaultTentangLinks = [
     'Model Bisnis',
