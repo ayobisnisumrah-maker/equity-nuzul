@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { X, CheckCircle, Calculator, ShieldCheck, ArrowRight } from 'lucide-react';
+import { usePortalContent } from '../../context/PortalContentContext';
 
 interface EquityInterestModalProps {
   isOpen: boolean;
@@ -10,6 +11,18 @@ export const EquityInterestModal: React.FC<EquityInterestModalProps> = ({
   isOpen,
   onClose,
 }) => {
+  const { content } = usePortalContent();
+  const modalCms = content<Record<string, unknown>>('modals', {});
+  const equityCms = content<Record<string, unknown>>('equity', {});
+  const quickCms = content<Record<string, unknown>>('quick_action', {});
+  const cfg = (modalCms.interestJson && typeof modalCms.interestJson === 'object' ? modalCms.interestJson : {}) as Record<string, unknown>;
+  const pricePerUnit = typeof cfg.pricePerUnit === 'number' && cfg.pricePerUnit > 0 ? cfg.pricePerUnit : 100000000;
+  const sharePercentPerUnit = typeof equityCms.sharePercentPerUnit === 'number' && equityCms.sharePercentPerUnit > 0 ? equityCms.sharePercentPerUnit : 0.8;
+  const maxUnits = typeof cfg.maxUnits === 'number' && cfg.maxUnits > 0 ? Math.floor(cfg.maxUnits) : 50;
+  const title = typeof cfg.title === 'string' ? cfg.title : 'Ajukan Minat Equity';
+  const eyebrow = typeof cfg.eyebrow === 'string' ? cfg.eyebrow : 'Formulir Resmi Calon Investor';
+  const description = typeof cfg.description === 'string' ? cfg.description : 'Langkah awal pendaftaran kepemilikan unit equity Nuzultrip. Tanpa komitmen finansial di muka.';
+  const whatsappUrl = typeof cfg.whatsappUrl === 'string' ? cfg.whatsappUrl : (typeof quickCms.whatsappUrl === 'string' ? quickCms.whatsappUrl : '');
   const [units, setUnits] = useState<number>(1);
   const [name, setName] = useState<string>('');
   const [phone, setPhone] = useState<string>('');
@@ -19,9 +32,8 @@ export const EquityInterestModal: React.FC<EquityInterestModalProps> = ({
 
   if (!isOpen) return null;
 
-  const pricePerUnit = 100000000; // Rp 100 Juta
   const totalInvestment = units * pricePerUnit;
-  const totalOwnership = (units * 0.8).toFixed(1);
+  const totalOwnership = (units * sharePercentPerUnit).toFixed(1);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -83,9 +95,7 @@ export const EquityInterestModal: React.FC<EquityInterestModalProps> = ({
 
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <a
-                href={`https://wa.me/6281234567890?text=Halo%20Admin%20Nuzultrip,%20saya%20sudah%20mengisi%20pengajuan%20minat%20equity%20atas%20nama%20${encodeURIComponent(
-                  name
-                )}%20sejumlah%20${units}%20unit.`}
+                href={`${whatsappUrl}${whatsappUrl.includes('?')?'&':'?'}text=${encodeURIComponent(`Halo Admin Nuzultrip, saya sudah mengisi pengajuan minat equity atas nama ${name} sejumlah ${units} unit.`)}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="py-3 px-6 rounded-xl bg-[#090909] text-white font-semibold text-[14px] flex items-center justify-center gap-2 hover:bg-[#222222]"
@@ -107,13 +117,13 @@ export const EquityInterestModal: React.FC<EquityInterestModalProps> = ({
             <div className="mb-6">
               <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-black/5 border border-black/10 text-[11px] font-bold uppercase tracking-[0.14em] text-[#555555] mb-2">
                 <ShieldCheck size={13} />
-                <span>Formulir Resmi Calon Investor</span>
+                <span>{eyebrow}</span>
               </div>
               <h3 className="text-[22px] sm:text-[26px] font-extrabold text-[#111111] tracking-tight">
-                Ajukan Minat Equity
+                {title}
               </h3>
               <p className="text-[14px] text-[#666666] mt-1">
-                Langkah awal pendaftaran kepemilikan unit equity Nuzultrip. Tanpa komitmen finansial di muka.
+                {description}
               </p>
             </div>
 
@@ -124,7 +134,7 @@ export const EquityInterestModal: React.FC<EquityInterestModalProps> = ({
                   <Calculator size={15} />
                   <span>Kalkulator Unit Equity</span>
                 </div>
-                <span className="text-[12px] text-[#888888]">1 Unit = Rp 100 Juta</span>
+                <span className="text-[12px] text-[#888888]">1 Unit = {new Intl.NumberFormat('id-ID',{style:'currency',currency:'IDR',maximumFractionDigits:0}).format(pricePerUnit)}</span>
               </div>
 
               {/* Slider & Counter */}
@@ -146,7 +156,7 @@ export const EquityInterestModal: React.FC<EquityInterestModalProps> = ({
                     </span>
                     <button
                       type="button"
-                      onClick={() => setUnits((prev) => Math.min(20, prev + 1))}
+                      onClick={() => setUnits((prev) => Math.min(maxUnits, prev + 1))}
                       className="w-8 h-8 rounded-lg border border-black/20 font-bold flex items-center justify-center hover:bg-black/5"
                     >
                       +
@@ -157,7 +167,7 @@ export const EquityInterestModal: React.FC<EquityInterestModalProps> = ({
                 <input
                   type="range"
                   min="1"
-                  max="15"
+                  max={maxUnits}
                   value={units}
                   onChange={(e) => setUnits(Number(e.target.value))}
                   className="w-full h-1.5 bg-black/10 rounded-lg appearance-none cursor-pointer accent-[#090909]"
