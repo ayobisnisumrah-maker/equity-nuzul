@@ -27,6 +27,13 @@ export const QuickActionSection: React.FC<QuickActionSectionProps> = ({
   const imageUrl = typeof cms.imageUrl === 'string' && cms.imageUrl ? cms.imageUrl : IMAGES.quickActionBg;
   const invitationTitle = typeof cms.invitationTitle === 'string' ? cms.invitationTitle : 'Siap Mengenal Nuzultrip Lebih Jauh?';
   const invitationDescription = typeof cms.invitationDescription === 'string' ? cms.invitationDescription : 'Dapatkan konsultasi eksklusif mengenai struktur kepemilikan dan skema bagi hasil.';
+  const phoneLabel = typeof cms.phoneLabel === 'string' ? cms.phoneLabel : 'Investor Relations';
+  const phoneTitle = typeof cms.phoneTitle === 'string' ? cms.phoneTitle : 'Hubungi Tim';
+  const documentLabel = typeof cms.documentLabel === 'string' ? cms.documentLabel : 'Dokumen Resmi';
+  const documentTitle = typeof cms.documentTitle === 'string' ? cms.documentTitle : 'Unduh Pitchdeck';
+  const documentDescription = typeof cms.documentDescription === 'string' ? cms.documentDescription : 'Pelajari ringkasan model bisnis & proyeksi';
+  const invitationLabel = typeof cms.invitationLabel === 'string' ? cms.invitationLabel : 'Langkah Awal Kemitraan';
+  const invitationCta = typeof cms.invitationCta === 'string' ? cms.invitationCta : 'Ajukan Minat Equity';
   return (
     <section
       id="kontak"
@@ -147,7 +154,7 @@ export const QuickActionSection: React.FC<QuickActionSectionProps> = ({
                   onClick={onOpenInterest}
                   className="w-full py-3.5 px-5 rounded-xl bg-white text-[#090909] font-bold text-[14px] flex items-center justify-center gap-2 hover:bg-emerald-600 hover:text-white border border-transparent hover:border-emerald-500/60 active:scale-98 transition-all duration-300 shadow-md hover:shadow-[0_6px_24px_rgba(16,185,129,0.35)] group cursor-pointer"
                 >
-                  <span>Ajukan Minat Equity</span>
+                  <span>{invitationCta}</span>
                   <ArrowRight size={16} className="text-current group-hover:translate-x-1 group-hover:text-white transition-all duration-200" />
                 </button>
               </div>
