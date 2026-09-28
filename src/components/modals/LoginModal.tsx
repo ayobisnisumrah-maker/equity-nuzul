@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { X, Lock, Eye, EyeOff, ShieldCheck, ArrowRight } from 'lucide-react';
 import { requestPasswordReset, signInPortal, type PortalIdentity } from '../../services/auth';
+import { usePortalContent } from '../../context/PortalContentContext';
 
 interface LoginModalProps {
   isOpen: boolean;
@@ -15,6 +16,10 @@ export const LoginModal: React.FC<LoginModalProps> = ({
   onOpenInterest,
   onAuthenticated,
 }) => {
+  const { content } = usePortalContent();
+  const modalCms = content<Record<string, unknown>>('modals', {});
+  const cfg = (modalCms.loginJson && typeof modalCms.loginJson === 'object' ? modalCms.loginJson : {}) as Record<string, unknown>;
+  const text = (key:string,fallback:string)=>typeof cfg[key] === 'string' ? String(cfg[key]) : fallback;
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -57,7 +62,7 @@ export const LoginModal: React.FC<LoginModalProps> = ({
               <ShieldCheck size={28} />
             </div>
             <h3 className="text-[20px] font-bold text-[#111111] mb-2">
-              Autentikasi Berhasil
+              {text('successTitle','Autentikasi Berhasil')}
             </h3>
             <p className="text-[14px] text-[#555555] leading-relaxed mb-6">
               Selamat datang, <strong>{identity?.name}</strong>. Anda masuk sebagai <strong>{identity?.roleLabel}</strong>. Anda akan diarahkan otomatis ke dashboard.
@@ -78,16 +83,16 @@ export const LoginModal: React.FC<LoginModalProps> = ({
               </div>
               <div>
                 <span className="text-[11px] font-bold uppercase tracking-[0.14em] text-[#888888]">
-                  Portal Resmi
+                  {text('eyebrow','Portal Resmi')}
                 </span>
                 <h3 className="text-[20px] sm:text-[22px] font-extrabold text-[#111111]">
-                  Masuk Portal
+                  {text('title','Masuk Portal')}
                 </h3>
               </div>
             </div>
 
             <p className="text-[13.5px] text-[#666666] leading-relaxed mb-6">
-              Akses resmi untuk Admin dan Investor Nuzultrip yang telah terdaftar.
+              {text('description','Akses resmi untuk Admin dan Investor Nuzultrip yang telah terdaftar.')}
             </p>
 
             <form onSubmit={handleLogin} className="space-y-4">
@@ -95,7 +100,7 @@ export const LoginModal: React.FC<LoginModalProps> = ({
               {loginError&&<div className="rounded-xl bg-red-50 border border-red-200 px-3 py-2 text-[12px] text-red-700">{loginError}</div>}
               <div>
                 <label className="block text-[13px] font-bold text-[#111111] mb-1">
-                  Email Terdaftar
+                  {text('emailLabel','Email Terdaftar')}
                 </label>
                 <input
                   type="email"
@@ -110,9 +115,9 @@ export const LoginModal: React.FC<LoginModalProps> = ({
               <div>
                 <div className="flex justify-between items-center mb-1">
                   <label className="block text-[13px] font-bold text-[#111111]">
-                    Kata Sandi
+                    {text('passwordLabel','Kata Sandi')}
                   </label>
-                  <button type="button" onClick={async()=>{setLoginError('');setResetMessage('');try{await requestPasswordReset(email);setResetMessage('Tautan atur ulang sandi telah dikirim ke email terdaftar.')}catch(error){setLoginError(error instanceof Error?error.message:'Gagal mengirim tautan reset sandi.')}}} className="text-[12px] text-[#666666] hover:text-black">Lupa sandi?</button>
+                  <button type="button" onClick={async()=>{setLoginError('');setResetMessage('');try{await requestPasswordReset(email);setResetMessage('Tautan atur ulang sandi telah dikirim ke email terdaftar.')}catch(error){setLoginError(error instanceof Error?error.message:'Gagal mengirim tautan reset sandi.')}}} className="text-[12px] text-[#666666] hover:text-black">{text('forgotLabel','Lupa sandi?')}</button>
                 </div>
 
                 <div className="relative">
@@ -141,10 +146,10 @@ export const LoginModal: React.FC<LoginModalProps> = ({
                   className="w-full py-3 px-5 rounded-xl bg-[#090909] text-white font-bold text-[14.5px] flex items-center justify-center gap-2 hover:bg-[#222222] active:scale-98 transition-all cursor-pointer disabled:opacity-70"
                 >
                   {isLoggingIn ? (
-                    <span>Memverifikasi Akses...</span>
+                    <span>{text('loadingLabel','Memverifikasi Akses...')}</span>
                   ) : (
                     <>
-                      <span>Masuk ke Akun</span>
+                      <span>{text('submitLabel','Masuk ke Akun')}</span>
                       <ArrowRight size={15} />
                     </>
                   )}
@@ -153,7 +158,7 @@ export const LoginModal: React.FC<LoginModalProps> = ({
 
               <div className="pt-3 border-t border-black/[0.08] text-center">
                 <p className="text-[13px] text-[#666666]">
-                  Belum terdaftar sebagai investor?{' '}
+                  {text('interestPrompt','Belum terdaftar sebagai investor?')}{' '}
                   <button
                     type="button"
                     onClick={() => {
@@ -162,7 +167,7 @@ export const LoginModal: React.FC<LoginModalProps> = ({
                     }}
                     className="font-bold text-[#111111] hover:underline"
                   >
-                    Ajukan Minat Equity Sekarang
+                    {text('interestCta','Ajukan Minat Equity Sekarang')}
                   </button>
                 </p>
               </div>
