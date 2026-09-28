@@ -18,6 +18,7 @@ const UNIT_OPTIONS: UnitOption[] = [
   { units: 5, price: 500_000_000, monthlyShare: 7_916_665 },
   { units: 10, price: 1_000_000_000, monthlyShare: 15_833_330 },
   { units: 25, price: 2_500_000_000, monthlyShare: 39_583_325 },
+  { units: 50, price: 5_000_000_000, monthlyShare: 79_166_650 },
 ];
 
 const SHARE_PERCENT_PER_UNIT = 0.8; // 0.8% per unit
