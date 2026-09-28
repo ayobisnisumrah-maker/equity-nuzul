@@ -27,6 +27,8 @@ export const Header: React.FC<HeaderProps> = ({
   const announcementTitle = typeof cms.announcementTitle === 'string' ? cms.announcementTitle : 'RUPS Luar Biasa Kuartal 3';
   const announcementText = typeof cms.announcementText === 'string' ? cms.announcementText : 'dijadwalkan pada 20 Oktober 2026. Laporan Triwulan II telah terbit.';
   const loginLabel = typeof cms.loginLabel === 'string' ? cms.loginLabel : 'Masuk';
+  const announcementTooltip = typeof cms.announcementTooltip === 'string' ? cms.announcementTooltip : 'Klik untuk melihat rincian pengumuman resmi';
+  const headerLogo = typeof cms.logoUrl === 'string' && /^https:\/\//i.test(cms.logoUrl) ? cms.logoUrl : logoSrc || LOGO_CONFIG.headerLogoSrc;
   const interestLabel = typeof cms.interestLabel === 'string' ? cms.interestLabel : 'Ajukan Minat Equity';
   const investorLoginLabel = typeof cms.investorLoginLabel === 'string' ? cms.investorLoginLabel : 'Masuk Portal Investor';
   const [isScrolled, setIsScrolled] = useState(false);
@@ -152,7 +154,7 @@ export const Header: React.FC<HeaderProps> = ({
             ? 'max-h-0 opacity-0 py-0 border-b-0 pointer-events-none'
             : 'max-h-20 opacity-100 py-1.5 sm:py-2 px-3 sm:px-4 border-b shadow-sm cursor-pointer hover:bg-[#1a1b1e]'
         }`}
-        title="Klik untuk melihat rincian pengumuman resmi"
+        title={announcementTooltip}
       >
         <Container size="default">
           <div className="flex items-center justify-center gap-2 sm:gap-2.5 text-center flex-wrap">
@@ -184,7 +186,7 @@ export const Header: React.FC<HeaderProps> = ({
               className="flex items-center shrink-0 group focus-visible:outline-none transition-opacity hover:opacity-90 py-1"
               aria-label="Nuzultrip Beranda"
             >
-              <NuzultripLogo size="md" src={logoSrc || LOGO_CONFIG.headerLogoSrc} />
+              <NuzultripLogo size="md" src={headerLogo} />
             </a>
 
             {/* Desktop Navigation */}
