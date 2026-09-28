@@ -68,6 +68,7 @@ export const PORTAL_SECTION_DEFINITIONS:PortalSectionDefinition[]=[
   {key:'eyebrow',label:'Eyebrow',kind:'text',value:'LAYANAN UTAMA'},
   {key:'headline',label:'Headline',kind:'text',value:'Ekosistem Perjalanan Muslim Nuzultrip'},
   {key:'description',label:'Deskripsi',kind:'textarea',value:'Menghubungkan mitra, vendor layanan, dan jaringan distribusi dalam satu kesatuan sistem yang transparan dan terstandar.'},
+  {key:'highlightWord',label:'Kata Highlight',kind:'text',value:'Nuzultrip'},
   {key:'moreCta',label:'CTA',kind:'text',value:'Layanan Lainnya'},
   {key:'itemsJson',label:'Daftar Layanan (JSON)',kind:'json-list',value:'[]'},
   {key:'detailMap',label:'Detail Layanan / Popup (JSON)',kind:'json-object',value:'{}'}
@@ -99,6 +100,7 @@ export const PORTAL_SECTION_DEFINITIONS:PortalSectionDefinition[]=[
  {key:'investor',label:'Informasi Investor',description:'Seluruh kartu informasi dan dokumen investor.',fields:[
   {key:'eyebrow',label:'Eyebrow',kind:'text',value:'INFORMASI INVESTOR'},
   {key:'headline',label:'Headline',kind:'text',value:'Informasi penting dalam satu tempat'},
+  {key:'highlightWord',label:'Kata Highlight',kind:'text',value:'tempat'},
   {key:'moreLabel',label:'Label Detail',kind:'text',value:'Selengkapnya'},
   {key:'itemsJson',label:'Kartu Informasi Investor (JSON)',kind:'json-list',value:'[]'},
   {key:'detailMap',label:'Detail Informasi Investor / Popup (JSON)',kind:'json-object',value:'{}'}
@@ -125,6 +127,7 @@ export const PORTAL_SECTION_DEFINITIONS:PortalSectionDefinition[]=[
   {key:'eyebrow',label:'Eyebrow',kind:'text',value:'ARTIKEL & BERITA'},
   {key:'headline',label:'Headline',kind:'text',value:'Pahami Peluang. Ambil Keputusan.'},
   {key:'description',label:'Deskripsi',kind:'textarea',value:'Analisis pasar, panduan investasi syariah, dan pembaruan strategis industri perjalanan ibadah Indonesia.'},
+  {key:'highlightWord',label:'Kata Highlight',kind:'text',value:'Keputusan.'},
   {key:'moreCta',label:'CTA',kind:'text',value:'Lebih Artikel Lainnya'},
   {key:'readMore',label:'Label Baca Artikel',kind:'text',value:'Baca Selengkapnya'},
   {key:'itemsJson',label:'Daftar Artikel (JSON)',kind:'json-list',value:'[]'},
@@ -139,6 +142,9 @@ export const PORTAL_SECTION_DEFINITIONS:PortalSectionDefinition[]=[
   {key:'instagramUrl',label:'Instagram URL',kind:'url',value:'https://instagram.com'},
   {key:'facebookUrl',label:'Facebook URL',kind:'url',value:'https://facebook.com'},
   {key:'tiktokUrl',label:'TikTok URL',kind:'url',value:'https://tiktok.com'},
+  {key:'instagramAria',label:'Label Aksesibilitas Instagram',kind:'text',value:'Instagram Nuzultrip'},
+  {key:'facebookAria',label:'Label Aksesibilitas Facebook',kind:'text',value:'Facebook Nuzultrip'},
+  {key:'tiktokAria',label:'Label Aksesibilitas TikTok',kind:'text',value:'TikTok Nuzultrip'},
   {key:'copyright',label:'Copyright',kind:'text',value:'© 2026 Nuzultrip. All Rights Reserved.'},
   {key:'aboutTitle',label:'Judul Kolom Tentang',kind:'text',value:'TENTANG NUZULTRIP'},
   {key:'infoTitle',label:'Judul Kolom Informasi',kind:'text',value:'INFORMASI'},
