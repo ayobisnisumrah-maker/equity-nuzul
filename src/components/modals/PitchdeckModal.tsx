@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { usePortalContent } from '../../context/PortalContentContext';
 import { X, FileText, Download, Check, ShieldCheck } from 'lucide-react';
 
 interface PitchdeckModalProps {
@@ -10,35 +11,26 @@ export const PitchdeckModal: React.FC<PitchdeckModalProps> = ({ isOpen, onClose 
   const [downloading, setDownloading] = useState(false);
   const [downloaded, setDownloaded] = useState(false);
   const [email, setEmail] = useState('');
+  const { content } = usePortalContent();
+  const modalCms = content<Record<string, unknown>>('modals', {});
+  const cfg = (modalCms.pitchdeckJson && typeof modalCms.pitchdeckJson === 'object' ? modalCms.pitchdeckJson : {}) as Record<string, unknown>;
+  const eyebrow = typeof cfg.eyebrow === 'string' ? cfg.eyebrow : 'Dokumen Resmi';
+  const title = typeof cfg.title === 'string' ? cfg.title : 'Unduh Pitchdeck Resmi';
+  const description = typeof cfg.description === 'string' ? cfg.description : 'Dapatkan ringkasan eksekutif dan informasi resmi Nuzultrip Equity.';
+  const documentUrl = typeof cfg.documentUrl === 'string' ? cfg.documentUrl : '';
+  const format = typeof cfg.format === 'string' ? cfg.format : 'PDF';
+  const version = typeof cfg.version === 'string' ? cfg.version : 'Versi terbaru';
+  const confidentiality = typeof cfg.confidentiality === 'string' ? cfg.confidentiality : 'Dokumen Investor';
 
   if (!isOpen) return null;
 
   const handleDownload = (e: React.FormEvent) => {
     e.preventDefault();
+    if (!documentUrl) return;
     setDownloading(true);
-
-    setTimeout(() => {
-      setDownloading(false);
-      setDownloaded(true);
-
-      // Create a dummy document download blob
-      const content = `NUZULTRIP EQUITY — EXECUTIVE PITCHDECK SUMMARY 2025\n\n` +
-        `Target Equity: 40% (50 Unit @ Rp 100.000.000)\n` +
-        `Total Penawaran: Rp 5.000.000.000\n` +
-        `Dividen: Distribusi Bulanan Berdasarkan Kinerja Operasional\n` +
-        `Mitra dan Jaringan: Makkah, Madinah, Jeddah, Jakarta\n\n` +
-        `Terima kasih atas minat Anda pada Nuzultrip Equity.\n` +
-        `Tim Investor Relations: ir@nuzultrip.com | +62 812-3456-7890`;
-
-      const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.setAttribute('download', 'Pitchdeck-Nuzultrip-Equity-2025.txt');
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    }, 1200);
+    window.open(documentUrl, '_blank', 'noopener,noreferrer');
+    setDownloading(false);
+    setDownloaded(true);
   };
 
   return (
@@ -65,32 +57,32 @@ export const PitchdeckModal: React.FC<PitchdeckModalProps> = ({ isOpen, onClose 
           </div>
           <div>
             <span className="text-[11px] font-bold uppercase tracking-[0.14em] text-[#888888]">
-              Dokumen Resmi
+              {eyebrow}
             </span>
             <h3 className="text-[20px] sm:text-[22px] font-extrabold text-[#111111]">
-              Unduh Pitchdeck Resmi
+              {title}
             </h3>
           </div>
         </div>
 
         <p className="text-[14px] text-[#555555] leading-relaxed mb-6">
-          Dapatkan ringkasan eksekutif, analisis pasar ibadah Muslim 2024–2026, roadmap teknologi, struktur penawaran 50 unit equity, dan proyeksi keuangan Nuzultrip.
+          {description}
         </p>
 
         {/* Highlights Preview */}
         <div className="bg-white rounded-2xl p-4 border border-black/10 mb-6 space-y-2 text-[13.5px]">
           <div className="flex items-center justify-between py-1 border-b border-black/[0.05]">
             <span className="text-[#666666]">Format Dokumen:</span>
-            <span className="font-semibold text-[#111111]">PDF Eksekutif (28 Halaman)</span>
+            <span className="font-semibold text-[#111111]">{format}</span>
           </div>
           <div className="flex items-center justify-between py-1 border-b border-black/[0.05]">
             <span className="text-[#666666]">Versi Terkini:</span>
-            <span className="font-semibold text-[#111111]">Q1 2025 (Updated)</span>
+            <span className="font-semibold text-[#111111]">{version}</span>
           </div>
           <div className="flex items-center justify-between py-1">
             <span className="text-[#666666]">Kerahasiaan:</span>
             <span className="font-semibold text-emerald-700 flex items-center gap-1">
-              <ShieldCheck size={14} /> Terproteksi Confidential
+              <ShieldCheck size={14} /> {confidentiality}
             </span>
           </div>
         </div>
@@ -102,7 +94,7 @@ export const PitchdeckModal: React.FC<PitchdeckModalProps> = ({ isOpen, onClose 
             </div>
             <h4 className="text-[17px] font-bold text-[#111111]">Dokumen Telah Diunduh</h4>
             <p className="text-[13.5px] text-[#666666] mt-1 mb-4">
-              File telah tersimpan di perangkat Anda. Salinan PDF lengkap juga dikirimkan ke <strong>{email}</strong>.
+              Dokumen resmi telah dibuka. Email yang Anda masukkan: <strong>{email}</strong>.
             </p>
             <button
               type="button"
@@ -130,7 +122,7 @@ export const PitchdeckModal: React.FC<PitchdeckModalProps> = ({ isOpen, onClose 
 
             <button
               type="submit"
-              disabled={downloading}
+              disabled={downloading || !documentUrl}
               className="w-full py-3 px-5 rounded-xl bg-[#090909] text-white font-bold text-[14.5px] flex items-center justify-center gap-2 hover:bg-[#222222] active:scale-98 transition-all cursor-pointer disabled:opacity-70"
             >
               {downloading ? (
@@ -141,7 +133,7 @@ export const PitchdeckModal: React.FC<PitchdeckModalProps> = ({ isOpen, onClose 
               ) : (
                 <>
                   <Download size={16} />
-                  <span>Unduh Pitchdeck PDF</span>
+                  <span>{documentUrl ? 'Buka Pitchdeck PDF' : 'Dokumen Belum Tersedia'}</span>
                 </>
               )}
             </button>
