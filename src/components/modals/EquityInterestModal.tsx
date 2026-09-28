@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { X, CheckCircle, Calculator, ShieldCheck, ArrowRight } from 'lucide-react';
 import { usePortalContent } from '../../context/PortalContentContext';
+import { submitEquityInterest } from '../../services/portalInquiry';
 
 interface EquityInterestModalProps {
   isOpen: boolean;
@@ -29,15 +30,23 @@ export const EquityInterestModal: React.FC<EquityInterestModalProps> = ({
   const [email, setEmail] = useState<string>('');
   const [investorType, setInvestorType] = useState<string>('Individu');
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
+  const [isSubmitting,setIsSubmitting]=useState(false);
+  const [submitError,setSubmitError]=useState('');
 
   if (!isOpen) return null;
 
   const totalInvestment = units * pricePerUnit;
   const totalOwnership = (units * sharePercentPerUnit).toFixed(1);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitted(true);
+    setIsSubmitting(true); setSubmitError('');
+    try {
+      await submitEquityInterest({name,email,phone,investorType,units,ownershipPercent:Number(totalOwnership),investmentValue:totalInvestment});
+      setIsSubmitted(true);
+    } catch(error) {
+      setSubmitError(error instanceof Error ? error.message : 'Pengajuan belum berhasil dikirim. Silakan coba kembali.');
+    } finally { setIsSubmitting(false); }
   };
 
   const handleReset = () => {
@@ -191,6 +200,7 @@ export const EquityInterestModal: React.FC<EquityInterestModalProps> = ({
 
             {/* Form Fields */}
             <form onSubmit={handleSubmit} className="space-y-4">
+              {submitError&&<div className="rounded-xl bg-red-50 border border-red-200 px-3 py-2 text-[12px] text-red-700">{submitError}</div>}
               <div>
                 <label className="block text-[13px] font-bold text-[#111111] mb-1">
                   Nama Lengkap Sesuai KTP *
@@ -260,9 +270,10 @@ export const EquityInterestModal: React.FC<EquityInterestModalProps> = ({
               <div className="pt-3">
                 <button
                   type="submit"
+                  disabled={isSubmitting}
                   className="w-full py-3.5 px-6 rounded-xl bg-[#090909] text-white font-bold text-[15px] flex items-center justify-center gap-2 hover:bg-[#222222] active:scale-98 transition-all shadow-md cursor-pointer"
                 >
-                  <span>Kirim Pengajuan Minat</span>
+                  <span>{isSubmitting?'Mengirim Pengajuan...':'Kirim Pengajuan Minat'}</span>
                   <ArrowRight size={16} />
                 </button>
                 <p className="text-[11.5px] text-[#777777] text-center mt-2.5">
