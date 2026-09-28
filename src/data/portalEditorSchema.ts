@@ -157,6 +157,6 @@ export const PORTAL_SECTION_DEFINITIONS:PortalSectionDefinition[]=[
   {key:'networkDetailJson',label:'Popup Detail Jaringan (JSON)',kind:'json-object',value:'{}'},
   {key:'loginJson',label:'Popup Login (JSON)',kind:'json-object',value:'{}'},
   {key:'pitchdeckJson',label:'Popup Pitchdeck (JSON)',kind:'json-object',value:'{}'},
-  {key:'interestJson',label:'Popup Minat Equity (JSON)',kind:'json-object',value:'{}'}
+  {key:'interestJson',label:'Popup Minat Equity (JSON)',kind:'json-object',value:'{"title":"Ajukan Minat Equity","eyebrow":"Formulir Resmi Calon Investor","description":"Langkah awal pendaftaran kepemilikan unit equity Nuzultrip. Tanpa komitmen finansial di muka.","pricePerUnit":100000000,"maxUnits":50,"whatsappUrl":""}'}
  ]}
 ];
