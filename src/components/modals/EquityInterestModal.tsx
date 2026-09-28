@@ -24,6 +24,11 @@ export const EquityInterestModal: React.FC<EquityInterestModalProps> = ({
   const eyebrow = typeof cfg.eyebrow === 'string' ? cfg.eyebrow : 'Formulir Resmi Calon Investor';
   const description = typeof cfg.description === 'string' ? cfg.description : 'Langkah awal pendaftaran kepemilikan unit equity Nuzultrip. Tanpa komitmen finansial di muka.';
   const whatsappUrl = typeof cfg.whatsappUrl === 'string' ? cfg.whatsappUrl : (typeof quickCms.whatsappUrl === 'string' ? quickCms.whatsappUrl : '');
+  const successTitle = typeof cfg.successTitle === 'string' ? cfg.successTitle : '{successTitle}';
+  const successMessage = typeof cfg.successMessage === 'string' ? cfg.successMessage : 'Tim Investor Relations Nuzultrip akan menghubungi Anda melalui WhatsApp dalam waktu 1x24 jam untuk verifikasi dokumen dan pengiriman Memorandum Informasi resmi.';
+  const calculatorLabel = typeof cfg.calculatorLabel === 'string' ? cfg.calculatorLabel : 'Kalkulator Unit Equity';
+  const confirmWhatsappLabel = typeof cfg.confirmWhatsappLabel === 'string' ? cfg.confirmWhatsappLabel : 'Konfirmasi via WhatsApp';
+  const doneLabel = typeof cfg.doneLabel === 'string' ? cfg.doneLabel : 'Selesai';
   const [units, setUnits] = useState<number>(1);
   const [name, setName] = useState<string>('');
   const [phone, setPhone] = useState<string>('');
@@ -82,7 +87,7 @@ export const EquityInterestModal: React.FC<EquityInterestModalProps> = ({
               Pengajuan Minat Diterima
             </h3>
             <p className="text-[14.5px] text-[#555555] leading-relaxed max-w-[420px] mx-auto mb-6">
-              Terima kasih, <strong>{name}</strong>. Tim Investor Relations Nuzultrip akan menghubungi Anda melalui WhatsApp ({phone}) dalam waktu 1x24 jam untuk verifikasi dokumen dan pengiriman Memorandum Informasi resmi.
+              Terima kasih, <strong>{name}</strong>. {successMessage} ({phone})
             </p>
 
             <div className="bg-white rounded-2xl p-5 border border-black/10 text-left mb-6 max-w-md mx-auto space-y-2 text-[14px]">
@@ -109,7 +114,7 @@ export const EquityInterestModal: React.FC<EquityInterestModalProps> = ({
                 rel="noopener noreferrer"
                 className="py-3 px-6 rounded-xl bg-[#090909] text-white font-semibold text-[14px] flex items-center justify-center gap-2 hover:bg-[#222222]"
               >
-                <span>Konfirmasi via WhatsApp</span>
+                <span>{confirmWhatsappLabel}</span>
                 <ArrowRight size={15} />
               </a>
               <button
@@ -141,7 +146,7 @@ export const EquityInterestModal: React.FC<EquityInterestModalProps> = ({
               <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center gap-2 text-[13px] font-bold uppercase tracking-wider text-[#555555]">
                   <Calculator size={15} />
-                  <span>Kalkulator Unit Equity</span>
+                  <span>{calculatorLabel}</span>
                 </div>
                 <span className="text-[12px] text-[#888888]">1 Unit = {new Intl.NumberFormat('id-ID',{style:'currency',currency:'IDR',maximumFractionDigits:0}).format(pricePerUnit)}</span>
               </div>
