@@ -4,7 +4,8 @@ export type OwnershipOfferingRow={id:string;name:string;code:string;status:strin
 
 export type InquiryRow={id:string;name:string;email:string;phone:string|null;organization:string|null;message:string;source_page:string|null;status:string;created_at:string};
 export async function listEquityInquiries(){const {data,error}=await client().from('portal_inquiries').select('id,name,email,phone,organization,message,source_page,status,created_at').eq('source_page','equity-interest').order('created_at',{ascending:false});if(error)throw error;return (data||[]) as InquiryRow[]}
-export async function setInquiryStatus(id:string,status:'new'|'in_progress'|'converted'|'closed'){const {error}=await client().schema('app').rpc('set_portal_inquiry_status',{p_inquiry_id:id,p_status:status});if(error)throw error}
+export async function setInquiryStatus(id:string,status:'new'|'in_progress'|'closed'){const {error}=await client().schema('app').rpc('set_portal_inquiry_status',{p_inquiry_id:id,p_status:status});if(error)throw error}
+export async function convertInquiryToInvestor(inquiry_id:string,investor_id:string){const {error}=await client().schema('app').rpc('convert_portal_inquiry_to_investor',{p_inquiry_id:inquiry_id,p_investor_id:investor_id});if(error)throw error}
 export type DistributionRow={id:string;investor_user_id:string;period:string;amount:number;status:string;paid_at:string|null;notes:string|null;created_at:string};
 export type FinanceRow={id:string;entry_date:string;type:'income'|'expense';category:string;description:string;amount:number;reference_no:string|null};
 export type DocumentRow={id:string;title:string;category:string;file_url:string;audience:string;published:boolean;status:string;created_at:string};
