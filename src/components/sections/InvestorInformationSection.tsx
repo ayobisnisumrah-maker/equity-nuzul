@@ -18,6 +18,7 @@ export const InvestorInformationSection: React.FC<InvestorInformationSectionProp
   const eyebrow = typeof cms.eyebrow === 'string' ? cms.eyebrow : 'INFORMASI INVESTOR';
   const headline = typeof cms.headline === 'string' ? cms.headline : 'Informasi penting dalam satu tempat';
   const moreLabel = typeof cms.moreLabel === 'string' ? cms.moreLabel : 'Selengkapnya';
+  const highlightWord = typeof cms.highlightWord === 'string' ? cms.highlightWord : 'tempat';
   const items = Array.isArray(cms.itemsJson) && cms.itemsJson.length ? cms.itemsJson as InvestorInfoItem[] : INVESTOR_INFO_LIST;
   const [hoveredCard, setHoveredCard] = useState<string | null>(null);
   const activeId = hoveredCard || items[0].id;
@@ -35,7 +36,7 @@ export const InvestorInformationSection: React.FC<InvestorInformationSectionProp
             as="h2"
             text={headline}
             className="font-h2 font-bold text-[#111111] leading-[1.08] tracking-tight"
-            highlightWord="tempat"
+            highlightWord={highlightWord}
             highlightClass="text-emerald-600"
           />
         </div>
