@@ -9,6 +9,10 @@ export const PORTAL_SECTION_DEFINITIONS:PortalSectionDefinition[]=[
   {key:'announcementText',label:'Isi Pengumuman',kind:'textarea',value:'dijadwalkan pada 20 Oktober 2026. Laporan Triwulan II telah terbit.'},
   {key:'loginLabel',label:'Tombol Masuk',kind:'text',value:'Masuk'},
   {key:'announcementTooltip',label:'Tooltip Pengumuman',kind:'text',value:'Klik untuk melihat rincian pengumuman resmi'},
+  {key:'announcementSchedule',label:'Jadwal Singkat Pengumuman',kind:'text',value:'Jadwal: 20 Okt 2026'},
+  {key:'announcementDetailLabel',label:'Label Detail Pengumuman',kind:'text',value:'Detail'},
+  {key:'announcementCloseLabel',label:'Label Tutup Pengumuman',kind:'text',value:'Tutup Pengumuman'},
+  {key:'announcementOpenLabel',label:'Label Buka Pengumuman',kind:'text',value:'Buka Pengumuman RUPS'},
   {key:'logoUrl',label:'Logo Header',kind:'url',value:''},
   {key:'interestLabel',label:'CTA Minat Mobile',kind:'text',value:'Ajukan Minat Equity'},
   {key:'investorLoginLabel',label:'Tombol Login Investor Mobile',kind:'text',value:'Masuk Portal Investor'},
@@ -77,6 +81,9 @@ export const PORTAL_SECTION_DEFINITIONS:PortalSectionDefinition[]=[
   {key:'eyebrow',label:'Eyebrow',kind:'text',value:'ALUR & TAHAPAN INVESTASI'},
   {key:'headline',label:'Headline',kind:'text',value:'Langkah Mudah Menjadi Bagian dari Kami'},
   {key:'description',label:'Deskripsi',kind:'textarea',value:'Empat tahapan transparan dan berkepastian hukum untuk menjadi pemegang unit equity resmi ekosistem Nuzultrip.'},
+  {key:'highlightWord',label:'Kata Highlight',kind:'text',value:'Kami'},
+  {key:'estimateLabel',label:'Label Estimasi',kind:'text',value:'Estimasi'},
+  {key:'outputLabel',label:'Label Output',kind:'text',value:'Output'},
   {key:'primaryCta',label:'CTA Utama',kind:'text',value:'Ajukan Minat Unit Equity'},
   {key:'secondaryCta',label:'CTA Detail',kind:'text',value:'Pelajari Prosedur Lengkap'},
   {key:'stepsJson',label:'Tahapan Proses (JSON)',kind:'json-list',value:'[]'}
@@ -85,6 +92,10 @@ export const PORTAL_SECTION_DEFINITIONS:PortalSectionDefinition[]=[
   {key:'eyebrow',label:'Eyebrow',kind:'text',value:'ROADMAP PERUSAHAAN'},
   {key:'headline',label:'Headline',kind:'text',value:'Peta Jalan Pertumbuhan Nuzultrip'},
   {key:'description',label:'Deskripsi',kind:'textarea',value:'Tahapan strategis pengembangan bisnis, platform teknologi, dan tata kelola investasi jangka panjang.'},
+  {key:'highlightWord',label:'Kata Highlight',kind:'text',value:'Nuzultrip'},
+  {key:'phaseLabel',label:'Label Fase',kind:'text',value:'Fase'},
+  {key:'swipeLabel',label:'Petunjuk Swipe Mobile',kind:'text',value:'Geser card ke samping'},
+  {key:'previousLabel',label:'Label Tombol Sebelumnya',kind:'text',value:'Sebelumnya'},
   {key:'phasesJson',label:'Fase Roadmap (JSON)',kind:'json-list',value:'[]'}
  ]},
  {key:'network',label:'Jaringan & Mitra',description:'Konten jaringan, mitra dan gambar.',fields:[

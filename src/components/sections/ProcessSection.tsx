@@ -82,6 +82,9 @@ export const ProcessSection: React.FC<ProcessSectionProps> = ({
   const description = typeof cms.description === 'string' ? cms.description : 'Empat tahapan transparan dan berkepastian hukum untuk menjadi pemegang unit equity resmi ekosistem Nuzultrip.';
   const primaryCta = typeof cms.primaryCta === 'string' ? cms.primaryCta : 'Ajukan Minat Unit Equity';
   const secondaryCta = typeof cms.secondaryCta === 'string' ? cms.secondaryCta : 'Pelajari Prosedur Lengkap';
+  const highlightWord=typeof cms.highlightWord==='string'?cms.highlightWord:'Kami';
+  const estimateLabel=typeof cms.estimateLabel==='string'?cms.estimateLabel:'Estimasi';
+  const outputLabel=typeof cms.outputLabel==='string'?cms.outputLabel:'Output';
   const rawSteps = Array.isArray(cms.stepsJson) && cms.stepsJson.length === 4 ? cms.stepsJson as Array<Omit<StepItem, 'icon'> & { iconName?: string }> : null;
   const iconFor = (name: string | undefined, index: number) => {
     const icons = [FileText, SearchCheck, Scale, Award];
@@ -112,7 +115,7 @@ export const ProcessSection: React.FC<ProcessSectionProps> = ({
               as="h2"
               text={headline}
               className="font-h2 font-bold text-white leading-[1.14] tracking-tight justify-center text-center"
-              highlightWord="Kami"
+              highlightWord={highlightWord}
               highlightClass="text-emerald-400"
             />
           </div>
@@ -196,7 +199,7 @@ export const ProcessSection: React.FC<ProcessSectionProps> = ({
                     <div className="flex items-center justify-between text-xs text-white/50">
                       <span className="flex items-center gap-1.5">
                         <Clock size={12} className="text-emerald-400/80" />
-                        <span>Estimasi</span>
+                        <span>{estimateLabel}</span>
                       </span>
                       <span className="font-semibold text-white/80">{step.duration}</span>
                     </div>
@@ -204,7 +207,7 @@ export const ProcessSection: React.FC<ProcessSectionProps> = ({
                     <div className="flex items-center justify-between text-xs">
                       <span className="flex items-center gap-1.5 text-white/50">
                         <ShieldCheck size={12} className="text-emerald-400/80" />
-                        <span>Output</span>
+                        <span>{outputLabel}</span>
                       </span>
                       <span className="font-medium text-emerald-300/90 truncate max-w-[150px]">
                         {step.output}
