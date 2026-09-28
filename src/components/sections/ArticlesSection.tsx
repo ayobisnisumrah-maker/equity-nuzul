@@ -19,6 +19,7 @@ export const ArticlesSection: React.FC<ArticlesSectionProps> = ({ onSelectArticl
   const description = typeof cms.description === 'string' ? cms.description : 'Analisis pasar, panduan investasi syariah, dan pembaruan strategis industri perjalanan ibadah Indonesia.';
   const moreCta = typeof cms.moreCta === 'string' ? cms.moreCta : 'Lebih Artikel Lainnya';
   const readMore = typeof cms.readMore === 'string' ? cms.readMore : 'Baca Selengkapnya';
+  const highlightWord = typeof cms.highlightWord === 'string' ? cms.highlightWord : 'Keputusan.';
   const articles = Array.isArray(cms.itemsJson) && cms.itemsJson.length ? cms.itemsJson as ArticleItem[] : ARTICLES_LIST;
   return (
     <section
@@ -36,7 +37,7 @@ export const ArticlesSection: React.FC<ArticlesSectionProps> = ({ onSelectArticl
                   as="h2"
                   text={headline}
                   className="font-h2 font-bold text-[#111111] leading-[1.08] tracking-tight"
-                  highlightWord="Keputusan."
+                  highlightWord={highlightWord}
                   highlightClass="text-emerald-600"
                 />
               </div>
