@@ -3,18 +3,20 @@ import {supabase} from '../lib/supabase';
 const db=()=>{if(!supabase)throw new Error('Supabase belum dikonfigurasi.');return supabase};
 
 export async function getAdminSummary(){
- const [investors,documents,invoices,payments,refunds,expenses]=await Promise.all([
+ const [investors,documents,invoices,items,payments,refunds,expenses]=await Promise.all([
   db().from('investors').select('id,status',{count:'exact'}),
   db().from('documents').select('id',{count:'exact'}),
   db().from('finance_invoices').select('id,status,grand_total,paid_total,refunded_total'),
+  db().from('finance_invoice_items').select('invoice_id,quantity,unit_label'),
   db().from('finance_payments').select('id,amount,status,received_at').order('received_at',{ascending:false}).limit(8),
   db().from('finance_refunds').select('id,invoice_id,amount,status'),
   db().from('finance_expenses').select('id,total_amount,status')
  ]);
- for(const result of [investors,documents,invoices,payments,refunds,expenses])if(result.error)throw result.error;
+ for(const result of [investors,documents,invoices,items,payments,refunds,expenses])if(result.error)throw result.error;
 
  const investorRows=investors.data||[];
  const invoiceRows=invoices.data||[];
+ const itemRows=items.data||[];
  const paymentRows=payments.data||[];
  const refundRows=refunds.data||[];
  const expenseRows=expenses.data||[];
@@ -36,6 +38,8 @@ export async function getAdminSummary(){
  const refundedInvoiceIds=new Set(processedRefunds.map(x=>x.invoice_id).filter(Boolean));
  const refundedInvoices=refundedInvoiceIds.size;
  const cancelledInvoices=invoiceRows.filter(x=>x.status==='void').length;
+ const activeInvoiceIds=new Set(activeSales.map(x=>x.id));
+ const pax=itemRows.filter(x=>activeInvoiceIds.has(x.invoice_id)&&String(x.unit_label).toLowerCase()==='pax').reduce((a,x)=>a+Number(x.quantity||0),0);
 
  return {
   investors:investors.count||0,
@@ -53,7 +57,7 @@ export async function getAdminSummary(){
    refund,
    outstanding:salesOutstanding,
    netCash:salesPaid-refund,
-   pax:0,
+   pax,
    paidInvoices,
    dpInvoices,
    refundedInvoices,
@@ -62,5 +66,5 @@ export async function getAdminSummary(){
  };
 }
 
-export async function getPortalSettings(){const {data,error}=await db().from('site_settings').select('key,value').order('key');if(error)throw error;return Object.fromEntries((data||[]).map(x=>[x.key,String(x.value??'')])) as Record<string,string>}
-export async function savePortalSettings(values:Record<string,string>){const user=(await db().auth.getUser()).data.user;if(!user)throw new Error('Sesi admin tidak tersedia.');const rows=Object.entries(values).map(([key,value])=>({key,value,updated_by:user.id,updated_at:new Date().toISOString()}));const {error}=await db().from('site_settings').upsert(rows,{onConflict:'key'});if(error)throw error}
+export async function getPortalSettings(){const {data,error}=await db().from('site_settings').select('key,value').order('key');if(error)throw error;return Object.fromEntries((data||[]).map(x=>[x.key,typeof x.value==='string'?x.value:String(x.value??'')])) as Record<string,string>}
+export async function savePortalSettings(values:Record<string,string>){const user=(await db().auth.getUser()).data.user;if(!user)throw new Error('Sesi admin tidak tersedia.');const existing=await db().from('site_settings').select('key,description,is_public');if(existing.error)throw existing.error;const meta=new Map((existing.data||[]).map(x=>[x.key,x]));const rows=Object.entries(values).map(([key,value])=>({key,value,description:meta.get(key)?.description||key,is_public:meta.get(key)?.is_public??false,updated_by:user.id,updated_at:new Date().toISOString()}));const {error}=await db().from('site_settings').upsert(rows,{onConflict:'key'});if(error)throw error}
