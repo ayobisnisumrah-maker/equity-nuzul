@@ -7,7 +7,7 @@ begin
  if v_actor is null or not app.has_permission('financial_periods.create') then raise exception 'Missing permission: financial_periods.create' using errcode='42501'; end if;
  if p_year<2024 or p_year>2100 or p_month<1 or p_month>12 then raise exception 'Invalid monthly financial period.' using errcode='22023'; end if;
  v_start:=make_date(p_year,p_month,1);
- v_end:=(v_start+interval '1 month-1 day')::date;
+ v_end:=(v_start+interval '1 month'-interval '1 day')::date;
  select * into v_row from public.financial_periods where period_type='monthly' and fiscal_year=p_year and period_index=p_month;
  if found then return v_row; end if;
  insert into public.financial_periods(period_type,fiscal_year,period_index,starts_on,ends_on,currency,status)
