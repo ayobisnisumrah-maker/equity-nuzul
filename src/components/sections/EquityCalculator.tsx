@@ -45,11 +45,11 @@ export const EquityCalculator: React.FC<EquityCalculatorProps> = ({ onOpenIntere
   const calculatorTitle = typeof cms.calculatorTitle === 'string' ? cms.calculatorTitle : 'Simulasi Bagi Hasil';
   const calculatorNote = typeof cms.calculatorNote === 'string' ? cms.calculatorNote : '*Pencairan dividen ditransfer bulanan sesuai pembukuan riil.';
   const calculatorCta = typeof cms.calculatorCta === 'string' ? cms.calculatorCta : 'Ajukan Minat Equity';
-  const unitSelectLabel = typeof cms.unitSelectLabel === 'string' ? cms.unitSelectLabel : '{unitSelectLabel}';
+  const unitSelectLabel = typeof cms.unitSelectLabel === 'string' ? cms.unitSelectLabel : 'Pilih Jumlah Unit';
   const ownershipSuffix = typeof cms.ownershipSuffix === 'string' ? cms.ownershipSuffix : 'Saham';
-  const selectedUnitLabel = typeof cms.selectedUnitLabel === 'string' ? cms.selectedUnitLabel : '{selectedUnitLabel}';
-  const investmentValueLabel = typeof cms.investmentValueLabel === 'string' ? cms.investmentValueLabel : '{investmentValueLabel}';
-  const monthlyShareLabel = typeof cms.monthlyShareLabel === 'string' ? cms.monthlyShareLabel : '{monthlyShareLabel}';
+  const selectedUnitLabel = typeof cms.selectedUnitLabel === 'string' ? cms.selectedUnitLabel : 'Unit Dipilih';
+  const investmentValueLabel = typeof cms.investmentValueLabel === 'string' ? cms.investmentValueLabel : 'Nilai Investasi';
+  const monthlyShareLabel = typeof cms.monthlyShareLabel === 'string' ? cms.monthlyShareLabel : 'Bagi Hasil per Bulan';
   const monthlySuffix = typeof cms.monthlySuffix === 'string' ? cms.monthlySuffix : '/bulan';
   const annualProjectionLabel = typeof cms.annualProjectionLabel === 'string' ? cms.annualProjectionLabel : 'Proyeksi Tahunan';
   const yieldLabel = typeof cms.yieldLabel === 'string' ? cms.yieldLabel : 'Estimasi Yield';
@@ -80,7 +80,7 @@ export const EquityCalculator: React.FC<EquityCalculatorProps> = ({ onOpenIntere
         {/* Label & Frame Persentase Saham */}
         <div className="flex items-center justify-between text-[12px]">
           <span className="font-bold text-[#666666] uppercase tracking-wider">
-            Pilih Jumlah Unit
+            {unitSelectLabel}
           </span>
           <span className="text-[12px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200/80 px-2.5 py-0.5 rounded-full shrink-0">
             {formatPercentage(ownershipPercentage)} {ownershipSuffix}
@@ -107,7 +107,7 @@ export const EquityCalculator: React.FC<EquityCalculatorProps> = ({ onOpenIntere
               value={stepIndex}
               onChange={(e) => setStepIndex(Number(e.target.value))}
               className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20"
-              aria-label="Slider Unit Equity"
+              aria-label={unitSelectLabel}
             />
 
             {/* Thumb Bulat Hijau: Rata Tengah Sempurna */}
@@ -145,7 +145,7 @@ export const EquityCalculator: React.FC<EquityCalculatorProps> = ({ onOpenIntere
         <div className="bg-[#F8F9FA] rounded-xl p-3.5 border border-black/[0.06] flex items-center justify-between">
           <div>
             <span className="text-[11px] font-bold uppercase tracking-wider text-[#777777] block">
-              Unit Dipilih
+              {selectedUnitLabel}
             </span>
             <div className="mt-0.5">
               <span className="text-[18px] sm:text-[19px] font-extrabold text-[#111111]">
@@ -155,7 +155,7 @@ export const EquityCalculator: React.FC<EquityCalculatorProps> = ({ onOpenIntere
           </div>
           <div className="text-right">
             <span className="text-[11px] font-bold uppercase tracking-wider text-[#777777] block">
-              Nilai Investasi
+              {investmentValueLabel}
             </span>
             <span className="text-[15px] sm:text-[16px] font-bold text-[#111111] mt-0.5 block">
               {formatRupiah(totalInvestment)}
@@ -168,7 +168,7 @@ export const EquityCalculator: React.FC<EquityCalculatorProps> = ({ onOpenIntere
       <div className="bg-[#F8F9FA] rounded-xl p-4 border border-black/[0.06] space-y-2.5">
         <div>
           <span className="text-[11px] font-bold uppercase tracking-wider text-[#777777] block">
-            Bagi Hasil per Bulan
+            {monthlyShareLabel}
           </span>
           <div className="flex items-baseline gap-1.5 mt-0.5">
             <span className="text-[23px] sm:text-[25px] font-extrabold text-emerald-700 tracking-tight leading-none">
