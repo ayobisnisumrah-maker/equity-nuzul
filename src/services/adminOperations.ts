@@ -1,5 +1,9 @@
 import {supabase} from '../lib/supabase';
 export type InvestorRow={user_id:string;investor_code:string|null;full_name:string;status:string;units:number;ownership_percent:number;invested_amount:number;created_at:string};
+
+export type InquiryRow={id:string;name:string;email:string;phone:string|null;organization:string|null;message:string;source_page:string|null;status:string;created_at:string};
+export async function listEquityInquiries(){const {data,error}=await client().from('portal_inquiries').select('id,name,email,phone,organization,message,source_page,status,created_at').eq('source_page','equity-interest').order('created_at',{ascending:false});if(error)throw error;return (data||[]) as InquiryRow[]}
+export async function setInquiryStatus(id:string,status:'new'|'in_progress'|'resolved'|'spam'){const {error}=await client().from('portal_inquiries').update({status,handled_at:status==='new'?null:new Date().toISOString()}).eq('id',id);if(error)throw error}
 export type DistributionRow={id:string;investor_user_id:string;period:string;amount:number;status:string;paid_at:string|null;notes:string|null;created_at:string};
 export type FinanceRow={id:string;entry_date:string;type:'income'|'expense';category:string;description:string;amount:number;reference_no:string|null};
 export type DocumentRow={id:string;title:string;category:string;file_url:string;audience:string;published:boolean;status:string;created_at:string};
