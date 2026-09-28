@@ -1,0 +1,2 @@
+-- Production migration: fix_investor_sales_summary_refunds
+-- Applied in Supabase production. Keeps investor aggregate sales outstanding refund-aware.
