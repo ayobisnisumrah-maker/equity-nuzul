@@ -1,0 +1,4 @@
+drop policy if exists document_versions_select_authenticated on public.document_versions;
+create policy document_versions_select_authenticated on public.document_versions for select to authenticated using (app.has_permission('documents.view') or exists (select 1 from public.documents d where d.id=document_versions.document_id and d.published_version_id=document_versions.id and d.status='published' and (d.visibility='public' or (app.current_investor_id() is not null and (d.visibility='investors' or (d.visibility='restricted' and app.investor_granted_document(d.id)))))));
+drop policy if exists document_versions_select_public on public.document_versions;
+create policy document_versions_select_public on public.document_versions for select to anon using (exists (select 1 from public.documents d where d.id=document_versions.document_id and d.published_version_id=document_versions.id and d.status='published' and d.visibility='public'));
