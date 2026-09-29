@@ -72,6 +72,14 @@ export default function App() {
 
   // Restore authenticated Admin/Investor dashboard after refresh and keep role state synced with Supabase Auth.
   useEffect(() => {
+    // Password recovery owns its temporary Supabase session. Do not resolve it
+    // into an Admin/Investor dashboard identity before the password is changed.
+    if (window.location.pathname === '/atur-sandi') {
+      setPortalIdentity(null);
+      setDashboardRole(null);
+      setAuthReady(true);
+      return;
+    }
     if (!supabase) { setAuthReady(true); return; }
     let alive = true;
     const applyUser = async (user: import('@supabase/supabase-js').User | null) => {
