@@ -88,6 +88,9 @@ export default function App() {
         setPortalIdentity(null);
         setDashboardRole(null);
         setAuthReady(true);
+        // Fail closed: a valid Auth session without an active portal identity
+        // must not remain authenticated in the browser.
+        void supabase.auth.signOut();
       }
     };
     void supabase.auth.getSession().then(({ data }) => applyUser(data.session?.user ?? null));
