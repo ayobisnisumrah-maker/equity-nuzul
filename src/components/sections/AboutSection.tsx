@@ -12,7 +12,7 @@ export const AboutSection: React.FC = () => {
   const eyebrow = typeof cms.eyebrow === 'string' ? cms.eyebrow : 'TENTANG KAMI';
   const headline = typeof cms.headline === 'string' ? cms.headline : 'Menghadirkan Inovasi Teknologi dengan Integrasi Berkelanjutan';
     const highlightWord = typeof cms.highlightWord === 'string' ? cms.highlightWord : 'Berkelanjutan';
-  const metrics =const metrics = Array.isArray(cms.metricsJson) && cms.metricsJson.length ? cms.metricsJson as typeof ABOUT_METRICS : ABOUT_METRICS;
+  const metrics = Array.isArray(cms.metricsJson) && cms.metricsJson.length ? cms.metricsJson as typeof ABOUT_METRICS : ABOUT_METRICS;
   return (
     <section
       id="tentang"
