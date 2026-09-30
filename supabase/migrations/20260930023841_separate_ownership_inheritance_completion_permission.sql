@@ -1,0 +1,1 @@
+-- Adds ownership_inheritance.complete, assigned to admin_investor_relations. A table-level guard requires this permission for transition to completed; approval remains with admin_internal.\n
