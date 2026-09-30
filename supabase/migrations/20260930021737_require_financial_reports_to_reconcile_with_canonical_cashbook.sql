@@ -1,0 +1,3 @@
+-- Adds canonical cash reconciliation for financial reports. Confirmed payments minus processed refunds
+-- must equal reported revenue_total, and recorded finance expenses must equal expense_total for the report period.
+-- A report version cannot transition draft -> review unless both values reconcile.
