@@ -42,7 +42,7 @@ export const AdminDashboard:React.FC<{identity:PortalIdentity;onBack:()=>void;on
     active==='kasir'?<CashierModule permissionKeys={permissionKeys}/>:
     active==='keuangan'?<FinanceModule permissionKeys={permissionKeys}/>:
     active==='laporan'?<ReportsModule permissionKeys={permissionKeys}/>:
-    active==='dokumen'?<DocumentsModule permissionKeys={permissionKeys}/>:
+    active==='dokumen'?<DocumentsModule permissionKeys={permissionKeys} roleLabel={roleLabel}/>:
     active==='admin'?<AdminManagement permissionKeys={permissionKeys}/>:
     active==='pengaturan'?<SettingsModule/>:
     null}
