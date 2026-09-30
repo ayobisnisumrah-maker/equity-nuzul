@@ -1,0 +1,1 @@
+-- register_portal_document_asset now rejects finance/ paths and binds declared PDF MIME/byte size to the actual storage.objects metadata before creating finalized media_assets metadata.
