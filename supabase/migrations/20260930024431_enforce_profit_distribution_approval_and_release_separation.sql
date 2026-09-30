@@ -1,0 +1,1 @@
+-- Adds payable_by/payable_at audit fields. For non-Super-Admins, the distribution approver cannot release the same distribution to payable. Payable audit fields become immutable after release.\n
