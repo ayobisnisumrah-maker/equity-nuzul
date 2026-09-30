@@ -1,0 +1,1 @@
+-- Archives the legacy published test report 'Judul TEST 121' by its fixed production UUID.\n-- The row/version is retained for audit; no financial figures or transactions are rewritten.\n-- The migration is conditional and refuses to act if the report is referenced by a distribution.\n
