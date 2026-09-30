@@ -1,0 +1,1 @@
+-- Production guard freezes closed financial periods once referenced by a published report or profit distribution.\n-- Authoritative periods may only progress from closed to locked; locked periods remain immutable.\n
