@@ -21,7 +21,8 @@ export const EquitySection: React.FC<EquitySectionProps> = ({
   const cms = content('equity', {} as Record<string, unknown>);
   const eyebrow = typeof cms.eyebrow === 'string' ? cms.eyebrow : 'PELUANG EQUITY';
   const headline = typeof cms.headline === 'string' ? cms.headline : 'Kesempatan Bertumbuh Bersama';
-  const description = typeof cms.description === 'string' ? cms.description : 'Jadilah bagian dari perjalanan besar Nuzultrip dengan kepemilikan yang jelas, transparan, dan terstruktur.';
+    const highlightWord = typeof cms.highlightWord === 'string' ? cms.highlightWord : 'Bersama';
+  const description =const description = typeof cms.description === 'string' ? cms.description : 'Jadilah bagian dari perjalanan besar Nuzultrip dengan kepemilikan yang jelas, transparan, dan terstruktur.';
   const detailCta = typeof cms.detailCta === 'string' ? cms.detailCta : 'Lebih Detail Penawaran';
   const metrics = Array.isArray(cms.metricsJson) && cms.metricsJson.length ? cms.metricsJson as typeof EQUITY_METRICS : EQUITY_METRICS;
   return (
@@ -40,7 +41,7 @@ export const EquitySection: React.FC<EquitySectionProps> = ({
                   as="h2"
                   text={headline}
                   className="font-h2 font-bold text-[#111111] leading-[1.08] tracking-tight"
-                  highlightWord="Bersama"
+                  highlightWord={highlightWord}
                   highlightClass="text-emerald-600"
                 />
               </div>
