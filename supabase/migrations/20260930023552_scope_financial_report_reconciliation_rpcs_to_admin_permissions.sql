@@ -1,0 +1,2 @@
+-- Financial report cash and operational reconciliation RPCs now require financial_reports.view or financial_reports.update.
+-- This prevents ordinary authenticated investors from querying internal canonical cash, expense, refund and pax reconciliation aggregates by report id.
