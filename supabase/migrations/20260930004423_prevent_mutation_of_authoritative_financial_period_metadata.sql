@@ -1,0 +1,1 @@
+-- Published-report/distribution periods are authoritative and cannot have metadata mutated or remain/re-enter open through updates.\n-- Existing legacy rows are not rewritten by this migration.\n
