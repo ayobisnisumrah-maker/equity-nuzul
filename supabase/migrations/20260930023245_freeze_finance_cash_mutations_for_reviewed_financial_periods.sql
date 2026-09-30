@@ -1,0 +1,1 @@
+-- Freezes cash mutations by recognized cash date. Confirmed payments and processed refunds cannot enter a financial period that is locked or has a report in review/approved/published state.\n
