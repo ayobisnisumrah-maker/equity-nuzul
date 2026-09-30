@@ -1,0 +1,3 @@
+-- Adds operational reconciliation for pax. Canonical pax is counted once per invoice in the period of its
+-- first confirmed payment, only for non-draft/non-void invoices with positive net paid balance.
+-- Financial report draft -> review is rejected when pax_total differs from this canonical value.
