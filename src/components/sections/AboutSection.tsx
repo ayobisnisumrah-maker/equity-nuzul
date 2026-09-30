@@ -11,7 +11,8 @@ export const AboutSection: React.FC = () => {
   const cms = content('about', {} as Record<string, unknown>);
   const eyebrow = typeof cms.eyebrow === 'string' ? cms.eyebrow : 'TENTANG KAMI';
   const headline = typeof cms.headline === 'string' ? cms.headline : 'Menghadirkan Inovasi Teknologi dengan Integrasi Berkelanjutan';
-  const metrics = Array.isArray(cms.metricsJson) && cms.metricsJson.length ? cms.metricsJson as typeof ABOUT_METRICS : ABOUT_METRICS;
+    const highlightWord = typeof cms.highlightWord === 'string' ? cms.highlightWord : 'Berkelanjutan';
+  const metrics =const metrics = Array.isArray(cms.metricsJson) && cms.metricsJson.length ? cms.metricsJson as typeof ABOUT_METRICS : ABOUT_METRICS;
   return (
     <section
       id="tentang"
@@ -26,7 +27,7 @@ export const AboutSection: React.FC = () => {
               as="h2"
               text={headline}
               className="font-h2 font-bold text-[#111111] leading-[1.18] tracking-tight justify-center text-center"
-              highlightWord="Berkelanjutan"
+              highlightWord={highlightWord}
               highlightClass="text-emerald-600"
             />
           </div>
