@@ -1,0 +1,1 @@
+-- Restricts storage UPDATE/DELETE of profit-distribution proof files to allocations that are still payable. Once an allocation is paid, the referenced proof file is immutable audit evidence.
