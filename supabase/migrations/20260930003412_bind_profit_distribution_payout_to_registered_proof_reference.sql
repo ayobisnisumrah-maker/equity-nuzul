@@ -1,0 +1,5 @@
+-- Production hardening for app.mark_profit_distribution_allocation_paid.
+-- Before marking paid it reasserts distribution/allocation integrity, requires a proof,
+-- requires a non-empty proof payment reference, rejects a mismatched caller reference,
+-- and persists the proof reference as the canonical allocation payment reference.
+-- Anonymous execution is revoked.
