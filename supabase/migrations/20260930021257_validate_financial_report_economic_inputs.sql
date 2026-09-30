@@ -1,0 +1,1 @@
+-- Enforces non-negative financial line amounts, canonical IDR/classification for revenue_total and expense_total,\n-- unique line/KPI keys per report version, and non-negative pax_total.\n
