@@ -1,0 +1,3 @@
+alter table public.profit_distributions add column if not exists operating_expense_amount numeric(20,2) not null default 0, add column if not exists opex_rate_bps integer not null default 1000;
+alter table public.profit_distributions add constraint profit_distributions_operating_expense_nonnegative check (operating_expense_amount>=0), add constraint profit_distributions_opex_rate_valid check (opex_rate_bps between 0 and 10000);
+-- Production migration also replaces app.create_profit_distribution and app.assert_profit_distribution_snapshot so operating expense is separated from the fixed 10% equity-program OPEX and distributable profit is calculated after that OPEX.
