@@ -19,7 +19,7 @@ export const CompanySection: React.FC<CompanySectionProps> = ({ onOpenDetail }) 
     const highlightWord = typeof cms.highlightWord === 'string' ? cms.highlightWord : 'Bertumbuh';
   const credential = typeof cms.credential === 'string' ? cms.credential : 'Amanah';
   const credentialDescription = typeof cms.credentialDescription === 'string' ? cms.credentialDescription : 'Terverifikasi PPIU Kemenag';
-  const description =const description = typeof cms.description === 'string' ? cms.description : 'Menghadirkan layanan perjalanan ibadah yang bermakna melalui layanan, jaringan, dan teknologi.';
+  const description = typeof cms.description === 'string' ? cms.description : 'Menghadirkan layanan perjalanan ibadah yang bermakna melalui layanan, jaringan, dan teknologi.';
   const detailCta = typeof cms.detailCta === 'string' ? cms.detailCta : 'Lebih Detail Penawaran';
   const metrics = Array.isArray(cms.metricsJson) && cms.metricsJson.length ? cms.metricsJson as typeof COMPANY_METRICS : COMPANY_METRICS;
   const images = Array.isArray(cms.imagesJson) && cms.imagesJson.length === 5 && cms.imagesJson.every((v) => typeof v === 'string') ? cms.imagesJson as string[] : IMAGES.companySlices;
@@ -204,7 +204,7 @@ export const CompanySection: React.FC<CompanySectionProps> = ({ onOpenDetail }) 
                         : 'text-[#111111] group-hover:text-black'
                     }`}
                   >
-                    Amanah
+                    {credential}
                   </div>
                   {activeImageIndex === 4 && (
                     <span className="w-1.5 h-1.5 rounded-full bg-[#111111] animate-pulse" />
@@ -217,7 +217,7 @@ export const CompanySection: React.FC<CompanySectionProps> = ({ onOpenDetail }) 
                       : 'text-[#666666] group-hover:text-[#333333]'
                   }`}
                 >
-                  Terverifikasi PPIU Kemenag
+                  {credentialDescription}
                 </p>
               </div>
             </div>
