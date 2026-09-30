@@ -1,0 +1,1 @@
+-- Aligns investor monthly pax with canonical reporting: count invoice pax once in the month of first confirmed payment, excluding draft/void and zero-net-paid invoices.\n
