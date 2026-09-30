@@ -1,0 +1,2 @@
+-- Canonical CMS media upload uses the existing public-media bucket and media_assets registry.
+-- Adds authenticated portal.update INSERT, unregistered-only cleanup DELETE, and app.register_portal_public_media(...) which verifies owner, MIME and actual storage size.
