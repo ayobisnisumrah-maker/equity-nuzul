@@ -1,0 +1,4 @@
+-- Adds finance_payments.create to admin_finance_reporting.
+-- Production migration replaces app.record_finance_payment to require the dedicated
+-- permission while retaining semantic idempotency, invoice locking, outstanding cap,
+-- pending-only creation, and concurrent duplicate recovery. Anonymous execution revoked.
