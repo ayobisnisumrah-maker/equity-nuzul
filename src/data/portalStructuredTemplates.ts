@@ -1,7 +1,8 @@
-export type StructuredTemplate={label:string;fields:Record<string,string|number|string[]>;imageFields?:string[]};
+export type StructuredTemplate={label:string;fields:Record<string,string|number|string[]>;imageFields?:string[];stringArray?:boolean};
 export const STRUCTURED_TEMPLATES:Record<string,StructuredTemplate>={
  'about.metricsJson':{label:'Metrik',fields:{id:'',value:0,prefix:'',suffix:'',label:'',description:''}},
  'equity.metricsJson':{label:'Metrik Equity',fields:{id:'',value:0,prefix:'',suffix:'',label:''}},
+ 'company.imagesJson':{label:'Gambar Galeri',fields:{},stringArray:true},
  'company.metricsJson':{label:'Metrik Perusahaan',fields:{id:'',value:0,prefix:'',suffix:'',label:''}},
  'services.itemsJson':{label:'Layanan',fields:{id:'',code:'',title:'',tagline:'',description:'',iconName:''}},
  'process.stepsJson':{label:'Tahapan',fields:{id:'',stepNumber:'',title:'',description:'',duration:'',output:''}},
