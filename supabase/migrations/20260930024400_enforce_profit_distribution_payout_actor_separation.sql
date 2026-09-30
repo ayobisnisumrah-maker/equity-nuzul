@@ -1,0 +1,1 @@
+-- Adds paid_by to profit distribution allocations. For non-Super-Admin payouts, the actor marking an allocation paid cannot be the proof uploader, distribution creator, or distribution approver. paid_by is immutable after payout.\n
