@@ -1,0 +1,6 @@
+-- Adds app.assert_profit_distribution_allocations(uuid) and invokes it from
+-- app.transition_profit_distribution before review/approval/payable transitions.
+-- The production function validates the authoritative financial snapshot,
+-- aggregate allocation <= investor pool, ownership bps <= investor pool bps,
+-- each allocation amount = round(distributable profit * ownership_bps / 10000, 2),
+-- and prevents duplicate active allocations for a holding.
