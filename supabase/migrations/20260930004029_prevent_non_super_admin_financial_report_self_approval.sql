@@ -1,0 +1,2 @@
+-- Production trigger prevents non-Super-Admin report owner/version creator from approving
+-- that same financial report version. Super Admin remains an explicit operational exception.
