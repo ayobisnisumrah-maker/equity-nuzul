@@ -1,0 +1,2 @@
+-- Adds app.close_financial_period(uuid). Requires financial_periods.close, canonical calendar identity,
+-- open status, and period end date not in the future. Anonymous execution is revoked.
