@@ -1,0 +1,1 @@
+-- Adds app.create_canonical_financial_period. Admin supplies type/year/index; server derives exact calendar dates.\n-- Requires financial_periods.create and rejects duplicate type/year/index.\n
