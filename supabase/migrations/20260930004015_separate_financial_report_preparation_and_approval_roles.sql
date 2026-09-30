@@ -1,0 +1,4 @@
+-- Financial report separation of duties.
+-- admin_finance_reporting: create/update/review/view.
+-- admin_internal: approve/publish/view.
+-- Direct delete permission removed from both operational roles; Super Admin bypass remains.
