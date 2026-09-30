@@ -1,0 +1,1 @@
+-- Financial line items and KPIs are mutable only while their report version is draft.\n-- Submission to review freezes figures so approval, publication and investor distribution use the reviewed snapshot.\n
