@@ -1,0 +1,1 @@
+-- Ownership sale approval/rejection remains with admin_internal. process and complete permissions move to admin_investor_relations, enforcing cross-role execution.\n
