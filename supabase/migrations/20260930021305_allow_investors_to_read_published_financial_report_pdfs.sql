@@ -1,0 +1,1 @@
+-- Private financial-documents storage remains private. Authenticated investors may SELECT only objects linked\n-- to the published version of an investors-visible published financial report. Draft/review/approved/archived files remain inaccessible.\n
