@@ -1,0 +1,1 @@
+-- Rejects confirmed payment received_at timestamps that are null or materially in the future before applying financial-period freeze checks.\n
