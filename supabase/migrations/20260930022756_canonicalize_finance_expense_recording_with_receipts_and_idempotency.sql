@@ -1,0 +1,1 @@
+-- Canonical finance expense recording: dedicated permission, mandatory finalized receipt under finance/expenses/, idempotency key, direct INSERT removal, and recorded-row immutability.\n-- New expenses are rejected when their financial period already has a report in review/approved/published state.\n
