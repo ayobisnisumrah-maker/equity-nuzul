@@ -1,0 +1,1 @@
+-- Adds finance_expenses.void and canonical app.void_finance_expense. Recorded expenses can only transition to void through this RPC, with a reason, before report review/publication freezes the period.\n
