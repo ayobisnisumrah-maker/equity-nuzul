@@ -43,8 +43,8 @@ export async function voidSalesInvoice(_invoice_id:string,_reason:string){throw 
 
 
 export type FinancialPeriodRow={id:string;period_type:string;fiscal_year:number;period_index:number;starts_on:string;ends_on:string;currency:string;status:string};
-export async function listFinancialPeriods(){const {data,error}=await client().from('financial_periods').select('id,period_type,fiscal_year,period_index,starts_on,ends_on,currency,status').order('starts_on',{ascending:false});if(error)throw error;return (data||[]) as FinancialPeriodRow[]}
-export async function createMonthlyFinancialPeriod(year:number,month:number){const {data,error}=await client().schema('app').rpc('create_monthly_financial_period',{p_year:year,p_month:month});if(error)throw error;return data as FinancialPeriodRow}
+export async function listFinancialPeriods(){const {data,error}=await client().schema('app').rpc('list_selectable_financial_periods');if(error)throw error;return (data||[]) as FinancialPeriodRow[]}
+export async function createMonthlyFinancialPeriod(year:number,month:number){const {data,error}=await client().schema('app').rpc('create_canonical_financial_period',{p_period_type:'monthly',p_fiscal_year:year,p_period_index:month,p_currency:'IDR'});if(error)throw error;return data as string}
 export async function closeFinancialPeriod(id:string){const {data,error}=await client().from('financial_periods').update({status:'closed'}).eq('id',id).select('id,period_type,fiscal_year,period_index,starts_on,ends_on,currency,status').single();if(error)throw error;return data as FinancialPeriodRow}
 
 export type FinancialReportRow={id:string;financial_period_id:string;title:string;summary:string|null;visibility:string;status:string;current_version_id:string|null;published_version_id:string|null;created_at:string};
