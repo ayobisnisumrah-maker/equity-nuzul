@@ -1,0 +1,4 @@
+-- Adds dangerous permission finance_refunds.process to admin_finance_reporting only.
+-- Production migration also replaces app.process_finance_refund so refund processing
+-- requires the dedicated permission, validates a non-empty reason, confirmed payment,
+-- invoice-wide refundable cap and per-payment refundable cap, and revokes anon execution.
