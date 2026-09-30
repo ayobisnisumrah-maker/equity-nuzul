@@ -1,0 +1,4 @@
+-- Production hardening closes direct REST lifecycle bypass for financial reports and versions.
+-- Status changes are rejected by guards unless app.transition_financial_report opens a
+-- transaction-local transition flag after validating the required review/approve/publish permission.
+-- Draft financial content remains editable through the intended finance preparation workflow.
