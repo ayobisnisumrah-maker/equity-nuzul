@@ -1,0 +1,1 @@
+-- Adds self-scoped investor financial report metadata listing. Requires current active investor identity and\n-- returns only published investor-visible reports with finalized private PDF assets.\n
