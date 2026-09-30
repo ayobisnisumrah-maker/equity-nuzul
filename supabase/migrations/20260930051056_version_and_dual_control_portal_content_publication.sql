@@ -1,0 +1,4 @@
+-- Creates immutable portal_content_versions snapshots for publish/rollback.
+-- public.publish_portal_content(uuid) requires portal.publish and blocks a non-Super Admin from publishing a draft they last edited.
+-- public.rollback_portal_content(uuid,uuid) requires portal.publish, records a new rollback version, and blocks a non-Super Admin from rolling back to a version they originally published.
+-- Version history is SELECT-only to authenticated admins with portal.view.
