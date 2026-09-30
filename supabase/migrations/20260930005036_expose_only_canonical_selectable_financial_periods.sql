@@ -1,0 +1,1 @@
+-- Adds canonical-period predicate/list RPC for dashboard selectors. Only canonical, non-locked periods are selectable.\n-- Report INSERT guard also rejects locked periods, including direct REST writes.\n
