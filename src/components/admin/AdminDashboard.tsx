@@ -37,7 +37,7 @@ export const AdminDashboard:React.FC<{identity:PortalIdentity;onBack:()=>void;on
    <header className="min-h-[78px] bg-white/95 backdrop-blur border-b border-black/[.08] flex items-center px-5 lg:px-10 gap-4 sticky top-0 z-20"><button className="lg:hidden p-2" onClick={()=>setMobile(true)}><Menu size={20}/></button><div className="min-w-0"><p className="text-[10px] uppercase tracking-[.16em] font-bold text-black/35">Control Center</p><h1 className="font-bold text-lg tracking-[-.02em] mt-0.5">{current.label}</h1><p className="text-xs text-black/45 mt-0.5 truncate">{current.description}</p></div><div className="ml-auto hidden md:flex items-center gap-3"><div className="text-right"><p className="text-xs font-bold">{identity.name}</p><p className="text-[11px] text-black/40">{roleLabel}</p></div><div className="w-9 h-9 rounded-full bg-[#111] text-white grid place-items-center text-xs font-bold">{identity.name.slice(0,2).toUpperCase()}</div></div></header>
    <div className="p-4 sm:p-6 lg:p-10 max-w-[1600px] mx-auto">
     {active==='ringkasan'?<AdminSummary/>:
-    active==='portal'?<PortalEditor/>:
+    active==='portal'?<PortalEditor permissionKeys={permissionKeys}/>:
     active==='investor'?<InvestorManagement permissionKeys={permissionKeys}/>:
     active==='kasir'?<CashierModule permissionKeys={permissionKeys}/>:
     active==='keuangan'?<FinanceModule permissionKeys={permissionKeys}/>:
