@@ -103,7 +103,18 @@ export default function App() {
     };
     void supabase.auth.getSession().then(({ data }) => applyUser(data.session?.user ?? null));
     const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => { void applyUser(session?.user ?? null); });
-    return () => { alive = false; listener.subscription.unsubscribe(); };
+    let accountChannel: ReturnType<typeof supabase.channel> | null = null;
+    void supabase.auth.getUser().then(({ data }) => {
+      if (!alive || !data.user) return;
+      accountChannel = supabase.channel(`portal-account-status-${data.user.id}`)
+        .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'user_accounts', filter: `id=eq.${data.user.id}` }, () => { void applyUser(data.user); })
+        .subscribe();
+    });
+    return () => {
+      alive = false;
+      listener.subscription.unsubscribe();
+      if (accountChannel) void supabase.removeChannel(accountChannel);
+    };
   }, []);
 
   useEffect(()=>{const sync=()=>setPath(window.location.pathname);window.addEventListener('popstate',sync);return()=>window.removeEventListener('popstate',sync)},[]);
