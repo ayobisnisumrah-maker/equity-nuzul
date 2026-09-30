@@ -1,0 +1,4 @@
+-- Adds finance_invoices.create and finance_invoices.issue permissions to admin_finance_reporting.
+-- Production migration replaces create_finance_invoice, issue_finance_invoice, and
+-- set_finance_invoice_departure to use dedicated permissions. Departure is editable
+-- only while draft. Anonymous execution is revoked; authenticated/service_role retain RPC access.
