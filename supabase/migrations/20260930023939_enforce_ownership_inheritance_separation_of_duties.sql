@@ -1,0 +1,1 @@
+-- Database guard prevents a non-Super-Admin inheritance approver from completing the same inheritance request.\n
