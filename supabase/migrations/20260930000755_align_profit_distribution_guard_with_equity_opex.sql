@@ -1,0 +1,4 @@
+-- Production migration replaces app.guard_profit_distribution_snapshot_transition.
+-- It reconciles revenue and actual operating expense to the published financial snapshot,
+-- enforces opex_rate_bps = 1000 (10%), validates OPEX and distributable profit,
+-- and freezes distribution economics after review.
