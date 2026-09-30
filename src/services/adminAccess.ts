@@ -4,8 +4,8 @@ export interface AdminAccess{role:string;permissions:AdminModule[];permissionKey
 const permissionMap:Record<Exclude<AdminModule,'ringkasan'>,string[]>={
  portal:['portal.view'],
  investor:['investors.view'],
- kasir:['financial_reports.create','financial_reports.update'],
- keuangan:['financial_periods.view','financial_reports.view','profit_distributions.view'],
+ kasir:['finance_invoices.create','finance_invoices.issue','finance_invoices.update_draft','finance_invoices.void','finance_payments.create','finance_payments.reconcile','finance_payments.fail','finance_refunds.request','finance_refunds.approve','finance_refunds.process'],
+ keuangan:['finance_expenses.record','finance_expenses.void','financial_periods.view','financial_reports.view','profit_distributions.view','profit_distribution_payments.view'],
  laporan:['financial_reports.view','audit_logs.view'],
  dokumen:['documents.view'],
  admin:['admins.view','roles.view'],
