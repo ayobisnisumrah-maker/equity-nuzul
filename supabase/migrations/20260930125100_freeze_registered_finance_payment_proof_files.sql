@@ -1,0 +1,2 @@
+drop policy if exists finance_payment_proofs_admin_delete on storage.objects;
+create policy finance_payment_proofs_admin_delete_unregistered_only on storage.objects for delete to authenticated using(bucket_id='company-documents' and name like 'finance/%' and name not like 'finance/expenses/%' and app.has_permission('finance_payments.reconcile') and not exists(select 1 from public.media_assets m where m.bucket=objects.bucket_id and m.path=objects.name));
