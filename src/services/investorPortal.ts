@@ -6,6 +6,7 @@ export interface InvestorInheritance{id:string;holding_id:string;beneficiary_nam
 export interface InvestorDistribution{id:string;period:string;amount:number;status:string;paid_at:string|null;notes:string|null}
 export interface SalesSummary{invoice_count:number;total_sales:number;payments_received:number;refunds:number;outstanding:number;net_cash:number;paid_count:number;dp_count:number;refunded_count:number;cancelled_count:number;pax:number}
 export interface InvestorDocument{id:string;title:string;category:string;file_url:string;created_at:string}
+export interface InvestorFinancialReport{report_id:string;title:string;period_start:string;period_end:string;published_at:string|null;storage_path:string;original_filename:string}
 const db=()=>{if(!supabase)throw new Error('Supabase belum dikonfigurasi.');return supabase};
 export async function getInvestorDashboardData(){
  const {data:{user}}=await db().auth.getUser();if(!user)throw new Error('Sesi investor tidak tersedia.');
@@ -29,7 +30,10 @@ export async function getInvestorDashboardData(){
  const transactions:InvestorTransaction[]=(ownershipActivity.data||[]).map((t:any)=>({id:t.id,transaction_date:t.transaction_date,reference_no:t.reference_no,description:t.description,amount:Number(t.amount||0),payment_method:t.payment_method,status:t.status}));
  const docs:InvestorDocument[]=(documents.data||[]).map((d:any)=>({id:d.id,title:d.title,category:String(d.kind||'Dokumen'),file_url:d.id,created_at:d.created_at}));
  const raw=Array.isArray(sales.data)?sales.data[0]:sales.data;const salesSummary:SalesSummary={invoice_count:Number(raw?.invoice_count||0),total_sales:Number(raw?.total_sales||0),payments_received:Number(raw?.payments_received||0),refunds:Number(raw?.refunds||0),outstanding:Number(raw?.outstanding||0),net_cash:Number(raw?.net_cash||0),paid_count:Number(raw?.paid_count||0),dp_count:Number(raw?.dp_count||0),refunded_count:Number(raw?.refunded_count||0),cancelled_count:Number(raw?.cancelled_count||0),pax:Number(raw?.pax||0)};
- return {profile,holdings:holdingDetails,inheritance,transactions,distributions,documents:docs,salesSummary};
+ const financialReportsResult=await db().schema('app').rpc('list_investor_financial_reports');if(financialReportsResult.error)throw financialReportsResult.error;const financialReports=(financialReportsResult.data||[]) as InvestorFinancialReport[];
+ return {profile,holdings:holdingDetails,inheritance,transactions,distributions,documents:docs,financialReports,salesSummary};
 }
 
 export async function downloadInvestorDocument(documentId:string){const client=db();const {data,error}=await client.functions.invoke('investor-document-download',{body:{document_id:documentId}});if(error)throw error;if(!data?.url)throw new Error('Tautan dokumen tidak tersedia.');window.open(String(data.url),'_blank','noopener,noreferrer')}
+
+export async function downloadInvestorFinancialReport(path:string,fileName:string){const client=db();const {data,error}=await client.storage.from('financial-documents').download(path);if(error)throw error;const url=URL.createObjectURL(data);const a=document.createElement('a');a.href=url;a.download=fileName||'laporan-keuangan.pdf';a.rel='noopener';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000)}
