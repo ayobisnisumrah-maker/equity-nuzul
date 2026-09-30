@@ -1,0 +1,1 @@
+-- Revocation timestamps are stamped by the database using now(), not trusted from the browser.
