@@ -1,0 +1,1 @@
+-- Adds canonical app.archive_financial_report(uuid). Only published reports may be archived,\n-- reports already referenced by profit distributions are rejected, published evidence remains immutable,\n-- and anonymous execution is revoked.\n
