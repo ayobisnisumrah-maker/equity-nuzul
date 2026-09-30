@@ -22,7 +22,7 @@ export const EquitySection: React.FC<EquitySectionProps> = ({
   const eyebrow = typeof cms.eyebrow === 'string' ? cms.eyebrow : 'PELUANG EQUITY';
   const headline = typeof cms.headline === 'string' ? cms.headline : 'Kesempatan Bertumbuh Bersama';
     const highlightWord = typeof cms.highlightWord === 'string' ? cms.highlightWord : 'Bersama';
-  const description =const description = typeof cms.description === 'string' ? cms.description : 'Jadilah bagian dari perjalanan besar Nuzultrip dengan kepemilikan yang jelas, transparan, dan terstruktur.';
+  const description = typeof cms.description === 'string' ? cms.description : 'Jadilah bagian dari perjalanan besar Nuzultrip dengan kepemilikan yang jelas, transparan, dan terstruktur.';
   const detailCta = typeof cms.detailCta === 'string' ? cms.detailCta : 'Lebih Detail Penawaran';
   const metrics = Array.isArray(cms.metricsJson) && cms.metricsJson.length ? cms.metricsJson as typeof EQUITY_METRICS : EQUITY_METRICS;
   return (
