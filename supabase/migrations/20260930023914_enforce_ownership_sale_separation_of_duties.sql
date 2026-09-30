@@ -1,0 +1,1 @@
+-- Database guard prevents a non-Super-Admin sale approver from processing or completing the same ownership sale, even if future role assignments overlap.\n
