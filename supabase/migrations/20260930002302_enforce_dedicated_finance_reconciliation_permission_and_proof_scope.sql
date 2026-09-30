@@ -1,0 +1,3 @@
+-- Production migration replaces app.reconcile_finance_payment.
+-- Reconciliation now requires finance_payments.reconcile and only accepts finalized,
+-- private company-documents assets under finance/% as bank evidence.
