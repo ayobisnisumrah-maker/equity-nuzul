@@ -1,0 +1,4 @@
+-- Separation of duties for profit distribution.
+-- admin_finance_reporting: create/update/view distributions and view/upload/replace/mark-paid payout proofs.
+-- admin_internal: view/approve/publish distributions and view payout proofs.
+-- Super Admin continues to use the explicit has_permission bypass.
