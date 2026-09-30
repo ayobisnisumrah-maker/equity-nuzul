@@ -1,0 +1,3 @@
+-- Adds app.assert_canonical_financial_period(uuid) and a BEFORE INSERT guard on financial_reports.
+-- New reports cannot reference legacy periods whose dates do not match their monthly/quarterly/yearly identity.
+-- Existing historical reports/periods are retained unchanged for audit.
