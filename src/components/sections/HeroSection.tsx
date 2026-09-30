@@ -34,6 +34,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   const secondaryCta = typeof cms.secondaryCta === 'string' ? cms.secondaryCta : 'Unduh Pitchdeck 2025';
   const highlightsLabel = typeof cms.highlightsLabel === 'string' ? cms.highlightsLabel : 'SOROTAN EKOSISTEM NUZULTRIP';
   const scrollLabel = typeof cms.scrollLabel === 'string' ? cms.scrollLabel : 'Scroll Eksplorasi';
+  const heroImageUrl = typeof cms.heroImageUrl === 'string' && /^https:\/\//i.test(cms.heroImageUrl) ? cms.heroImageUrl : '';
   const highlights = Array.isArray(cms.highlights) && cms.highlights.every((v) => typeof v === 'string') ? cms.highlights as string[] : HIGHLIGHT_BADGES;
   const [isEntranceVisible, setIsEntranceVisible] = useState(false);
   const [scrollY, setScrollY] = useState(0);
@@ -85,6 +86,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
       id="hero"
       className="hero relative overflow-hidden bg-[#131314] text-white min-h-screen flex flex-col justify-between"
     >
+      {/* Optional CMS-controlled hero media. Empty value preserves the original clean hero exactly. */}
+      {heroImageUrl && <div className="absolute inset-0 z-0 pointer-events-none" aria-hidden="true"><img src={heroImageUrl} alt="" className="w-full h-full object-cover opacity-[0.16]"/><div className="absolute inset-0 bg-[#131314]/65"/></div>}
+
       {/* 1. Subtle Floating Micro-Particles Background */}
       <HeroParticles scrollY={scrollY} />
 
