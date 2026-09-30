@@ -1,0 +1,3 @@
+-- Production trigger prevents a non-Super-Admin distribution creator from approving
+-- the same distribution. Super Admin remains an explicit operational exception while
+-- the production system has only one active admin account.
