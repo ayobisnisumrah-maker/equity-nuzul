@@ -1,0 +1,1 @@
+-- Adds app.abandon_unreferenced_portal_document_asset(uuid): only the uploading actor with documents.create may abandon an asset, and only while no document_version references it. Portal media asset deletes otherwise fail closed.
