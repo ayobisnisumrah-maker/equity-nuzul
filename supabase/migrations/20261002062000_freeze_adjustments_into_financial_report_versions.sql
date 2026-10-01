@@ -1,0 +1,9 @@
+-- Freeze prior-period adjustment disclosure into the financial report version at approval.
+-- Production implementation adds:
+-- app.snapshot_financial_report_adjustments(uuid)
+-- app.require_financial_report_adjustment_snapshot() + financial_report_adjustment_snapshot_guard
+-- transition_financial_report now snapshots app.financial_period_adjustment_disclosure(period_id)
+-- into financial_report_versions.structured_content.prior_period_adjustments_snapshot
+-- atomically with review -> approved.
+-- list_investor_financial_report_summaries reads only that published-version snapshot,
+-- never live finance_adjustments, preserving immutable investor reporting.
