@@ -107,3 +107,5 @@ export async function getOperationalBalanceSheet(asOf:string){const {data,error}
 
 export async function getGlTrialBalance(asOf:string){const {data,error}=await client().schema('app').rpc('gl_trial_balance',{p_as_of:asOf});if(error)throw error;return(data||[]).map((x:any)=>({...x,debit:Number(x.debit||0),credit:Number(x.credit||0),balance:Number(x.balance||0)}))}
 export async function getGlIntegrityStatus(){const {data,error}=await client().schema('app').rpc('gl_integrity_status');if(error)throw error;return data as any}
+
+export async function getGlSourceCoverage(){const {data,error}=await client().schema('app').rpc('gl_source_coverage');if(error)throw error;return data as any}
