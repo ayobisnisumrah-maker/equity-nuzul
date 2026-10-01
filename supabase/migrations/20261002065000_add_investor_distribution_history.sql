@@ -1,0 +1,7 @@
+-- Investor self-scoped distribution history.
+-- Production functions:
+-- app.list_current_investor_distribution_history(): returns only the authenticated
+-- investor's payable/paid frozen allocation snapshots and their source report economics.
+-- app.current_investor_distribution_yearly_summary(): yearly totals for entitlement,
+-- paid and payable amounts, sourced only from frozen payout allocations.
+-- PUBLIC/anon execute revoked; authenticated/service_role execute granted.
