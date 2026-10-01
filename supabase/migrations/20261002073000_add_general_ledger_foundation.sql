@@ -1,0 +1,9 @@
+-- General Ledger / Chart of Accounts foundation.
+-- Production creates RLS-protected gl_accounts, gl_journals and gl_journal_lines.
+-- Seeded system accounts cover cash, receivables, refund/distribution liabilities,
+-- contributed capital, retained earnings, revenue, HPP, partner/agent/marketing/payment fees,
+-- OPEX, tax and other expenses.
+-- Posted journals/lines are immutable. app.post_gl_journal(...) requires finance permission,
+-- an open canonical monthly period, idempotency and balanced debit/credit lines.
+-- app.gl_trial_balance(date) and app.gl_integrity_status() provide reporting/integrity checks.
+-- No opening capital or retained earnings values are fabricated.
