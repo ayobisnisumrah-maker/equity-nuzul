@@ -1,0 +1,1 @@
+revoke execute on function app.guard_profit_distribution_payment_proof_append_only() from public,anon,authenticated;
