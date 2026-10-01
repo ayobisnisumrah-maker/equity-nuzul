@@ -122,3 +122,5 @@ export async function rejectGlOpeningRequest(id:string,note:string){const {error
 
 export interface FullBalanceSheet{as_of:string;assets:number;liabilities:number;equity_before_current_profit:number;current_profit:number;equity_total:number;liabilities_and_equity:number;difference:number;balanced:boolean;total_debit:number;total_credit:number}
 export async function getFullBalanceSheet(asOf:string){const {data,error}=await client().schema('app').rpc('full_balance_sheet',{p_as_of:asOf});if(error)throw error;return data as FullBalanceSheet}
+
+export async function reverseGlJournal(journalId:string,reversalDate:string,reason:string){const {data,error}=await client().schema('app').rpc('reverse_gl_journal',{p_journal_id:journalId,p_reversal_date:reversalDate,p_reason:reason.trim()});if(error)throw error;return data as string}
