@@ -1,0 +1,10 @@
+-- Harden profit distributions against drift from the published financial report.
+-- Production adds/updates:
+-- app.assert_profit_distribution_snapshot(uuid): verifies published report/version,
+-- exact canonical period, revenue/expense line items, fixed OPEX 10%, eligible ownership cutoff,
+-- and exact investor pool reconciliation.
+-- app.guard_profit_distribution_transition_snapshot(): revalidates snapshot + allocations on
+-- every transition to review/approved/payable.
+-- app.guard_profit_distribution_report_snapshot(): financial source and amounts immutable after approval.
+-- app.guard_profit_distribution_program_terms(): fixed Nuzultrip Equity program terms:
+-- company share cap 60%, investor pool cap 40%, OPEX 10%.
