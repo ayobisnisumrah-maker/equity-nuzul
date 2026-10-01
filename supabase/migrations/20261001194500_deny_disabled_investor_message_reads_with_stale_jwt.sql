@@ -1,0 +1,3 @@
+create or replace function app.participates_in_thread(p_thread_id uuid) returns boolean language sql stable security definer set search_path='' as $$select exists(select 1 from public.thread_participants tp where tp.thread_id=p_thread_id and tp.user_id=(select auth.uid()) and (app.current_investor_id() is not null or app.has_permission('messages.view')));$$;
+drop policy if exists thread_participants_select_authenticated on public.thread_participants;
+create policy thread_participants_select_authenticated on public.thread_participants for select to authenticated using(app.has_permission('messages.view') or (user_id=app.current_user_id() and app.current_investor_id() is not null));
