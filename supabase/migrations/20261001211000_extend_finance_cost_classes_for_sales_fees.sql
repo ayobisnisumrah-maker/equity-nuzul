@@ -1,0 +1,1 @@
+alter type public.finance_cost_class add value if not exists 'agent_fee';alter type public.finance_cost_class add value if not exists 'partner_fee';alter type public.finance_cost_class add value if not exists 'marketing_fee';alter type public.finance_cost_class add value if not exists 'payment_fee';
