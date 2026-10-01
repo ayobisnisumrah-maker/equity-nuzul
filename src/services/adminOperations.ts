@@ -119,3 +119,6 @@ export async function createGlOpeningRequest(effectiveDate:string,description:st
 export async function submitGlOpeningRequest(id:string){const {error}=await client().schema('app').rpc('submit_gl_opening_request',{p_request_id:id});if(error)throw error}
 export async function approveGlOpeningRequest(id:string,note?:string){const {data,error}=await client().schema('app').rpc('approve_gl_opening_request',{p_request_id:id,p_review_note:note?.trim()||null});if(error)throw error;return data as string}
 export async function rejectGlOpeningRequest(id:string,note:string){const {error}=await client().schema('app').rpc('reject_gl_opening_request',{p_request_id:id,p_review_note:note.trim()});if(error)throw error}
+
+export interface FullBalanceSheet{as_of:string;assets:number;liabilities:number;equity_before_current_profit:number;current_profit:number;equity_total:number;liabilities_and_equity:number;difference:number;balanced:boolean;total_debit:number;total_credit:number}
+export async function getFullBalanceSheet(asOf:string){const {data,error}=await client().schema('app').rpc('full_balance_sheet',{p_as_of:asOf});if(error)throw error;return data as FullBalanceSheet}
