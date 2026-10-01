@@ -3,68 +3,10 @@ import {supabase} from '../lib/supabase';
 const db=()=>{if(!supabase)throw new Error('Supabase belum dikonfigurasi.');return supabase};
 
 export async function getAdminSummary(){
- const [investors,documents,invoices,items,payments,refunds,expenses]=await Promise.all([
-  db().from('investors').select('id,status',{count:'exact'}),
-  db().from('documents').select('id',{count:'exact'}),
-  db().from('finance_invoices').select('id,status,grand_total,paid_total,refunded_total'),
-  db().from('finance_invoice_items').select('invoice_id,quantity,unit_label'),
-  db().from('finance_payments').select('id,amount,status,received_at').order('received_at',{ascending:false}),
-  db().from('finance_refunds').select('id,invoice_id,amount,status'),
-  db().from('finance_expenses').select('id,total_amount,status')
- ]);
- for(const result of [investors,documents,invoices,items,payments,refunds,expenses])if(result.error)throw result.error;
-
- const investorRows=investors.data||[];
- const invoiceRows=invoices.data||[];
- const itemRows=items.data||[];
- const paymentRows=payments.data||[];
- const refundRows=refunds.data||[];
- const expenseRows=expenses.data||[];
-
- const approved=investorRows.filter(x=>['approved','active'].includes(String(x.status))).length;
- const confirmedPayments=paymentRows.filter(x=>x.status==='confirmed');
- const processedRefunds=refundRows.filter(x=>x.status==='processed');
- const activeExpenses=expenseRows.filter(x=>x.status==='recorded');
- const income=confirmedPayments.reduce((a,x)=>a+Number(x.amount||0),0);
- const expense=activeExpenses.reduce((a,x)=>a+Number(x.total_amount||0),0);
- const refund=processedRefunds.reduce((a,x)=>a+Number(x.amount||0),0);
-
- const activeSales=invoiceRows.filter(x=>!['draft','void'].includes(String(x.status)));
- const salesTotal=activeSales.reduce((a,x)=>a+Number(x.grand_total||0),0);
- const salesPaid=activeSales.reduce((a,x)=>a+Number(x.paid_total||0),0);
- const salesNetCash=income-refund-expense;
- const salesOutstanding=activeSales.reduce((a,x)=>a+Math.max(0,Number(x.grand_total||0)-Math.max(0,Number(x.paid_total||0)-Number(x.refunded_total||0))),0);
- const paidInvoices=invoiceRows.filter(x=>x.status==='paid').length;
- const dpInvoices=invoiceRows.filter(x=>x.status==='partially_paid').length;
- const refundedInvoiceIds=new Set(processedRefunds.map(x=>x.invoice_id).filter(Boolean));
- const refundedInvoices=refundedInvoiceIds.size;
- const cancelledInvoices=invoiceRows.filter(x=>x.status==='void').length;
- const activeInvoiceIds=new Set(activeSales.map(x=>x.id));
- const pax=itemRows.filter(x=>activeInvoiceIds.has(x.invoice_id)&&String(x.unit_label).toLowerCase()==='pax').reduce((a,x)=>a+Number(x.quantity||0),0);
-
- return {
-  investors:investors.count||0,
-  approved,
-  cashCount:confirmedPayments.length,
-  income,
-  expense,
-  balance:income-refund-expense,
-  documents:documents.count||0,
-  recentCash:confirmedPayments.slice(0,8),
-  sales:{
-   invoiceCount:activeSales.length,
-   total:salesTotal,
-   paid:salesPaid,
-   refund,
-   outstanding:salesOutstanding,
-   netCash:salesNetCash,
-   pax,
-   paidInvoices,
-   dpInvoices,
-   refundedInvoices,
-   cancelledInvoices
-  }
- };
+ const {data,error}=await db().schema('app').rpc('admin_dashboard_summary');
+ if(error)throw error;
+ if(!data||typeof data!=='object')throw new Error('Ringkasan dashboard tidak tersedia.');
+ return data as {investors:number;approved:number;cashCount:number;income:number;expense:number;balance:number;documents:number;sales:{invoiceCount:number;total:number;paid:number;refund:number;outstanding:number;netCash:number;pax:number;paidInvoices:number;dpInvoices:number;refundedInvoices:number;cancelledInvoices:number}};
 }
 
 export async function getPortalSettings(){const {data,error}=await db().from('site_settings').select('key,value').order('key');if(error)throw error;return Object.fromEntries((data||[]).map(x=>[x.key,typeof x.value==='string'?x.value:String(x.value??'')])) as Record<string,string>}
