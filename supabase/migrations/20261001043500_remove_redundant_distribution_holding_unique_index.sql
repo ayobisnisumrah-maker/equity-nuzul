@@ -1,0 +1,2 @@
+-- The pre-existing distribution_allocations_distribution_holding_key already enforces this invariant.
+drop index if exists public.profit_distribution_allocations_distribution_holding_unique;
