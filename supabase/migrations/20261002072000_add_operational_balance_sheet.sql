@@ -1,0 +1,7 @@
+-- Operational balance sheet.
+-- Production app.balance_sheet_operational(date) reports only canonical balances currently
+-- supported by transaction ledgers: operational cash, customer receivables, refund payable,
+-- and investor distribution payable.
+-- It deliberately returns contributed_capital and retained_earnings as null and
+-- completeness.is_full_balance_sheet=false until canonical opening/capital and other
+-- asset/liability ledgers exist. No balancing plug or inferred equity is permitted.
