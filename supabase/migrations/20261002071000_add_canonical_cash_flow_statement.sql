@@ -1,0 +1,7 @@
+-- Canonical cash flow statement.
+-- Production app.cash_flow_statement(date,date) separates:
+-- operating inflow: confirmed customer receipts;
+-- operating outflow: processed refunds + recorded direct cost, agent/partner/marketing/payment fees, OPEX, tax and other expenses;
+-- equity financing outflow: immutable paid investor profit distributions.
+-- Investor distributions never flow into finance_expenses or P&L.
+-- Permission checked; PUBLIC/anon execute revoked.
