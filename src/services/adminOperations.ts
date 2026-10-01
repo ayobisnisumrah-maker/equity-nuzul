@@ -109,3 +109,13 @@ export async function getGlTrialBalance(asOf:string){const {data,error}=await cl
 export async function getGlIntegrityStatus(){const {data,error}=await client().schema('app').rpc('gl_integrity_status');if(error)throw error;return data as any}
 
 export async function getGlSourceCoverage(){const {data,error}=await client().schema('app').rpc('gl_source_coverage');if(error)throw error;return data as any}
+
+export interface GlAccountRow{id:string;code:string;name:string;account_type:'asset'|'liability'|'equity'|'revenue'|'expense';system_key:string|null}
+export interface GlOpeningLine{account_key:string;debit:number;credit:number;memo?:string}
+export interface GlOpeningRequest{id:string;effective_date:string;description:string;lines:GlOpeningLine[];status:'draft'|'submitted'|'approved'|'rejected'|'posted';idempotency_key:string;created_by:string;submitted_at:string|null;reviewed_by:string|null;reviewed_at:string|null;review_note:string|null;journal_id:string|null;created_at:string}
+export async function listGlAccounts(){const {data,error}=await client().from('gl_accounts').select('id,code,name,account_type,system_key').eq('is_active',true).order('code');if(error)throw error;return(data||[]) as GlAccountRow[]}
+export async function listGlOpeningRequests(){const {data,error}=await client().from('gl_opening_requests').select('id,effective_date,description,lines,status,idempotency_key,created_by,submitted_at,reviewed_by,reviewed_at,review_note,journal_id,created_at').order('created_at',{ascending:false});if(error)throw error;return(data||[]) as GlOpeningRequest[]}
+export async function createGlOpeningRequest(effectiveDate:string,description:string,lines:GlOpeningLine[]){const key='opening:'+crypto.randomUUID();const {data,error}=await client().schema('app').rpc('create_gl_opening_request',{p_effective_date:effectiveDate,p_description:description,p_lines:lines,p_idempotency_key:key});if(error)throw error;return data as string}
+export async function submitGlOpeningRequest(id:string){const {error}=await client().schema('app').rpc('submit_gl_opening_request',{p_request_id:id});if(error)throw error}
+export async function approveGlOpeningRequest(id:string,note?:string){const {data,error}=await client().schema('app').rpc('approve_gl_opening_request',{p_request_id:id,p_review_note:note?.trim()||null});if(error)throw error;return data as string}
+export async function rejectGlOpeningRequest(id:string,note:string){const {error}=await client().schema('app').rpc('reject_gl_opening_request',{p_request_id:id,p_review_note:note.trim()});if(error)throw error}
