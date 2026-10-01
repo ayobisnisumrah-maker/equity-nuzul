@@ -124,3 +124,8 @@ export interface FullBalanceSheet{as_of:string;assets:number;liabilities:number;
 export async function getFullBalanceSheet(asOf:string){const {data,error}=await client().schema('app').rpc('full_balance_sheet',{p_as_of:asOf});if(error)throw error;return data as FullBalanceSheet}
 
 export async function reverseGlJournal(journalId:string,reversalDate:string,reason:string){const {data,error}=await client().schema('app').rpc('reverse_gl_journal',{p_journal_id:journalId,p_reversal_date:reversalDate,p_reason:reason.trim()});if(error)throw error;return data as string}
+
+export interface GlJournalRow{id:string;journal_no:string;journal_date:string;description:string;source_type:string;source_id:string|null;financial_period_id:string|null;status:string;created_by:string|null;created_at:string;idempotency_key:string|null;reversal_of_journal_id:string|null}
+export interface GlJournalLineRow{id:string;account_id:string;code:string;name:string;debit:number;credit:number;memo:string|null}
+export async function listGlJournals(limit=100){const {data,error}=await client().schema('app').rpc('list_gl_journals',{p_limit:limit});if(error)throw error;return(data||[]) as GlJournalRow[]}
+export async function listGlJournalLines(journalId:string){const {data,error}=await client().schema('app').rpc('gl_journal_lines',{p_journal_id:journalId});if(error)throw error;return(data||[]) as GlJournalLineRow[]}
