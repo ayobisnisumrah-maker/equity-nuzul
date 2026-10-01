@@ -32,7 +32,7 @@ export async function getAdminSummary(){
  const activeSales=invoiceRows.filter(x=>!['draft','void'].includes(String(x.status)));
  const salesTotal=activeSales.reduce((a,x)=>a+Number(x.grand_total||0),0);
  const salesPaid=activeSales.reduce((a,x)=>a+Number(x.paid_total||0),0);
- const salesNetPaid=income-refund;
+ const salesNetCash=income-refund-expense;
  const salesOutstanding=activeSales.reduce((a,x)=>a+Math.max(0,Number(x.grand_total||0)-Math.max(0,Number(x.paid_total||0)-Number(x.refunded_total||0))),0);
  const paidInvoices=invoiceRows.filter(x=>x.status==='paid').length;
  const dpInvoices=invoiceRows.filter(x=>x.status==='partially_paid').length;
@@ -57,7 +57,7 @@ export async function getAdminSummary(){
    paid:salesPaid,
    refund,
    outstanding:salesOutstanding,
-   netCash:salesNetPaid,
+   netCash:salesNetCash,
    pax,
    paidInvoices,
    dpInvoices,
