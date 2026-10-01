@@ -1,0 +1,17 @@
+create or replace function app.guard_profit_distribution_self_approval()
+returns trigger language plpgsql security definer set search_path=''
+as $$ begin if new.status='approved' and old.status='review' and new.created_by=auth.uid() then raise exception 'Pembuat distribusi tidak boleh menyetujui distribusinya sendiri.' using errcode='42501';end if;return new;end $$;
+
+create or replace function app.guard_profit_distribution_publish_separation_of_duties()
+returns trigger language plpgsql security definer set search_path=''
+as $$ begin if old.status is distinct from 'payable' and new.status='payable' then new.payable_by:=auth.uid();new.payable_at:=coalesce(new.payable_at,now());if new.approved_by is not null and new.approved_by=new.payable_by then raise exception 'Distribution approver cannot release the same distribution for payment.' using errcode='42501';end if;end if;if old.status in('payable','paid') and (new.payable_by is distinct from old.payable_by or new.payable_at is distinct from old.payable_at) then raise exception 'Distribution payable audit fields are immutable.' using errcode='42501';end if;return new;end $$;
+
+create or replace function app.guard_profit_distribution_payout_separation_of_duties()
+returns trigger language plpgsql security definer set search_path=''
+as $$ declare v_proof_uploader uuid;v_creator uuid;v_approver uuid;begin if old.status is distinct from 'paid' and new.status='paid' then if new.paid_by is null then new.paid_by:=auth.uid();end if;if new.paid_by is distinct from auth.uid() then raise exception 'paid_by must match current actor.' using errcode='42501';end if;select p.uploaded_by into v_proof_uploader from public.profit_distribution_payment_proofs p where p.allocation_id=new.id;select d.created_by,d.approved_by into v_creator,v_approver from public.profit_distributions d where d.id=new.distribution_id;if v_proof_uploader is null then raise exception 'Payment proof uploader is required.' using errcode='23514';end if;if new.paid_by=v_proof_uploader then raise exception 'Payment proof uploader cannot mark the same allocation paid.' using errcode='42501';end if;if new.paid_by=v_creator then raise exception 'Distribution creator cannot mark its allocation paid.' using errcode='42501';end if;if v_approver is not null and new.paid_by=v_approver then raise exception 'Distribution approver cannot mark its allocation paid.' using errcode='42501';end if;end if;if old.status='paid' and new.paid_by is distinct from old.paid_by then raise exception 'paid_by is immutable.' using errcode='42501';end if;return new;end $$;
+
+create or replace function app.guard_profit_distribution_payment_proof_append_only()
+returns trigger language plpgsql security definer set search_path=''
+as $$ begin raise exception 'Bukti pembayaran pembagian hasil bersifat append-only dan tidak dapat diubah atau dihapus setelah diregistrasikan.' using errcode='23514';end $$;
+drop trigger if exists profit_distribution_payment_proof_append_only_guard on public.profit_distribution_payment_proofs;
+create trigger profit_distribution_payment_proof_append_only_guard before update or delete on public.profit_distribution_payment_proofs for each row execute function app.guard_profit_distribution_payment_proof_append_only();
