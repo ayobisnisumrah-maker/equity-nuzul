@@ -1,0 +1,8 @@
+-- Automatic GL posting for canonical transaction sources.
+-- Production installs one-source/one-journal uniqueness and triggers:
+-- confirmed finance payment: Dr Cash / Cr Sales Revenue
+-- processed refund: Dr Sales Revenue / Cr Cash
+-- recorded expense: Dr expense account selected by finance_cost_class / Cr Cash
+-- paid investor distribution cash movement: Dr Distribution Payable / Cr Cash
+-- All journals are checked balanced and source duplication is rejected.
+-- app.gl_source_coverage() reports finalized source records that lack a GL journal.
