@@ -3,7 +3,8 @@ const date=(v:string|null|undefined)=>v?new Date(v.length===10?v+'T00:00:00':v).
 const esc=(v:unknown)=>String(v??'—').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]||m));
 const pct=(bps:number)=>new Intl.NumberFormat('id-ID',{maximumFractionDigits:2}).format(Number(bps||0)/100)+'%';
 export function printInvestorProfitDistributionReceipt(row:any){
- const inv=Array.isArray(row.investors)?row.investors[0]:row.investors||row.inv||{};
+ const liveInv=Array.isArray(row.investors)?row.investors[0]:row.investors||row.inv||{};
+ const inv={reference_code:row.investor_reference_snapshot||liveInv.reference_code,legal_name:row.investor_legal_name_snapshot||liveInv.legal_name,bank_name:row.bank_name_snapshot||liveInv.bank_name,bank_account_name:row.bank_account_name_snapshot||liveInv.bank_account_name,bank_account_number:row.bank_account_number_snapshot||liveInv.bank_account_number};
  const d=Array.isArray(row.profit_distributions)?row.profit_distributions[0]:row.profit_distributions||row.d||{};
  const ref=row.payment_reference||row.payout_workflow?.payment_reference||'—';
  const status=row.status==='paid'?'DIBAYAR':'BELUM DIBAYAR';
