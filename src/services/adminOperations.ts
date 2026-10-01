@@ -102,3 +102,5 @@ export async function getEquityDistributionCashSummary(from?:string,to?:string){
 
 export interface CashFlowStatement{from_date:string;to_date:string;operating:{customer_receipts:number;refunds:number;direct_cost:number;agent_fee:number;partner_fee:number;marketing_fee:number;payment_fee:number;operating_expense:number;tax:number;other_expense:number;total_outflow:number;net_cash_flow:number};equity_financing:{investor_distribution_outflow:number;net_cash_flow:number};net_cash_change:number}
 export async function getCashFlowStatement(from:string,to:string){const {data,error}=await client().schema('app').rpc('cash_flow_statement',{p_from:from,p_to:to});if(error)throw error;return data as CashFlowStatement}
+
+export async function getOperationalBalanceSheet(asOf:string){const {data,error}=await client().schema('app').rpc('balance_sheet_operational',{p_as_of:asOf});if(error)throw error;return data as any}
