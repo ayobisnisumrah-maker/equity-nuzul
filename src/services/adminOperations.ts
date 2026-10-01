@@ -129,3 +129,6 @@ export interface GlJournalRow{id:string;journal_no:string;journal_date:string;de
 export interface GlJournalLineRow{id:string;account_id:string;code:string;name:string;debit:number;credit:number;memo:string|null}
 export async function listGlJournals(limit=100){const {data,error}=await client().schema('app').rpc('list_gl_journals',{p_limit:limit});if(error)throw error;return(data||[]) as GlJournalRow[]}
 export async function listGlJournalLines(journalId:string){const {data,error}=await client().schema('app').rpc('gl_journal_lines',{p_journal_id:journalId});if(error)throw error;return(data||[]) as GlJournalLineRow[]}
+
+export interface PeriodGlCloseStatus{period_id:string;period_status:string;closing_journal_id:string|null;closing_journal_present:boolean;closing_debit:number;closing_credit:number;closing_balanced:boolean}
+export async function getPeriodGlCloseStatus(periodId:string){const {data,error}=await client().schema('app').rpc('period_gl_close_status',{p_period_id:periodId});if(error)throw error;const x:any=data||{};return{...x,closing_debit:Number(x.closing_debit||0),closing_credit:Number(x.closing_credit||0)} as PeriodGlCloseStatus}
