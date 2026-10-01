@@ -44,7 +44,7 @@ export const AdminDashboard:React.FC<{identity:PortalIdentity;onBack:()=>void;on
     active==='laporan'?<ReportsModule permissionKeys={permissionKeys}/>:
     active==='dokumen'?<DocumentsModule permissionKeys={permissionKeys} roleLabel={roleLabel}/>:
     active==='admin'?<AdminManagement permissionKeys={permissionKeys}/>:
-    active==='pengaturan'?<SettingsModule/>:
+    active==='pengaturan'?<SettingsModule permissionKeys={permissionKeys}/>:
     null}
    </div>
   </main>
