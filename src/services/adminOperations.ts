@@ -104,3 +104,6 @@ export interface CashFlowStatement{from_date:string;to_date:string;operating:{cu
 export async function getCashFlowStatement(from:string,to:string){const {data,error}=await client().schema('app').rpc('cash_flow_statement',{p_from:from,p_to:to});if(error)throw error;return data as CashFlowStatement}
 
 export async function getOperationalBalanceSheet(asOf:string){const {data,error}=await client().schema('app').rpc('balance_sheet_operational',{p_as_of:asOf});if(error)throw error;return data as any}
+
+export async function getGlTrialBalance(asOf:string){const {data,error}=await client().schema('app').rpc('gl_trial_balance',{p_as_of:asOf});if(error)throw error;return(data||[]).map((x:any)=>({...x,debit:Number(x.debit||0),credit:Number(x.credit||0),balance:Number(x.balance||0)}))}
+export async function getGlIntegrityStatus(){const {data,error}=await client().schema('app').rpc('gl_integrity_status');if(error)throw error;return data as any}
