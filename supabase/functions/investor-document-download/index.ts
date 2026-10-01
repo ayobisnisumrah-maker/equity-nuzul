@@ -18,7 +18,7 @@ Deno.serve(async(req)=>{
  const visible=await caller.from("documents").select("id,title,status,visibility,published_version_id").eq("id",documentId).eq("status","published").maybeSingle();
  if(visible.error||!visible.data)return json({error:"Dokumen tidak tersedia untuk akun ini"},404,ch);
  const db=createClient(url,service,{auth:{persistSession:false}});
- const {data,error}=await db.from("document_versions").select("id,file_asset:media_assets!document_versions_file_asset_id_fkey(bucket,path,original_filename,mime_type)").eq("id",visible.data.published_version_id).maybeSingle();
+ const {data,error}=await db.from("document_versions").select("id,file_asset:media_assets!document_versions_file_asset_id_fkey(bucket,path,original_filename,mime_type)").eq("id",visible.data.published_version_id).eq("document_id",documentId).eq("status","published").maybeSingle();
  if(error||!data)return json({error:"Versi dokumen tidak tersedia"},404,ch);
  const asset=(data as any).file_asset;if(!asset||asset.mime_type!=="application/pdf"||asset.bucket!=="company-documents")return json({error:"PDF tidak valid"},404,ch);
  const signed=await db.storage.from(asset.bucket).createSignedUrl(asset.path,60,{download:asset.original_filename});
