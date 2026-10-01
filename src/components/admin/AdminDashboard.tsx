@@ -1,6 +1,6 @@
 import React,{useEffect,useMemo,useState} from 'react';
 import {PortalEditor} from './PortalEditor';
-import {CashierModule,DocumentsModule,FinanceModule,ReportsModule} from './OperationsModules';
+import {CashierModule,DocumentsModule,FinanceModule,ReportsModule,OpeningBalanceModule} from './OperationsModules';
 import {InvestorManagement} from './InvestorManagement';
 import {AdminManagement} from './AdminManagement';
 import {AdminSummary,SettingsModule} from './AdminOverview';
@@ -40,7 +40,7 @@ export const AdminDashboard:React.FC<{identity:PortalIdentity;onBack:()=>void;on
     active==='portal'?<PortalEditor permissionKeys={permissionKeys}/>:
     active==='investor'?<InvestorManagement permissionKeys={permissionKeys}/>:
     active==='kasir'?<CashierModule permissionKeys={permissionKeys}/>:
-    active==='keuangan'?<FinanceModule permissionKeys={permissionKeys}/>:
+    active==='keuangan'?<div className="space-y-6"><FinanceModule permissionKeys={permissionKeys}/><OpeningBalanceModule permissionKeys={permissionKeys}/></div>:
     active==='laporan'?<ReportsModule permissionKeys={permissionKeys}/>:
     active==='dokumen'?<DocumentsModule permissionKeys={permissionKeys} roleLabel={roleLabel}/>:
     active==='admin'?<AdminManagement permissionKeys={permissionKeys}/>:
