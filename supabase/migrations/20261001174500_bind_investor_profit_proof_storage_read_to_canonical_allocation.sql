@@ -1,0 +1,2 @@
+drop policy if exists payment_proofs_investor_select_own on storage.objects;
+create policy payment_proofs_investor_select_own on storage.objects for select to authenticated using (bucket_id='profit-distribution-proofs' and app.current_investor_id() is not null and exists (select 1 from public.profit_distribution_payment_proofs pp where pp.storage_bucket=objects.bucket_id and pp.storage_path=objects.name and pp.investor_id=app.current_investor_id() and private.investor_can_read_canonical_distribution(null::uuid,pp.investor_id,pp.allocation_id)));
