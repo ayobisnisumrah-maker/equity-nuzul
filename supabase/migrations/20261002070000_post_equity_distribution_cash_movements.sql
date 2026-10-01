@@ -1,0 +1,6 @@
+-- Equity distribution payouts are financing/equity cash outflows, not P&L expenses.
+-- Production creates public.equity_distribution_cash_movements with RLS and immutable rows.
+-- One unique movement is posted automatically when an investor allocation transitions to Paid.
+-- Posting requires the frozen payout snapshot, payment reference, paid_at and matching transfer proof.
+-- The movement is intentionally excluded from finance_expenses and canonical P&L totals.
+-- app.equity_distribution_cash_summary(date,date) provides permission-checked cash reconciliation.
