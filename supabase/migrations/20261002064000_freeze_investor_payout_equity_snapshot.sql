@@ -1,0 +1,8 @@
+-- Extend immutable payable allocation snapshots.
+-- Production adds units_snapshot, investment_value_snapshot, offering_code_snapshot,
+-- financial_report_version_id_snapshot and financial_report_title_snapshot.
+-- app.snapshot_profit_distribution_allocations(uuid) freezes investor identity/bank,
+-- equity units/value, offering and published financial-report source atomically at Payable.
+-- app.guard_profit_distribution_allocation_payout_snapshot() prevents changes to frozen
+-- identity, bank, equity, report source, ownership, pool share and allocation amount.
+-- app.guard_profit_distribution_payable_snapshot() invokes the snapshot before release.
