@@ -39,6 +39,6 @@ export async function getInvestorDashboardData(){
 
 export async function downloadInvestorDocument(documentId:string){const client=db();const {data,error}=await client.functions.invoke('investor-document-download',{body:{document_id:documentId}});if(error)throw error;if(!data?.url)throw new Error('Tautan dokumen tidak tersedia.');window.open(String(data.url),'_blank','noopener,noreferrer')}
 
-export async function downloadInvestorFinancialReport(path:string,fileName:string){void path;void fileName;throw new Error('Unduhan laporan keuangan langsung dinonaktifkan. Gunakan dokumen investor terdaftar.')}
+export async function downloadRegisteredInvestorDocument(documentNumber:string){const client=db();const {data,error}=await client.functions.invoke('investor-document-download',{body:{document_number:documentNumber}});if(error)throw error;if(!data?.url)throw new Error('Tautan dokumen tidak tersedia.');window.open(String(data.url),'_blank','noopener,noreferrer')}
 
 export async function downloadInvestorDistributionProof(path:string){void path;throw new Error('Unduhan bukti transfer langsung dinonaktifkan. Gunakan akses dokumen investor terotorisasi.')}
