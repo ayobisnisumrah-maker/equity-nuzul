@@ -13,17 +13,15 @@ const db=()=>{if(!supabase)throw new Error('Supabase belum dikonfigurasi.');retu
 export async function getInvestorDashboardData(){
  const {data:{user}}=await db().auth.getUser();if(!user)throw new Error('Sesi investor tidak tersedia.');
  const investor=await db().from('investors').select('id,reference_code,legal_name,status').eq('id',user.id).single();if(investor.error)throw investor.error;if(!['approved','active'].includes(String(investor.data.status)))throw new Error('Akses investor belum aktif.');
- const [holdings,sales,ownershipActivity,portfolioDetails,inheritanceActivity]=await Promise.all([
-  db().from('ownership_holdings').select('id,units,ownership_bps,status').eq('investor_id',user.id).in('status',['reserved','active']),
+ const [sales,ownershipActivity,portfolioDetails,inheritanceActivity]=await Promise.all([
   db().rpc('get_investor_sales_summary'),
   db().rpc('get_investor_ownership_activity'),
   db().rpc('get_investor_equity_portfolio_detail'),
   db().rpc('get_investor_inheritance_activity')
  ]);
- if(holdings.error)throw holdings.error;if(sales.error)throw sales.error;if(ownershipActivity.error)throw ownershipActivity.error;if(portfolioDetails.error)throw portfolioDetails.error;if(inheritanceActivity.error)throw inheritanceActivity.error;
- const hs=holdings.data||[];const units=hs.reduce((s:any,h:any)=>s+Number(h.units||0),0);const bps=hs.reduce((s:any,h:any)=>s+Number(h.ownership_bps||0),0);
+ if(sales.error)throw sales.error;if(ownershipActivity.error)throw ownershipActivity.error;if(portfolioDetails.error)throw portfolioDetails.error;if(inheritanceActivity.error)throw inheritanceActivity.error;
  const holdingDetails:InvestorHolding[]=(portfolioDetails.data||[]).map((h:any)=>({id:h.holding_id,offering_name:h.offering_name,offering_code:h.offering_code,units:Number(h.units||0),ownership_percent:Number(h.ownership_bps||0)/100,unit_price:Number(h.unit_price||0),invested_amount:Number(h.invested_amount||0),acquisition_at:h.acquisition_at,transfer_eligible_at:h.transfer_eligible_at,status:h.status,acquisition_reference:h.acquisition_reference||null}));
- const profile:InvestorPortfolio={investor_code:investor.data.reference_code,full_name:investor.data.legal_name,units,ownership_percent:bps/100,invested_amount:holdingDetails.reduce((sum,h)=>sum+h.invested_amount,0)};
+ const units=holdingDetails.reduce((sum,h)=>sum+h.units,0);const ownershipPercent=holdingDetails.reduce((sum,h)=>sum+h.ownership_percent,0);const profile:InvestorPortfolio={investor_code:investor.data.reference_code,full_name:investor.data.legal_name,units,ownership_percent:ownershipPercent,invested_amount:holdingDetails.reduce((sum,h)=>sum+h.invested_amount,0)};
  const inheritance:InvestorInheritance[]=(inheritanceActivity.data||[]).map((i:any)=>({id:i.id,holding_id:i.holding_id,beneficiary_name:i.beneficiary_name,units:Number(i.units||0),status:i.status,requested_at:i.requested_at,approved_at:i.approved_at||null,completed_at:i.completed_at||null,rejection_reason:i.rejection_reason||null}));
  // Investor transaction history is sourced only from canonical ownership records through a self-scoped SECURITY DEFINER RPC. Customer finance rows remain private.
  const transactions:InvestorTransaction[]=(ownershipActivity.data||[]).map((t:any)=>({id:t.id,transaction_date:t.transaction_date,reference_no:t.reference_no,description:t.description,amount:Number(t.amount||0),payment_method:t.payment_method,status:t.status}));
