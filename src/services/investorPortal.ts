@@ -16,7 +16,7 @@ export async function getInvestorDashboardData(){
  const [holdings,allocations,proofs,documents,sales,ownershipActivity,portfolioDetails,inheritanceActivity]=await Promise.all([
   db().from('ownership_holdings').select('id,units,ownership_bps,status').eq('investor_id',user.id).in('status',['reserved','active']),
   db().from('profit_distribution_allocations').select('id,ownership_bps,investor_pool_share_bps,allocation_amount,status,paid_at,payment_reference,investor_reference_snapshot,investor_legal_name_snapshot,bank_name_snapshot,bank_account_name_snapshot,bank_account_number_snapshot,profit_distributions(period_start,period_end,revenue_amount,operating_expense_amount,opex_rate_bps,opex_amount,profit_amount,investor_pool_bps,investor_pool_amount,notes)').eq('investor_id',user.id).in('status',['payable','paid']).order('created_at',{ascending:false}),
-  db().from('profit_distribution_payment_proofs').select('allocation_id,storage_path,payment_reference').eq('investor_id',user.id),
+  Promise.resolve({data:[],error:null}),
   db().from('documents').select('id,title,kind,created_at,published_version_id').eq('status','published').order('created_at',{ascending:false}),
   db().rpc('get_investor_sales_summary'),
   db().rpc('get_investor_ownership_activity'),
@@ -39,6 +39,6 @@ export async function getInvestorDashboardData(){
 
 export async function downloadInvestorDocument(documentId:string){const client=db();const {data,error}=await client.functions.invoke('investor-document-download',{body:{document_id:documentId}});if(error)throw error;if(!data?.url)throw new Error('Tautan dokumen tidak tersedia.');window.open(String(data.url),'_blank','noopener,noreferrer')}
 
-export async function downloadInvestorFinancialReport(path:string,fileName:string){const client=db();const {data,error}=await client.storage.from('financial-documents').download(path);if(error)throw error;const url=URL.createObjectURL(data);const a=document.createElement('a');a.href=url;a.download=fileName||'laporan-keuangan.pdf';a.rel='noopener';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000)}
+export async function downloadInvestorFinancialReport(path:string,fileName:string){void path;void fileName;throw new Error('Unduhan laporan keuangan langsung dinonaktifkan. Gunakan dokumen investor terdaftar.')}
 
-export async function downloadInvestorDistributionProof(path:string){const client=db();const {data,error}=await client.storage.from('profit-distribution-proofs').download(path);if(error)throw error;const url=URL.createObjectURL(data);const a=document.createElement('a');a.href=url;a.download=path.split('/').pop()||'bukti-bagi-hasil';document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url)}
+export async function downloadInvestorDistributionProof(path:string){void path;throw new Error('Unduhan bukti transfer langsung dinonaktifkan. Gunakan akses dokumen investor terotorisasi.')}
