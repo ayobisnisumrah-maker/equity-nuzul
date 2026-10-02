@@ -106,8 +106,11 @@ export default function App() {
     let accountChannel: ReturnType<typeof supabase.channel> | null = null;
     void supabase.auth.getUser().then(({ data }) => {
       if (!alive || !data.user) return;
-      accountChannel = supabase.channel(`portal-account-status-${data.user.id}`)
-        .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'user_accounts', filter: `id=eq.${data.user.id}` }, () => { void applyUser(data.user); })
+      const refreshIdentity = () => { void applyUser(data.user); };
+      accountChannel = supabase.channel(`portal-identity-${data.user.id}`)
+        .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'user_accounts', filter: `id=eq.${data.user.id}` }, refreshIdentity)
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'investors', filter: `id=eq.${data.user.id}` }, refreshIdentity)
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'ownership_holdings', filter: `investor_id=eq.${data.user.id}` }, refreshIdentity)
         .subscribe();
     });
     return () => {
