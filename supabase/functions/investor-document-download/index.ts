@@ -12,15 +12,26 @@ Deno.serve(async(req)=>{
  const caller=createClient(url,anon,{global:{headers:{Authorization:auth}},auth:{persistSession:false}});
  const {data:{user}}=await caller.auth.getUser();if(!user)return json({error:"Authentication required"},401,ch);
  let body:any;try{body=await req.json()}catch{return json({error:"Invalid JSON"},400,ch)}
- const documentId=String(body.document_id||"");if(!documentId)return json({error:"document_id required"},400,ch);
- // RLS on documents is the authorization boundary: public/investor documents are visible
- // to eligible investors, while restricted documents require an active per-investor grant.
+
+ const documentNumber=String(body.document_number||"").trim();
+ if(documentNumber){
+  const {data,error}=await caller.schema("app").rpc("current_investor_equity_document_delivery",{p_document_number:documentNumber});
+  if(error)return json({error:"Dokumen tidak tersedia untuk akun ini"},404,ch);
+  const delivery=Array.isArray(data)?data[0]:data;
+  if(!delivery?.bucket||!delivery?.path)return json({error:"File dokumen belum tersedia"},404,ch);
+  const db=createClient(url,service,{auth:{persistSession:false}});
+  const signed=await db.storage.from(String(delivery.bucket)).createSignedUrl(String(delivery.path),60,{download:String(delivery.file_name||documentNumber+".pdf")});
+  if(signed.error)return json({error:"Gagal membuat tautan unduhan"},500,ch);
+  return json({document_type:delivery.document_type,document_number:delivery.document_number,file_name:delivery.file_name,url:signed.data.signedUrl},200,ch);
+ }
+
+ const documentId=String(body.document_id||"").trim();if(!documentId)return json({error:"document_number or document_id required"},400,ch);
  const visible=await caller.from("documents").select("id,title,status,visibility,published_version_id").eq("id",documentId).eq("status","published").maybeSingle();
  if(visible.error||!visible.data)return json({error:"Dokumen tidak tersedia untuk akun ini"},404,ch);
  const db=createClient(url,service,{auth:{persistSession:false}});
- const {data,error}=await db.from("document_versions").select("id,file_asset:media_assets!document_versions_file_asset_id_fkey(bucket,path,original_filename,mime_type)").eq("id",visible.data.published_version_id).eq("document_id",documentId).eq("status","published").maybeSingle();
+ const {data,error}=await db.from("document_versions").select("id,file_asset:media_assets!document_versions_file_asset_id_fkey(bucket,path,original_filename,mime_type,finalized_at)").eq("id",visible.data.published_version_id).eq("document_id",documentId).eq("status","published").maybeSingle();
  if(error||!data)return json({error:"Versi dokumen tidak tersedia"},404,ch);
- const asset=(data as any).file_asset;if(!asset||asset.mime_type!=="application/pdf"||asset.bucket!=="company-documents")return json({error:"PDF tidak valid"},404,ch);
+ const asset=(data as any).file_asset;if(!asset||asset.mime_type!=="application/pdf"||asset.bucket!=="company-documents"||!asset.finalized_at)return json({error:"PDF tidak valid"},404,ch);
  const signed=await db.storage.from(asset.bucket).createSignedUrl(asset.path,60,{download:asset.original_filename});
  if(signed.error)return json({error:"Gagal membuat tautan unduhan"},500,ch);
  return json({title:visible.data.title,file_name:asset.original_filename,url:signed.data.signedUrl},200,ch);
