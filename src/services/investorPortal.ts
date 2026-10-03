@@ -50,3 +50,13 @@ export async function getInvestorDistributionStatementPayload(documentNumber:str
  if(!data)throw new Error('Payload laporan pembagian hasil tidak tersedia.');
  return data as any;
 }
+
+
+export async function getInvestorPaymentReceiptPayload(documentNumber:string){
+ const value=String(documentNumber||'').trim();
+ if(!value)throw new Error('Nomor dokumen EQ-PR tidak tersedia.');
+ const {data,error}=await db().schema('app').rpc('equity_payment_receipt_render_payload',{p_document_number:value});
+ if(error)throw error;
+ if(!data)throw new Error('Payload bukti pembagian hasil tidak tersedia.');
+ return data as any;
+}
