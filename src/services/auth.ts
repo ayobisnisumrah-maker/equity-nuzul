@@ -27,7 +27,7 @@ export async function resolvePortalIdentity(user:User):Promise<PortalIdentity>{
  if(!supabase)throw new Error('Supabase belum dikonfigurasi.');
 
  const [{data:routeData,error:routeError},{data:account,error:accountError}]=await Promise.all([
-  supabase.schema('app').rpc('current_session_route'),
+  supabase.rpc('get_current_session_route'),
   supabase.from('user_accounts').select('id,status,full_name').eq('id',user.id).maybeSingle(),
  ]);
  if(routeError)throw routeError;
