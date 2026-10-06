@@ -8,7 +8,8 @@ import { ARTICLES_LIST, ArticleItem } from '../../data/landingData';
 import { usePortalContent } from '../../context/PortalContentContext';
 
 interface ArticlesSectionProps {
-  onSelectArticle: (article: ArticleItem) => void;\n  onOpenMore: () => void;
+  onSelectArticle: (article: ArticleItem) => void;
+  onOpenMore: () => void;
 }
 
 export const ArticlesSection: React.FC<ArticlesSectionProps> = ({ onSelectArticle, onOpenMore }) => {
