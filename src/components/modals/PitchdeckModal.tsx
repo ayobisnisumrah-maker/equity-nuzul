@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { usePortalContent } from '../../context/PortalContentContext';
 import { X, FileText, Download, Check, ShieldCheck } from 'lucide-react';
+import { submitPitchdeckRequest } from '../../services/portalInquiry';
 
 interface PitchdeckModalProps {
   isOpen: boolean;
@@ -11,6 +12,7 @@ export const PitchdeckModal: React.FC<PitchdeckModalProps> = ({ isOpen, onClose 
   const [downloading, setDownloading] = useState(false);
   const [downloaded, setDownloaded] = useState(false);
   const [email, setEmail] = useState('');
+  const [error,setError]=useState('');
   const { content } = usePortalContent();
   const modalCms = content<Record<string, unknown>>('modals', {});
   const cfg = (modalCms.pitchdeckJson && typeof modalCms.pitchdeckJson === 'object' ? modalCms.pitchdeckJson : {}) as Record<string, unknown>;
@@ -24,13 +26,17 @@ export const PitchdeckModal: React.FC<PitchdeckModalProps> = ({ isOpen, onClose 
 
   if (!isOpen) return null;
 
-  const handleDownload = (e: React.FormEvent) => {
+  const handleDownload = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!documentUrl) return;
-    setDownloading(true);
-    window.open(documentUrl, '_blank', 'noopener,noreferrer');
-    setDownloading(false);
-    setDownloaded(true);
+    setDownloading(true); setError('');
+    try {
+      await submitPitchdeckRequest(email);
+      window.open(documentUrl, '_blank', 'noopener,noreferrer');
+      setDownloaded(true);
+    } catch(err) {
+      setError(err instanceof Error?err.message:'Permintaan dokumen belum berhasil disimpan.');
+    } finally { setDownloading(false); }
   };
 
   return (
@@ -106,6 +112,7 @@ export const PitchdeckModal: React.FC<PitchdeckModalProps> = ({ isOpen, onClose 
           </div>
         ) : (
           <form onSubmit={handleDownload} className="space-y-4">
+            {error&&<div className="rounded-xl bg-red-50 border border-red-200 px-3 py-2 text-[12px] text-red-700">{error}</div>}
             <div>
               <label className="block text-[13px] font-bold text-[#111111] mb-1">
                 Masukkan Email Anda untuk Menerima Dokumen *
