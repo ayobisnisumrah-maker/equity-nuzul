@@ -175,7 +175,7 @@ export const Footer: React.FC<FooterProps> = ({
               onClick={() => onOpenDetail(privacyLabel)}
               className="text-white/60 hover:text-white transition-colors cursor-pointer focus-visible:outline-none"
             >
-              Kebijakan Privasi
+              {privacyLabel}
             </button>
             <span className="text-white/30">•</span>
             <button
@@ -183,7 +183,7 @@ export const Footer: React.FC<FooterProps> = ({
               onClick={() => onOpenDetail(termsLabel)}
               className="text-white/60 hover:text-white transition-colors cursor-pointer focus-visible:outline-none"
             >
-              Syarat dan Ketentuan
+              {termsLabel}
             </button>
           </div>
         </div>
