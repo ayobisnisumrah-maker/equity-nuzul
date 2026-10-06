@@ -89,10 +89,10 @@ export const QuickActionSection: React.FC<QuickActionSectionProps> = ({
               </div>
               <div>
                 <span className="text-[12px] font-bold uppercase tracking-[0.14em] text-white/60">
-                  Investor Relations
+                  {phoneLabel}
                 </span>
                 <h3 className="text-[18px] sm:text-[20px] font-bold text-white mt-1">
-                  Hubungi Tim
+                  {phoneTitle}
                 </h3>
                 <p className="text-[14px] text-white/70 mt-1 font-mono">
                   {phone}
@@ -113,13 +113,13 @@ export const QuickActionSection: React.FC<QuickActionSectionProps> = ({
               </div>
               <div>
                 <span className="text-[12px] font-bold uppercase tracking-[0.14em] text-white/60">
-                  Dokumen Resmi
+                  {documentLabel}
                 </span>
                 <h3 className="text-[18px] sm:text-[20px] font-bold text-white mt-1">
-                  Unduh Pitchdeck
+                  {documentTitle}
                 </h3>
                 <p className="text-[14px] text-white/70 mt-1">
-                  Pelajari ringkasan model bisnis & proyeksi
+                  {documentDescription}
                 </p>
               </div>
             </div>
@@ -138,7 +138,7 @@ export const QuickActionSection: React.FC<QuickActionSectionProps> = ({
 
               <div className="relative z-10">
                 <span className="text-[11px] font-bold uppercase tracking-[0.16em] text-white/70">
-                  Langkah Awal Kemitraan
+                  {invitationLabel}
                 </span>
                 <h3 className="text-[22px] sm:text-[24px] font-bold text-white mt-2 leading-[1.2]">
                   {invitationTitle}
