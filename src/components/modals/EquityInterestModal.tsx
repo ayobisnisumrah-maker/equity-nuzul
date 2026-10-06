@@ -122,7 +122,7 @@ export const EquityInterestModal: React.FC<EquityInterestModalProps> = ({
                 onClick={handleReset}
                 className="py-3 px-5 rounded-xl border border-black/20 text-[#111111] font-semibold text-[14px] hover:bg-black/5"
               >
-                Selesai
+                {doneLabel}
               </button>
             </div>
           </div>
