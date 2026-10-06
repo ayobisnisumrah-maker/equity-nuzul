@@ -246,6 +246,12 @@ export default function App() {
       ],
     });
 
+  const openSectionDetail = (sectionKey:string, fieldKey:string, fallback:DetailContent) => {
+    const section=content<Record<string,unknown>>(sectionKey,{});
+    const value=section[fieldKey] as Partial<DetailContent>|undefined;
+    setDetailModal({isOpen:true,title:value?.title||fallback.title,category:value?.category||fallback.category,content:value?.content||fallback.content,detailsList:Array.isArray(value?.detailsList)?value.detailsList:(fallback.detailsList||[])});
+  };
+
   const handleOpenServiceDetail = (service: ServiceItem) => {
     const services = content<Record<string, unknown>>('services', {});
     const detailMap = services.detailMap as Record<string, Partial<DetailContent>> | undefined;
@@ -371,7 +377,7 @@ export default function App() {
         <CompanySection onOpenDetail={handleOpenCompanyDetail} />
 
         {/* 05. Layanan Utama Section */}
-        <ServicesSection onOpenServiceDetail={handleOpenServiceDetail} />
+        <ServicesSection onOpenServiceDetail={handleOpenServiceDetail} onOpenMore={()=>openSectionDetail('services','moreDetailJson',{title:'Layanan Nuzultrip',category:'Ekosistem Layanan',content:'Informasi layanan Nuzultrip dan ekosistem pendukung perjalanan.',detailsList:[]})} />
 
         {/* 06. Proses Section (Dark) */}
         <ProcessSection
@@ -395,7 +401,7 @@ export default function App() {
         />
 
         {/* 11. Artikel & Berita Section */}
-        <ArticlesSection onSelectArticle={handleOpenArticle} />
+        <ArticlesSection onSelectArticle={handleOpenArticle} onOpenMore={()=>openSectionDetail('articles','moreDetailJson',{title:'Artikel & Berita Nuzultrip',category:'Informasi & Publikasi',content:'Informasi, artikel, dan pembaruan resmi Nuzultrip.',detailsList:[]})} />
       </main>
 
       {/* 12. Footer (Dark) */}
