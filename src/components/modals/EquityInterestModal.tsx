@@ -29,11 +29,28 @@ export const EquityInterestModal: React.FC<EquityInterestModalProps> = ({
   const calculatorLabel = typeof cfg.calculatorLabel === 'string' ? cfg.calculatorLabel : 'Kalkulator Unit Equity';
   const confirmWhatsappLabel = typeof cfg.confirmWhatsappLabel === 'string' ? cfg.confirmWhatsappLabel : 'Konfirmasi via WhatsApp';
   const doneLabel = typeof cfg.doneLabel === 'string' ? cfg.doneLabel : 'Selesai';
+  const nameLabel = typeof cfg.nameLabel === 'string' ? cfg.nameLabel : 'Nama Lengkap';
+  const namePlaceholder = typeof cfg.namePlaceholder === 'string' ? cfg.namePlaceholder : 'Contoh: Ahmad Fadhil Pratama';
+  const phoneLabel = typeof cfg.phoneLabel === 'string' ? cfg.phoneLabel : 'Nomor WhatsApp';
+  const phonePlaceholder = typeof cfg.phonePlaceholder === 'string' ? cfg.phonePlaceholder : '081234567890';
+  const emailLabel = typeof cfg.emailLabel === 'string' ? cfg.emailLabel : 'Email';
+  const emailPlaceholder = typeof cfg.emailPlaceholder === 'string' ? cfg.emailPlaceholder : 'nama@email.com';
+  const investorTypeLabel = typeof cfg.investorTypeLabel === 'string' ? cfg.investorTypeLabel : 'Tipe Investor';
+  const individualLabel = typeof cfg.individualLabel === 'string' ? cfg.individualLabel : 'Individu';
+  const institutionLabel = typeof cfg.institutionLabel === 'string' ? cfg.institutionLabel : 'Badan Usaha';
+  const communityLabel = typeof cfg.communityLabel === 'string' ? cfg.communityLabel : 'Komunitas';
+  const investorTypeOptions = Array.isArray(cfg.investorTypeOptions) && cfg.investorTypeOptions.every(v=>typeof v==='string') && cfg.investorTypeOptions.length ? cfg.investorTypeOptions as string[] : [individualLabel,institutionLabel,communityLabel];
+  const submitLabel = typeof cfg.submitLabel === 'string' ? cfg.submitLabel : 'Kirim Pengajuan Minat';
+  const submittingLabel = typeof cfg.submittingLabel === 'string' ? cfg.submittingLabel : 'Mengirim...';
+  const unitsLabel = typeof cfg.unitsLabel === 'string' ? cfg.unitsLabel : 'Jumlah Unit';
+  const interestedUnitsLabel = typeof cfg.interestedUnitsLabel === 'string' ? cfg.interestedUnitsLabel : 'Unit Diminati';
+  const investmentEstimateLabel = typeof cfg.investmentEstimateLabel === 'string' ? cfg.investmentEstimateLabel : 'Estimasi Investasi';
+  const privacyNotice = typeof cfg.privacyNotice === 'string' ? cfg.privacyNotice : '{privacyNotice}';
   const [units, setUnits] = useState<number>(1);
   const [name, setName] = useState<string>('');
   const [phone, setPhone] = useState<string>('');
   const [email, setEmail] = useState<string>('');
-  const [investorType, setInvestorType] = useState<string>('Individu');
+  const [investorType, setInvestorType] = useState<string>(investorTypeOptions[0]||'Individu');
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
   const [isSubmitting,setIsSubmitting]=useState(false);
   const [submitError,setSubmitError]=useState('');
@@ -92,11 +109,11 @@ export const EquityInterestModal: React.FC<EquityInterestModalProps> = ({
 
             <div className="bg-white rounded-2xl p-5 border border-black/10 text-left mb-6 max-w-md mx-auto space-y-2 text-[14px]">
               <div className="flex justify-between">
-                <span className="text-[#666666]">Unit Diminati:</span>
+                <span className="text-[#666666]">{interestedUnitsLabel}:</span>
                 <span className="font-bold text-[#111111]">{units} Unit ({totalOwnership}%)</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-[#666666]">Estimasi Investasi:</span>
+                <span className="text-[#666666]">{investmentEstimateLabel}:</span>
                 <span className="font-bold text-[#111111]">
                   Rp {(totalInvestment / 1000000).toLocaleString('id-ID')} Juta
                 </span>
@@ -122,7 +139,7 @@ export const EquityInterestModal: React.FC<EquityInterestModalProps> = ({
                 onClick={handleReset}
                 className="py-3 px-5 rounded-xl border border-black/20 text-[#111111] font-semibold text-[14px] hover:bg-black/5"
               >
-                Selesai
+                {doneLabel}
               </button>
             </div>
           </div>
@@ -208,14 +225,14 @@ export const EquityInterestModal: React.FC<EquityInterestModalProps> = ({
               {submitError&&<div className="rounded-xl bg-red-50 border border-red-200 px-3 py-2 text-[12px] text-red-700">{submitError}</div>}
               <div>
                 <label className="block text-[13px] font-bold text-[#111111] mb-1">
-                  Nama Lengkap Sesuai KTP *
+                  {nameLabel} *
                 </label>
                 <input
                   type="text"
                   required
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  placeholder="Contoh: Ahmad Fadhil Pratama"
+                  placeholder={namePlaceholder}
                   className="w-full px-4 py-2.5 rounded-xl border border-black/15 bg-white text-[14px] text-[#111111] placeholder:text-black/35 focus:border-black focus:ring-1 focus:ring-black outline-none"
                 />
               </div>
@@ -223,28 +240,28 @@ export const EquityInterestModal: React.FC<EquityInterestModalProps> = ({
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-[13px] font-bold text-[#111111] mb-1">
-                    Nomor WhatsApp / HP *
+                    {phoneLabel} *
                   </label>
                   <input
                     type="tel"
                     required
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
-                    placeholder="081234567890"
+                    placeholder={phonePlaceholder}
                     className="w-full px-4 py-2.5 rounded-xl border border-black/15 bg-white text-[14px] text-[#111111] placeholder:text-black/35 focus:border-black focus:ring-1 focus:ring-black outline-none"
                   />
                 </div>
 
                 <div>
                   <label className="block text-[13px] font-bold text-[#111111] mb-1">
-                    Email Aktif *
+                    {emailLabel} *
                   </label>
                   <input
                     type="email"
                     required
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    placeholder="nama@email.com"
+                    placeholder={emailPlaceholder}
                     className="w-full px-4 py-2.5 rounded-xl border border-black/15 bg-white text-[14px] text-[#111111] placeholder:text-black/35 focus:border-black focus:ring-1 focus:ring-black outline-none"
                   />
                 </div>
@@ -252,10 +269,10 @@ export const EquityInterestModal: React.FC<EquityInterestModalProps> = ({
 
               <div>
                 <label className="block text-[13px] font-bold text-[#111111] mb-1">
-                  Profil Calon Investor
+                  {investorTypeLabel}
                 </label>
                 <div className="grid grid-cols-3 gap-2">
-                  {['Individu', 'Badan Usaha', 'Komunitas'].map((type) => (
+                  {investorTypeOptions.map((type) => (
                     <button
                       key={type}
                       type="button"
@@ -278,7 +295,7 @@ export const EquityInterestModal: React.FC<EquityInterestModalProps> = ({
                   disabled={isSubmitting}
                   className="w-full py-3.5 px-6 rounded-xl bg-[#090909] text-white font-bold text-[15px] flex items-center justify-center gap-2 hover:bg-[#222222] active:scale-98 transition-all shadow-md cursor-pointer"
                 >
-                  <span>{isSubmitting?'Mengirim Pengajuan...':'Kirim Pengajuan Minat'}</span>
+                  <span>{isSubmitting?submittingLabel:submitLabel}</span>
                   <ArrowRight size={16} />
                 </button>
                 <p className="text-[11.5px] text-[#777777] text-center mt-2.5">
