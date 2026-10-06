@@ -8,7 +8,8 @@ import { SERVICES_LIST, ServiceItem } from '../../data/landingData';
 import { usePortalContent } from '../../context/PortalContentContext';
 
 interface ServicesSectionProps {
-  onOpenServiceDetail: (service: ServiceItem) => void;\n  onOpenMore: () => void;
+  onOpenServiceDetail: (service: ServiceItem) => void;
+  onOpenMore: () => void;
 }
 
 export const ServicesSection: React.FC<ServicesSectionProps> = ({ onOpenServiceDetail, onOpenMore }) => {
