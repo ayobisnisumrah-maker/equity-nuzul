@@ -8,10 +8,10 @@ import { SERVICES_LIST, ServiceItem } from '../../data/landingData';
 import { usePortalContent } from '../../context/PortalContentContext';
 
 interface ServicesSectionProps {
-  onOpenServiceDetail: (service: ServiceItem) => void;
+  onOpenServiceDetail: (service: ServiceItem) => void;\n  onOpenMore: () => void;
 }
 
-export const ServicesSection: React.FC<ServicesSectionProps> = ({ onOpenServiceDetail }) => {
+export const ServicesSection: React.FC<ServicesSectionProps> = ({ onOpenServiceDetail, onOpenMore }) => {
   const { content } = usePortalContent();
   const cms = content('services', {} as Record<string, unknown>);
   const eyebrow = typeof cms.eyebrow === 'string' ? cms.eyebrow : 'LAYANAN UTAMA';
@@ -65,7 +65,7 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({ onOpenServiceD
             <div className="pt-8 sm:pt-10 mt-auto">
               <ArrowButton
                 variant="link"
-                onClick={() => onOpenServiceDetail(services[0])}
+                onClick={onOpenMore}
                 id="services-cta-other"
               >
                 {otherCta}
