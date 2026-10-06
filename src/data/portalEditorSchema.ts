@@ -74,6 +74,7 @@ export const PORTAL_SECTION_DEFINITIONS:PortalSectionDefinition[]=[
   {key:'description',label:'Deskripsi',kind:'textarea',value:'Menghubungkan mitra, vendor layanan, dan jaringan distribusi dalam satu kesatuan sistem yang transparan dan terstandar.'},
   {key:'highlightWord',label:'Kata Highlight',kind:'text',value:'Nuzultrip'},
   {key:'moreCta',label:'CTA',kind:'text',value:'Layanan Lainnya'},
+  {key:'moreDetailJson',label:'Detail CTA Layanan Lainnya (JSON)',kind:'json-object',value:'{"title":"Layanan Nuzultrip","category":"Ekosistem Layanan","content":"Informasi layanan Nuzultrip dan ekosistem pendukung perjalanan.","detailsList":[]}'},
   {key:'itemsJson',label:'Daftar Layanan (JSON)',kind:'json-list',value:'[]'},
   {key:'detailMap',label:'Detail Layanan / Popup (JSON)',kind:'json-object',value:'{}'}
  ]},
@@ -141,6 +142,7 @@ export const PORTAL_SECTION_DEFINITIONS:PortalSectionDefinition[]=[
   {key:'highlightWord',label:'Kata Highlight',kind:'text',value:'Keputusan.'},
   {key:'moreCta',label:'CTA',kind:'text',value:'Lebih Artikel Lainnya'},
   {key:'readMore',label:'Label Baca Artikel',kind:'text',value:'Baca Selengkapnya'},
+  {key:'moreDetailJson',label:'Detail CTA Artikel Lainnya (JSON)',kind:'json-object',value:'{"title":"Artikel & Berita Nuzultrip","category":"Informasi & Publikasi","content":"Informasi, artikel, dan pembaruan resmi Nuzultrip.","detailsList":[]}'},
   {key:'itemsJson',label:'Daftar Artikel (JSON)',kind:'json-list',value:'[]'},
   {key:'detailMap',label:'Detail Artikel / Popup (JSON)',kind:'json-object',value:'{}'}
  ]},
