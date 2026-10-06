@@ -31,3 +31,12 @@ export async function submitEquityInterest(input:EquityInterestInput){
   });
   if(error) throw error;
 }
+
+
+export async function submitPitchdeckRequest(email:string){
+  if(!supabase) throw new Error('Layanan dokumen belum tersedia.');
+  const normalized=email.trim().toLowerCase();
+  if(!normalized.includes('@')) throw new Error('Masukkan email yang valid.');
+  const {error}=await supabase.from('portal_inquiries').insert({name:normalized,email:normalized,phone:null,organization:null,message:'Permintaan akses pitchdeck resmi Nuzultrip Equity',source_page:'pitchdeck-download',user_agent:navigator.userAgent,status:'new'});
+  if(error) throw error;
+}
