@@ -8,10 +8,10 @@ import { ARTICLES_LIST, ArticleItem } from '../../data/landingData';
 import { usePortalContent } from '../../context/PortalContentContext';
 
 interface ArticlesSectionProps {
-  onSelectArticle: (article: ArticleItem) => void;
+  onSelectArticle: (article: ArticleItem) => void;\n  onOpenMore: () => void;
 }
 
-export const ArticlesSection: React.FC<ArticlesSectionProps> = ({ onSelectArticle }) => {
+export const ArticlesSection: React.FC<ArticlesSectionProps> = ({ onSelectArticle, onOpenMore }) => {
   const { content } = usePortalContent();
   const cms = content('articles', {} as Record<string, unknown>);
   const eyebrow = typeof cms.eyebrow === 'string' ? cms.eyebrow : 'ARTIKEL & BERITA';
@@ -50,7 +50,7 @@ export const ArticlesSection: React.FC<ArticlesSectionProps> = ({ onSelectArticl
             <div className="pt-8 sm:pt-10 mt-auto">
               <ArrowButton
                 variant="link"
-                onClick={() => onSelectArticle(articles[0])}
+                onClick={onOpenMore}
                 id="articles-cta-more"
               >
                 {moreCta}
