@@ -53,8 +53,7 @@ export const PORTAL_SECTION_DEFINITIONS:PortalSectionDefinition[]=[
   {key:'yieldLabel',label:'Label Estimasi Yield',kind:'text',value:'Estimasi Yield'},
   {key:'calculatorNote',label:'Catatan Kalkulator',kind:'textarea',value:'*Pencairan dividen ditransfer bulanan sesuai pembukuan riil.'},
   {key:'calculatorCta',label:'CTA Kalkulator',kind:'text',value:'Ajukan Minat Equity'},
-  {key:'sharePercentPerUnit',label:'Persentase per Unit',kind:'number',value:0.8},
-  {key:'calculatorOptionsJson',label:'Opsi Unit Kalkulator (JSON)',kind:'json-list',value:'[]'},
+   {key:'calculatorOptionsJson',label:'Opsi Unit & Proyeksi Kalkulator (JSON)',kind:'json-list',value:'[]'},
   {key:'metricsJson',label:'Metrik Equity (JSON)',kind:'json-list',value:'[]'}
  ]},
  {key:'company',label:'Perusahaan',description:'Profil, galeri, metrik dan kredensial perusahaan.',fields:[
