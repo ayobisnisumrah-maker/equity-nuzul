@@ -21,7 +21,9 @@ const UNIT_OPTIONS: UnitOption[] = [
   { units: 50, price: 5_000_000_000, monthlyShare: 79_166_650 },
 ];
 
-const SHARE_PERCENT_PER_UNIT = 0.8; // 0.8% per unit
+const SHARE_PERCENT_PER_UNIT = 0.8; // canonical open offering: 80 bps = 0.8% per unit
+const CANONICAL_UNIT_PRICE = 100_000_000;
+const CANONICAL_TOTAL_UNITS = 50;
 
 const formatRupiah = (val: number): string => {
   return new Intl.NumberFormat('id-ID', {
@@ -54,9 +56,12 @@ export const EquityCalculator: React.FC<EquityCalculatorProps> = ({ onOpenIntere
   const monthlySuffix = typeof cms.monthlySuffix === 'string' ? cms.monthlySuffix : '/bulan';
   const annualProjectionLabel = typeof cms.annualProjectionLabel === 'string' ? cms.annualProjectionLabel : 'Proyeksi Tahunan';
   const yieldLabel = typeof cms.yieldLabel === 'string' ? cms.yieldLabel : 'Estimasi Yield';
-  const configuredOptions = Array.isArray(cms.calculatorOptionsJson) ? cms.calculatorOptionsJson.filter((v): v is UnitOption => Boolean(v) && typeof v === 'object' && Number.isFinite((v as UnitOption).units) && Number.isFinite((v as UnitOption).price) && Number.isFinite((v as UnitOption).monthlyShare)) : [];
-  const unitOptions = configuredOptions.length >= 2 ? configuredOptions : UNIT_OPTIONS;
-  const sharePercentPerUnit = typeof cms.sharePercentPerUnit === 'number' && cms.sharePercentPerUnit > 0 ? cms.sharePercentPerUnit : SHARE_PERCENT_PER_UNIT;
+  const configuredOptions = Array.isArray(cms.calculatorOptionsJson) ? cms.calculatorOptionsJson.filter((v): v is UnitOption => Boolean(v) && typeof v === 'object' && Number.isInteger((v as UnitOption).units) && (v as UnitOption).units > 0 && (v as UnitOption).units <= CANONICAL_TOTAL_UNITS && Number.isFinite((v as UnitOption).monthlyShare) && (v as UnitOption).monthlyShare >= 0) : [];
+  // Price and ownership are offering terms, not CMS marketing values. CMS may configure the selectable
+  // unit steps and projection only; investment value is always derived from the canonical unit price.
+  const projectionOptions = configuredOptions.length >= 2 ? configuredOptions : UNIT_OPTIONS;
+  const unitOptions = projectionOptions.map((option) => ({ ...option, price: option.units * CANONICAL_UNIT_PRICE }));
+  const sharePercentPerUnit = SHARE_PERCENT_PER_UNIT;
   const [stepIndex, setStepIndex] = useState<number>(0);
 
   const safeStepIndex = Math.min(stepIndex, unitOptions.length - 1);
