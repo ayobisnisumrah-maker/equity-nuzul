@@ -21,7 +21,10 @@ export const CompanySection: React.FC<CompanySectionProps> = ({ onOpenDetail }) 
   const credentialDescription = typeof cms.credentialDescription === 'string' ? cms.credentialDescription : 'Terverifikasi PPIU Kemenag';
   const description = typeof cms.description === 'string' ? cms.description : 'Menghadirkan layanan perjalanan ibadah yang bermakna melalui layanan, jaringan, dan teknologi.';
   const detailCta = typeof cms.detailCta === 'string' ? cms.detailCta : 'Lebih Detail Penawaran';
-  const metrics = Array.isArray(cms.metricsJson) && cms.metricsJson.length ? cms.metricsJson as typeof COMPANY_METRICS : COMPANY_METRICS;
+  const rawMetrics = Array.isArray(cms.metricsJson) && cms.metricsJson.length ? cms.metricsJson as typeof COMPANY_METRICS : COMPANY_METRICS;
+  // The visual contract is 5 gallery states: 4 metrics + 1 credential.
+  // Cap CMS metrics so a published payload cannot create a sixth card or collide with credential index 4.
+  const metrics = rawMetrics.slice(0, 4);
   const images = Array.isArray(cms.imagesJson) && cms.imagesJson.length === 5 && cms.imagesJson.every((v) => typeof v === 'string') ? cms.imagesJson as string[] : IMAGES.companySlices;
   const [activeImageIndex, setActiveImageIndex] = useState(0);
   const imageContainerRef = useRef<HTMLDivElement>(null);
