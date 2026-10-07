@@ -85,7 +85,14 @@ export const ProcessSection: React.FC<ProcessSectionProps> = ({
   const highlightWord=typeof cms.highlightWord==='string'?cms.highlightWord:'Kami';
   const estimateLabel=typeof cms.estimateLabel==='string'?cms.estimateLabel:'Estimasi';
   const outputLabel=typeof cms.outputLabel==='string'?cms.outputLabel:'Output';
-  const rawSteps = Array.isArray(cms.stepsJson) && cms.stepsJson.length === 4 ? cms.stepsJson as Array<Omit<StepItem, 'icon'> & { iconName?: string }> : null;
+  const isProcessStep = (value: unknown) => {
+    if (!value || typeof value !== 'object') return false;
+    const step = value as Record<string, unknown>;
+    return ['id','stepNumber','title','description','duration','output'].every((key) => typeof step[key] === 'string');
+  };
+  const rawSteps = Array.isArray(cms.stepsJson) && cms.stepsJson.length === 4 && cms.stepsJson.every(isProcessStep)
+    ? cms.stepsJson as Array<Omit<StepItem, 'icon'> & { iconName?: string }>
+    : null;
   const iconFor = (name: string | undefined, index: number) => {
     const icons = [FileText, SearchCheck, Scale, Award];
     const map: Record<string, React.ElementType> = { file: FileText, search: SearchCheck, scale: Scale, award: Award };
