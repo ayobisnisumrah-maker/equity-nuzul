@@ -46,16 +46,16 @@ export const EquityCalculator: React.FC<EquityCalculatorProps> = ({ onOpenIntere
   const { content } = usePortalContent();
   const cms = content('equity', {} as Record<string, unknown>);
   const calculatorTitle = typeof cms.calculatorTitle === 'string' ? cms.calculatorTitle : 'Simulasi Bagi Hasil';
-  const calculatorNote = typeof cms.calculatorNote === 'string' ? cms.calculatorNote : '*Pencairan dividen ditransfer bulanan sesuai pembukuan riil.';
+  const calculatorNote = typeof cms.calculatorNote === 'string' ? cms.calculatorNote : '*Simulasi bukan jaminan hasil. Distribusi aktual mengikuti laporan dan keputusan yang berlaku.';
   const calculatorCta = typeof cms.calculatorCta === 'string' ? cms.calculatorCta : 'Ajukan Minat Equity';
   const unitSelectLabel = typeof cms.unitSelectLabel === 'string' ? cms.unitSelectLabel : 'Pilih Jumlah Unit';
   const ownershipSuffix = typeof cms.ownershipSuffix === 'string' ? cms.ownershipSuffix : 'Saham';
   const selectedUnitLabel = typeof cms.selectedUnitLabel === 'string' ? cms.selectedUnitLabel : 'Unit Dipilih';
   const investmentValueLabel = typeof cms.investmentValueLabel === 'string' ? cms.investmentValueLabel : 'Nilai Investasi';
-  const monthlyShareLabel = typeof cms.monthlyShareLabel === 'string' ? cms.monthlyShareLabel : 'Bagi Hasil per Bulan';
+  const monthlyShareLabel = typeof cms.monthlyShareLabel === 'string' ? cms.monthlyShareLabel : 'Simulasi Bagi Hasil per Bulan';
   const monthlySuffix = typeof cms.monthlySuffix === 'string' ? cms.monthlySuffix : '/bulan';
-  const annualProjectionLabel = typeof cms.annualProjectionLabel === 'string' ? cms.annualProjectionLabel : 'Proyeksi Tahunan';
-  const yieldLabel = typeof cms.yieldLabel === 'string' ? cms.yieldLabel : 'Estimasi Yield';
+  const annualProjectionLabel = typeof cms.annualProjectionLabel === 'string' ? cms.annualProjectionLabel : 'Simulasi Tahunan';
+  const yieldLabel = typeof cms.yieldLabel === 'string' ? cms.yieldLabel : 'Estimasi Simulasi';
   const configuredOptions = Array.isArray(cms.calculatorOptionsJson) ? cms.calculatorOptionsJson.filter((v): v is UnitOption => Boolean(v) && typeof v === 'object' && Number.isInteger((v as UnitOption).units) && (v as UnitOption).units > 0 && (v as UnitOption).units <= CANONICAL_TOTAL_UNITS && Number.isFinite((v as UnitOption).monthlyShare) && (v as UnitOption).monthlyShare >= 0) : [];
   // Price and ownership are offering terms, not CMS marketing values. CMS may configure the selectable
   // unit steps and projection only; investment value is always derived from the canonical unit price.
