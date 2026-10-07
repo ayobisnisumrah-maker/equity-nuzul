@@ -177,14 +177,14 @@ export default function App() {
 
   const handleOpenAnnouncementDetail = () =>
     openCmsDetail('announcementJson', {
-      title: 'RUPS Luar Biasa Kuartal 3 & Laporan Triwulan II',
+      title: 'Informasi Resmi Pemegang Equity',
       category: 'Pengumuman Resmi Pemegang Saham',
       content:
-        'Pengumuman resmi kepada seluruh pemegang equity dan mitra Nuzultrip: Rapat Umum Pemegang Saham Luar Biasa (RUPSLB) Kuartal 3 dijadwalkan pada 20 Oktober 2026. Laporan Triwulan II telah terbit dan dapat diakses melalui portal investor.',
+        'Informasi resmi untuk pemegang equity dan mitra Nuzultrip. Jadwal, agenda, dan dokumen korporasi yang telah disahkan tersedia melalui portal investor atau pengumuman resmi perusahaan.',
       detailsList: [
-        'Jadwal RUPSLB: Selasa, 20 Oktober 2026 pukul 09.30 WIB via Hybrid Portal',
-        'Agenda Utama: Evaluasi kinerja semester I dan pengesahan alokasi ekspansi operasional',
-        'Laporan Triwulan II: Dokumen lengkap dapat diunduh di dashboard investor',
+        'Jadwal rapat dan agenda korporasi mengikuti pengumuman resmi perusahaan yang berlaku',
+        'Agenda rapat disampaikan melalui undangan atau pengumuman resmi kepada pihak yang berhak',
+        'Laporan yang telah dipublikasikan tersedia sesuai hak akses pada dashboard investor',
         'Hak Suara: Berlaku bagi seluruh pemegang unit equity terdaftar',
       ],
     });
@@ -200,7 +200,7 @@ export default function App() {
         'Jumlah Unit Terbatas: Tersedia 50 Unit kepemilikan (0,8% kepemilikan per unit)',
         'Harga Penawaran: Rp 100.000.000 (Seratus Juta Rupiah) per unit',
         'Distribusi Bagi Hasil: Pelaporan dan pembagian hasil operasional berkala',
-        'Hak Pemegang Unit: Akses portal investor, laporan keuangan teraudit, dan hak suara proporsional',
+        'Hak Pemegang Unit: Akses portal investor, laporan keuangan yang dipublikasikan, dan hak sesuai dokumen kepemilikan yang berlaku',
       ],
     });
 
@@ -209,10 +209,10 @@ export default function App() {
       title: 'Struktur dan Visi Perusahaan Nuzultrip',
       category: 'Profil Korporasi',
       content:
-        'Nuzultrip adalah ekosistem perjalanan Muslim yang mengintegrasikan layanan haji, umroh, land arrangement, serta halal tourism. Didirikan oleh para praktisi berpengalaman lebih dari 10 tahun di industri travel ibadah, Nuzultrip memadukan keramahan layanan berbasis syariah dengan inovasi otomasi teknologi.',
+        'Nuzultrip adalah ekosistem perjalanan Muslim yang mengintegrasikan layanan perjalanan ibadah, land arrangement, serta halal tourism. Informasi profil, legalitas, dan struktur perusahaan mengikuti dokumen resmi yang dipublikasikan Nuzultrip.',
       detailsList: [
         'Jaringan mitra terverifikasi di 4 negara utama (Arab Saudi, Turki, UAE, Indonesia)',
-        'Kapasitas handling jamaah dengan kepuasan pelanggan di atas 98%',
+        'Kinerja operasional dan layanan dilaporkan berdasarkan data perusahaan pada periode yang relevan',
         'Infrastruktur kontrak langsung dengan hotel bintang dan muassasah resmi di Makkah & Madinah',
         'Sistem digitalisasi pemesanan terpusat untuk efisiensi rantai pasok travel ibadah',
       ],
@@ -262,7 +262,7 @@ export default function App() {
       category: value?.category || `Ekosistem Layanan • ${service.code}`,
       content:
         value?.content ||
-        `${service.description} Nuzultrip menjamin standar kenyamanan optimal, kepastian jadwal penerbangan, serta bimbingan ibadah yang sesuai sunnah.`,
+        `${service.description} Detail fasilitas, jadwal, pendampingan, dan ketentuan layanan mengikuti paket atau perjanjian layanan yang berlaku.`,
       detailsList: Array.isArray(value?.detailsList)
         ? value.detailsList
         : [
@@ -303,7 +303,7 @@ export default function App() {
       category: value?.category || article.category,
       content:
         value?.content ||
-        `${article.description}\n\nDi era modernisasi ekosistem haji dan umroh pasca-Visi Saudi 2030, transformasi digital menjadi kunci peningkatan efisiensi operasional. Dengan memadukan kontrak langsung, automasi reservasi hotel, dan transparansi bagi hasil, Nuzultrip membuktikan bahwa bisnis perjalanan ibadah dapat tumbuh berkelanjutan sekaligus memberikan nilai investasi yang solid bagi para pemegang sahamnya.`,
+        `${article.description}\n\nKonten artikel ini merupakan informasi umum. Data kinerja, laporan keuangan, dan informasi kepemilikan yang berlaku mengikuti dokumen resmi yang dipublikasikan melalui portal.`,
       detailsList: Array.isArray(value?.detailsList)
         ? value.detailsList
         : [
