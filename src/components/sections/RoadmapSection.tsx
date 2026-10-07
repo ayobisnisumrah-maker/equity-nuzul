@@ -116,7 +116,16 @@ export const RoadmapSection: React.FC = () => {
   const phaseLabel=typeof cms.phaseLabel==='string'?cms.phaseLabel:'Fase';
   const swipeLabel=typeof cms.swipeLabel==='string'?cms.swipeLabel:'Geser card ke samping';
   const previousLabel=typeof cms.previousLabel==='string'?cms.previousLabel:'Sebelumnya';
-  const phases = Array.isArray(cms.phasesJson) && cms.phasesJson.length ? cms.phasesJson as RoadmapPhase[] : ROADMAP_PHASES;
+  const isRoadmapPhase = (value: unknown): value is RoadmapPhase => {
+    if (!value || typeof value !== 'object') return false;
+    const phase = value as Partial<RoadmapPhase>;
+    return typeof phase.step === 'string' && typeof phase.period === 'string' && typeof phase.title === 'string' &&
+      ['completed','active','upcoming','development'].includes(String(phase.status)) &&
+      typeof phase.statusLabel === 'string' && typeof phase.summary === 'string' && Array.isArray(phase.highlights);
+  };
+  const phases = Array.isArray(cms.phasesJson) && cms.phasesJson.length && cms.phasesJson.every(isRoadmapPhase)
+    ? cms.phasesJson as RoadmapPhase[]
+    : ROADMAP_PHASES;
   const [activeIndex, setActiveIndex] = useState(0); // Default to first phase (Fase 01)
   const scrollRef = useRef<HTMLDivElement>(null);
 
