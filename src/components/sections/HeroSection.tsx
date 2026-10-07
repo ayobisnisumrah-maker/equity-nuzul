@@ -13,10 +13,10 @@ const HIGHLIGHT_BADGES = [
   '40% Alokasi Equity',
   '50 Unit Terbatas',
   'Rp 100 Juta / Unit',
-  'Dividen Berkala',
+  'Distribusi Hasil Berkala',
   'Jaringan 4 Negara',
-  '1000+ Jamaah Tahunan',
-  'Izin PPIU Kemenag Resmi',
+  'Portal Investor Terintegrasi',
+  'Legalitas & Dokumen Terstruktur',
   'Kontrak Hotel Langsung Makkah-Madinah',
 ];
 
