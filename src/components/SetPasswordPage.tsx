@@ -8,17 +8,29 @@ export const SetPasswordPage:React.FC=()=>{
  useEffect(()=>{
   if(!supabase){setError('Supabase belum dikonfigurasi.');setChecking(false);return}
   let alive=true;
+  let recoveryConfirmed=false;
+  const reject=()=>{setAuthorized(false);setError('Tautan atur ulang sandi tidak valid atau sudah kedaluwarsa.');setChecking(false)};
+  const recoveryHint=()=>window.location.hash.includes('type=recovery')||new URLSearchParams(window.location.search).get('type')==='recovery'||new URLSearchParams(window.location.search).has('code');
   const verify=async()=>{
+   // A normal persisted login session must never authorize the recovery page by itself.
+   // Supabase emits PASSWORD_RECOVERY for a valid recovery link; URL hints only keep the
+   // page in a checking state while detectSessionInUrl finishes processing that link.
+   if(!recoveryHint()){if(alive)reject();return}
    const {data,error}=await supabase.auth.getSession();
    if(!alive)return;
-   if(error||!data.session){setAuthorized(false);setError('Tautan atur ulang sandi tidak valid atau sudah kedaluwarsa.');setChecking(false);return}
-   setAuthorized(true);setChecking(false);
+   if(error||!data.session){reject();return}
+   // For implicit recovery links, type=recovery is explicit. PKCE recovery is confirmed
+   // by the PASSWORD_RECOVERY event below before enabling the form.
+   if(window.location.hash.includes('type=recovery')||new URLSearchParams(window.location.search).get('type')==='recovery'){
+    recoveryConfirmed=true;setAuthorized(true);setChecking(false);
+   }
   };
-  void verify();
-  const {data:listener}=supabase.auth.onAuthStateChange((_event,session)=>{
+  const {data:listener}=supabase.auth.onAuthStateChange((event,session)=>{
    if(!alive)return;
-   if(!session){setAuthorized(false);setChecking(false)}
+   if(event==='PASSWORD_RECOVERY'&&session){recoveryConfirmed=true;setAuthorized(true);setError('');setChecking(false);return}
+   if(!session){recoveryConfirmed=false;setAuthorized(false);setChecking(false)}
   });
+  void verify();
   return()=>{alive=false;listener.subscription.unsubscribe()};
  },[]);
 
