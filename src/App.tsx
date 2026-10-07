@@ -109,6 +109,7 @@ export default function App() {
       const refreshIdentity = () => { void applyUser(data.user); };
       accountChannel = supabase.channel(`portal-identity-${data.user.id}`)
         .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'user_accounts', filter: `id=eq.${data.user.id}` }, refreshIdentity)
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'admins', filter: `id=eq.${data.user.id}` }, refreshIdentity)
         .on('postgres_changes', { event: '*', schema: 'public', table: 'investors', filter: `id=eq.${data.user.id}` }, refreshIdentity)
         .on('postgres_changes', { event: '*', schema: 'public', table: 'ownership_holdings', filter: `investor_id=eq.${data.user.id}` }, refreshIdentity)
         .subscribe();
