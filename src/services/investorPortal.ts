@@ -14,7 +14,7 @@ export interface InvestorFinancialSummary{report_id:string;title:string;period_t
 const db=()=>{if(!supabase)throw new Error('Supabase belum dikonfigurasi.');return supabase};
 export async function getInvestorDashboardData(){
  const {data:{user}}=await db().auth.getUser();if(!user)throw new Error('Sesi investor tidak tersedia.');
- const investor=await db().from('investors').select('id,reference_code,legal_name,status').eq('id',user.id).single();if(investor.error)throw investor.error;if(!['approved','active'].includes(String(investor.data.status)))throw new Error('Akses investor belum aktif.');
+ const investor=await db().from('investors').select('id,reference_code,legal_name,status').eq('id',user.id).single();if(investor.error)throw investor.error;if(String(investor.data.status)!=='active')throw new Error('Akses dashboard investor aktif setelah alokasi kepemilikan selesai.');
  const [sales,ownershipActivity,portfolioDetails,inheritanceActivity]=await Promise.all([
   db().rpc('get_investor_sales_summary'),
   db().rpc('get_investor_ownership_activity'),
