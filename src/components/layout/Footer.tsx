@@ -21,7 +21,7 @@ export const Footer: React.FC<FooterProps> = ({
   const contactTitle = typeof cms.contactTitle === 'string' ? cms.contactTitle : 'BUTUH INFORMASI TERBARU?';
   const contactDescription = typeof cms.contactDescription === 'string' ? cms.contactDescription : 'Hubungi tim Investor Relations untuk informasi, dokumen, atau pembaruan resmi Nuzultrip Equity.';
   const contactCta = typeof cms.contactCta === 'string' ? cms.contactCta : 'Hubungi Kami';
-  const whatsappUrl = safeUrl(cms.whatsappUrl, 'https://wa.me/6281234567890?text=Halo%20Tim%20Nuzultrip%20Equity,%20saya%20membutuhkan%20informasi%20terbaru%20mengenai%20penawaran%20equity.', /^https:\/\/(wa\.me|api\.whatsapp\.com)\//i);
+  const whatsappUrl = safeUrl(cms.whatsappUrl, '', /^https:\/\/(wa\.me|api\.whatsapp\.com)\//i);
   const instagramUrl = safeUrl(cms.instagramUrl, 'https://instagram.com', /^https:\/\/(www\.)?instagram\.com\//i);
   const facebookUrl = safeUrl(cms.facebookUrl, 'https://facebook.com', /^https:\/\/(www\.)?facebook\.com\//i);
   const tiktokUrl = safeUrl(cms.tiktokUrl, 'https://tiktok.com', /^https:\/\/(www\.)?tiktok\.com\//i);
@@ -152,7 +152,7 @@ export const Footer: React.FC<FooterProps> = ({
                 </p>
               </div>
               <div className="pt-6 mt-auto">
-                <a
+                {whatsappUrl ? <a
                   href={whatsappUrl}
                   target="_blank"
                   rel="noopener noreferrer"
@@ -160,7 +160,7 @@ export const Footer: React.FC<FooterProps> = ({
                 >
                   <span>{contactCta}</span>
                   <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
-                </a>
+                </a> : <span className="block text-center text-white/60 text-[13px] py-2.5">Kontak resmi akan ditampilkan setelah diverifikasi.</span>}
               </div>
             </div>
           </div>
