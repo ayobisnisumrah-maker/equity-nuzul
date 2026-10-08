@@ -15,7 +15,7 @@ const mergedSectionContent=(key:string,fields:PortalField[],stored:Record<string
 export const PortalEditor:React.FC<{permissionKeys:string[]}>=({permissionKeys})=>{
  const canUpdate=permissionKeys.includes('portal.update');const canPublish=permissionKeys.includes('portal.publish');
  const [selected,setSelected]=useState(PORTAL_SECTION_DEFINITIONS[0].key);
- const editingRef=useRef(false);const selectedRef=useRef(selected);selectedRef.current=selected;
+ const editingRef=useRef(false);
  const [rows,setRows]=useState<PortalCmsSection[]>([]);
  const [draft,setDraft]=useState<Record<string,string>>({});
  const [message,setMessage]=useState('');const [historyKey,setHistoryKey]=useState('');const [saving,setSaving]=useState(false);const [publishing,setPublishing]=useState(false);const [preview,setPreview]=useState(false);const [uploading,setUploading]=useState('');
