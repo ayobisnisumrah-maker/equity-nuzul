@@ -37,7 +37,7 @@ export async function listPortalContent(): Promise<PortalCmsSection[]> {
 
 export async function savePortalContent(section: PortalCmsSection): Promise<void> {
  if(!supabase)throw new Error('Supabase belum dikonfigurasi.');
- const {error}=await supabase.rpc('save_portal_content_draft',{p_id:section.id,p_content:section.content});if(error)throw error;const {data:stored,error:verifyError}=await supabase.from('portal_content').select('draft_content').eq('id',section.id).single();if(verifyError)throw new Error('Draft dikirim tetapi verifikasi gagal: '+verifyError.message);if(canonicalJson(stored?.draft_content)!==canonicalJson(section.content))throw new Error('Draft tidak sesuai dengan hasil baca ulang database.');
+ const {error}=await supabase.rpc('save_portal_content_draft',{p_id:section.id,p_content:section.content,p_expected_draft_updated_at:section.draft_updated_at??null});if(error)throw error;const {data:stored,error:verifyError}=await supabase.from('portal_content').select('draft_content').eq('id',section.id).single();if(verifyError)throw new Error('Draft dikirim tetapi verifikasi gagal: '+verifyError.message);if(canonicalJson(stored?.draft_content)!==canonicalJson(section.content))throw new Error('Draft tidak sesuai dengan hasil baca ulang database.');
 }
 
 export async function publishPortalContent(id:string):Promise<void>{
