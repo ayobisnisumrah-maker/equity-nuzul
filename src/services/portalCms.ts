@@ -72,5 +72,13 @@ export async function listPortalContentVersions(portalContentId:string):Promise<
  if(!supabase)return[];const {data,error}=await supabase.from('portal_content_versions').select('id,portal_content_id,section_key,version_no,content,action,source_version_id,created_at').eq('portal_content_id',portalContentId).order('version_no',{ascending:false}).limit(20);if(error)throw error;return(data??[]) as PortalContentVersion[];
 }
 export async function rollbackPortalContent(portalContentId:string,versionId:string):Promise<void>{
- if(!supabase)throw new Error('Supabase belum dikonfigurasi.');const {error}=await supabase.rpc('rollback_portal_content',{p_id:portalContentId,p_version_id:versionId});if(error)throw error;
+ if(!supabase)throw new Error('Supabase belum dikonfigurasi.');
+ const versionResult=await supabase.from('portal_content_versions').select('content').eq('id',versionId).eq('portal_content_id',portalContentId).single();
+ if(versionResult.error)throw versionResult.error;
+ const rollbackResult=await supabase.rpc('rollback_portal_content',{p_id:portalContentId,p_version_id:versionId});
+ if(rollbackResult.error)throw rollbackResult.error;
+ const readback=await supabase.from('portal_content').select('content,draft_content,published,published_at').eq('id',portalContentId).single();
+ if(readback.error)throw new Error('Rollback berhasil dikirim tetapi verifikasi gagal: '+readback.error.message);
+ const stored=readback.data;
+ if(!stored?.published||!stored.published_at||canonicalJson(stored.content)!==canonicalJson(versionResult.data.content)||canonicalJson(stored.draft_content)!==canonicalJson(versionResult.data.content))throw new Error('Konten rollback tidak sesuai dengan versi yang dipilih saat dibaca ulang dari database.');
 }
