@@ -1,6 +1,7 @@
 import { supabase } from '../lib/supabase';
 
 export type PortalContentMap = Record<string, unknown>;
+const canonicalJson=(value:unknown):string=>JSON.stringify(value,(_key,v)=>v&&typeof v==='object'&&!Array.isArray(v)?Object.fromEntries(Object.entries(v).sort(([a],[b])=>a.localeCompare(b))):v);
 
 export interface PortalCmsSection {
   id: string;
@@ -36,12 +37,12 @@ export async function listPortalContent(): Promise<PortalCmsSection[]> {
 
 export async function savePortalContent(section: PortalCmsSection): Promise<void> {
  if(!supabase)throw new Error('Supabase belum dikonfigurasi.');
- const {error}=await supabase.rpc('save_portal_content_draft',{p_id:section.id,p_content:section.content});if(error)throw error;const {data:stored,error:verifyError}=await supabase.from('portal_content').select('draft_content').eq('id',section.id).single();if(verifyError)throw new Error('Draft dikirim tetapi verifikasi gagal: '+verifyError.message);if(JSON.stringify(stored?.draft_content)!==JSON.stringify(section.content))throw new Error('Draft tidak sesuai dengan hasil baca ulang database.');
+ const {error}=await supabase.rpc('save_portal_content_draft',{p_id:section.id,p_content:section.content});if(error)throw error;const {data:stored,error:verifyError}=await supabase.from('portal_content').select('draft_content').eq('id',section.id).single();if(verifyError)throw new Error('Draft dikirim tetapi verifikasi gagal: '+verifyError.message);if(canonicalJson(stored?.draft_content)!==canonicalJson(section.content))throw new Error('Draft tidak sesuai dengan hasil baca ulang database.');
 }
 
 export async function publishPortalContent(id:string):Promise<void>{
  if(!supabase)throw new Error('Supabase belum dikonfigurasi.');
- const {error}=await supabase.rpc('publish_portal_content',{p_id:id});if(error)throw error;const {data:stored,error:verifyError}=await supabase.from('portal_content').select('content,draft_content,published,published_at').eq('id',id).single();if(verifyError)throw new Error('Publish dikirim tetapi verifikasi gagal: '+verifyError.message);if(!stored?.published||!stored.published_at||JSON.stringify(stored.content)!==JSON.stringify(stored.draft_content))throw new Error('Hasil publish belum sesuai dengan konten draft di database.');
+ const {error}=await supabase.rpc('publish_portal_content',{p_id:id});if(error)throw error;const {data:stored,error:verifyError}=await supabase.from('portal_content').select('content,draft_content,published,published_at').eq('id',id).single();if(verifyError)throw new Error('Publish dikirim tetapi verifikasi gagal: '+verifyError.message);if(!stored?.published||!stored.published_at||canonicalJson(stored.content)!==canonicalJson(stored.draft_content))throw new Error('Hasil publish belum sesuai dengan konten draft di database.');
 }
 
 export async function uploadPortalImage(sectionKey:string,fieldKey:string,file:File):Promise<string>{
