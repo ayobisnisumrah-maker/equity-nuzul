@@ -40,9 +40,9 @@ export async function savePortalContent(section: PortalCmsSection): Promise<void
  const {error}=await supabase.rpc('save_portal_content_draft',{p_id:section.id,p_content:section.content,p_expected_draft_updated_at:section.draft_updated_at??null});if(error)throw error;const {data:stored,error:verifyError}=await supabase.from('portal_content').select('draft_content').eq('id',section.id).single();if(verifyError)throw new Error('Draft dikirim tetapi verifikasi gagal: '+verifyError.message);if(canonicalJson(stored?.draft_content)!==canonicalJson(section.content))throw new Error('Draft tidak sesuai dengan hasil baca ulang database.');
 }
 
-export async function publishPortalContent(id:string):Promise<void>{
+export async function publishPortalContent(id:string,expectedDraftUpdatedAt:string|null):Promise<void>{
  if(!supabase)throw new Error('Supabase belum dikonfigurasi.');
- const {error}=await supabase.rpc('publish_portal_content',{p_id:id});if(error)throw error;const {data:stored,error:verifyError}=await supabase.from('portal_content').select('content,draft_content,published,published_at').eq('id',id).single();if(verifyError)throw new Error('Publish dikirim tetapi verifikasi gagal: '+verifyError.message);if(!stored?.published||!stored.published_at||canonicalJson(stored.content)!==canonicalJson(stored.draft_content))throw new Error('Hasil publish belum sesuai dengan konten draft di database.');
+ const {error}=await supabase.rpc('publish_portal_content',{p_id:id,p_expected_draft_updated_at:expectedDraftUpdatedAt});if(error)throw error;const {data:stored,error:verifyError}=await supabase.from('portal_content').select('content,draft_content,published,published_at').eq('id',id).single();if(verifyError)throw new Error('Publish dikirim tetapi verifikasi gagal: '+verifyError.message);if(!stored?.published||!stored.published_at||canonicalJson(stored.content)!==canonicalJson(stored.draft_content))throw new Error('Hasil publish belum sesuai dengan konten draft di database.');
 }
 
 export async function uploadPortalImage(sectionKey:string,fieldKey:string,file:File):Promise<string>{
