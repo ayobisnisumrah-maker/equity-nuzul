@@ -15,7 +15,7 @@ export interface PortalCmsSection {
 }
 
 export async function listPublishedPortalContent(): Promise<PortalCmsSection[]> {
-  if (!supabase) return [];
+  if (!supabase) throw new Error('Supabase belum dikonfigurasi. Konten portal tidak dapat diverifikasi.');
   const { data, error } = await supabase
     .from('portal_content')
     .select('id,key,label,content,updated_at')
@@ -26,7 +26,7 @@ export async function listPublishedPortalContent(): Promise<PortalCmsSection[]> 
 }
 
 export async function listPortalContent(): Promise<PortalCmsSection[]> {
-  if (!supabase) return [];
+  if (!supabase) throw new Error('Supabase belum dikonfigurasi. Konten portal tidak dapat diverifikasi.');
   const { data, error } = await supabase
     .from('portal_content')
     .select('id,key,label,content,draft_content,updated_at,draft_updated_at,published_at')
@@ -69,7 +69,7 @@ export async function ensurePortalContentSection(key:string,label:string,content
 
 export interface PortalContentVersion{ id:string;portal_content_id:string;section_key:string;version_no:number;content:PortalContentMap;action:'publish'|'rollback';source_version_id?:string|null;created_at:string; }
 export async function listPortalContentVersions(portalContentId:string):Promise<PortalContentVersion[]>{
- if(!supabase)return[];const {data,error}=await supabase.from('portal_content_versions').select('id,portal_content_id,section_key,version_no,content,action,source_version_id,created_at').eq('portal_content_id',portalContentId).order('version_no',{ascending:false}).limit(20);if(error)throw error;return(data??[]) as PortalContentVersion[];
+ if(!supabase)throw new Error('Supabase belum dikonfigurasi. Riwayat CMS tidak dapat dimuat.');const {data,error}=await supabase.from('portal_content_versions').select('id,portal_content_id,section_key,version_no,content,action,source_version_id,created_at').eq('portal_content_id',portalContentId).order('version_no',{ascending:false}).limit(20);if(error)throw error;return(data??[]) as PortalContentVersion[];
 }
 export async function rollbackPortalContent(portalContentId:string,versionId:string):Promise<void>{
  if(!supabase)throw new Error('Supabase belum dikonfigurasi.');
